@@ -8,6 +8,7 @@ import sillyv.com.counterlists.database.dbitems.CounterList;
 
 /**
  * Created by Vasili on 1/28/2017.
+ *
  */
 
 public class ListModel {
@@ -39,27 +40,27 @@ public class ListModel {
         this.counterItemsString = counterItemsString;
     }
 
-    public ListModel(CounterList listt) {
-        id = listt.getId();
-        defaultCardBackgroundColor = listt.getDefaultCardBackgroundColor();
-        defaultValue = listt.getDefaultValue();
-        defaultIncrement = listt.getDefaultIncrement();
-        defaultDecrement = listt.getDefaultDecrement();
-        background = listt.getBackground();
-        defaultCardForegroundColor = listt.getDefaultCardForegroundColor();
-        note = listt.getNote();
-        name = listt.getName();
-        clickSound = listt.isClickSound();
-        vibrate = listt.isVibrate();
-        speechOutputValue = listt.isSpeechOutputValue();
-        speechOutputName = listt.isSpeechOutputName();
-        keepAwake = listt.isKeepAwake();
-        volumeKey = listt.isVolumeKey();
+    public ListModel(CounterList list) {
+        id = list.getId();
+        defaultCardBackgroundColor = list.getDefaultCardBackgroundColor();
+        defaultValue = list.getDefaultValue();
+        defaultIncrement = list.getDefaultIncrement();
+        defaultDecrement = list.getDefaultDecrement();
+        background = list.getBackground();
+        defaultCardForegroundColor = list.getDefaultCardForegroundColor();
+        note = list.getNote();
+        name = list.getName();
+        clickSound = list.isClickSound();
+        vibrate = list.isVibrate();
+        speechOutputValue = list.isSpeechOutputValue();
+        speechOutputName = list.isSpeechOutputName();
+        keepAwake = list.isKeepAwake();
+        volumeKey = list.isVolumeKey();
         counterNames = new ArrayList<>();
         counterIds = new ArrayList<>();
         counterItemsString = "";
         for (Counter counter :
-                listt.getCounters()) {
+                list.getCounters()) {
             counterNames.add(counter.getName());
             counterIds.add(counter.getId());
             counterItemsString += counter.getName();

@@ -4,11 +4,12 @@ import sillyv.com.counterlists.CLFragment;
 
 /**
  * Created by Vasili on 1/28/2017.
+ *
  */
 
 public class AddFragmentEvent {
 
-    CLFragment fragment;
+    private CLFragment fragment;
 
     public AddFragmentEvent(CLFragment fragment) {
         this.fragment = fragment;

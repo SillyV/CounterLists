@@ -1,17 +1,18 @@
 package sillyv.com.counterlists.screens.lists.upsert;
 
 /**
- * Created by vasil on 2/18/2017.
+ * Created by Vasili on 2/18/2017.
+ *
  */
 
 public abstract class UpsertCounterListModel  {
 
-    public static final long NEW_LIST_IDENTIFIER = 0L;
+    private static final long NEW_LIST_IDENTIFIER = 0L;
 
     public static class CounterListSettings {
         private String name;
         private String note;
-        private String defaultVaule;
+        private String defaultValue;
         private String defaultIncrement;
         private String defaultDecrement;
         private int backgroundColor;
@@ -31,10 +32,10 @@ public abstract class UpsertCounterListModel  {
         public CounterListSettings() {
         }
 
-        public CounterListSettings(String name, String note, String defaultVaule, String defaultIncrement, String defaultDecrement, int backgroundColor, int defaultColorCounterBackground, int defaultColorCounterText, boolean clickSound, boolean vibrate, boolean speakValue, boolean speakName, boolean keepAwake, boolean useVolume, String dateCreated, String dateModified, String lastUsed, String toolbarTitle) {
+        public CounterListSettings(String name, String note, String defaultValue, String defaultIncrement, String defaultDecrement, int backgroundColor, int defaultColorCounterBackground, int defaultColorCounterText, boolean clickSound, boolean vibrate, boolean speakValue, boolean speakName, boolean keepAwake, boolean useVolume, String dateCreated, String dateModified, String lastUsed, String toolbarTitle) {
             this.name = name;
             this.note = note;
-            this.defaultVaule = defaultVaule;
+            this.defaultValue = defaultValue;
             this.defaultIncrement = defaultIncrement;
             this.defaultDecrement = defaultDecrement;
             this.backgroundColor = backgroundColor;
@@ -55,7 +56,7 @@ public abstract class UpsertCounterListModel  {
         private CounterListSettings(Builder builder) {
             name = builder.name;
             note = builder.note;
-            defaultVaule = builder.defaultVaule;
+            defaultValue = builder.defaultValue;
             defaultIncrement = builder.defaultIncrement;
             defaultDecrement = builder.defaultDecrement;
             backgroundColor = builder.backgroundColor;
@@ -89,12 +90,12 @@ public abstract class UpsertCounterListModel  {
             this.note = note;
         }
 
-        public String getDefaultVaule() {
-            return defaultVaule;
+        public String getDefaultValue() {
+            return defaultValue;
         }
 
-        public void setDefaultVaule(String defaultVaule) {
-            this.defaultVaule = defaultVaule;
+        public void setDefaultValue(String defaultValue) {
+            this.defaultValue = defaultValue;
         }
 
         public String getDefaultIncrement() {
@@ -220,7 +221,7 @@ public abstract class UpsertCounterListModel  {
         public static final class Builder {
             private String name;
             private String note;
-            private String defaultVaule;
+            private String defaultValue;
             private String defaultIncrement;
             private String defaultDecrement;
             private int backgroundColor;
@@ -250,8 +251,8 @@ public abstract class UpsertCounterListModel  {
                 return this;
             }
 
-            public Builder defaultVaule(String val) {
-                defaultVaule = val;
+            public Builder defaultValue(String val) {
+                defaultValue = val;
                 return this;
             }
 

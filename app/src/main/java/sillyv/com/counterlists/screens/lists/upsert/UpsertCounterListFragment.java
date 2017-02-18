@@ -20,8 +20,6 @@ import com.flask.colorpicker.OnColorSelectedListener;
 import com.flask.colorpicker.builder.ColorPickerClickListener;
 import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
 
-import org.greenrobot.eventbus.EventBus;
-
 import java.util.HashMap;
 import java.util.List;
 
@@ -37,62 +35,83 @@ import sillyv.com.counterlists.tools.ValidationTools;
 import static android.text.InputType.TYPE_NUMBER_FLAG_SIGNED;
 
 public class UpsertCounterListFragment extends CLFragment implements UpsertCounterListContract.UpsertCounterListView {
-    public static final String LIST_IDENTIFIER = "ListIdentifier";
+    private static final String LIST_IDENTIFIER = "ListIdentifier";
     //region ButterKnife View Binding
     @BindView(R.id.edit_text_name)
+    private
     TextView editTextName;
     @BindView(R.id.parent_constraint_layout)
+    private
     ViewGroup constraintLayout;
     @BindView(R.id.button_advanced)
+    private
     TextView buttonAdvanced;
     @BindView(R.id.edit_text_note)
+    private
     TextView editTextNote;
     @BindView(R.id.edit_text_default_value)
+    private
     TextView editTextDefaultValue;
     @BindView(R.id.edit_text_default_increment)
+    private
     TextView editTextDefaultIncrement;
     @BindView(R.id.edit_text_default_decrement)
+    private
     TextView editTextDefaultDecrement;
 
     @BindView(R.id.button_background)
+    private
     View buttonBackground;
     @BindView(R.id.button_default_card_background)
+    private
     View buttonDefaultCardBackground;
     @BindView(R.id.button_default_card_foreground)
+    private
     View buttonDefaultCardForeground;
 
     @BindView(R.id.switch_click_sound)
+    private
     Switch switchClickSound;
     @BindView(R.id.switch_vibrate)
+    private
     Switch switchVibrate;
     @BindView(R.id.switch_speech_output_value)
+    private
     Switch switchSpeechOutputValue;
     @BindView(R.id.switch_speech_output_name)
+    private
     Switch switchSpeechOutputName;
     @BindView(R.id.switch_keep_awake)
+    private
     Switch switchKeepAwake;
     @BindView(R.id.switch_volume_key)
+    private
     Switch switchVolumeKey;
 
     @BindView(R.id.text_view_date_created_stats)
+    private
     TextView textViewDateCreatedStats;
     @BindView(R.id.text_view_date_modified_stats)
+    private
     TextView textViewDateModifiedStats;
     @BindView(R.id.text_view_date_changed_stats)
+    private
     TextView textViewDateChangedStats;
 
-    boolean foundErrors;
+    private boolean foundErrors;
 
     @BindViews({R.id.text_input_layout_default_decrement, R.id.text_input_layout_default_increment, R.id.text_input_layout_default_value, R.id.text_input_layout_name, R.id.text_input_layout_note})
+    private
     List<TextInputLayout> textLayouts;
 
 
-    public final ButterKnife.Action<TextInputLayout> CHECK_FOR_ERRORS = new ButterKnife.Action<TextInputLayout>() {
+    private final ButterKnife.Action<TextInputLayout> CHECK_FOR_ERRORS = new ButterKnife.Action<TextInputLayout>() {
         @Override
 
-        public void apply(TextInputLayout view, int index) {
+        public void apply(@NonNull TextInputLayout view, int index) {
             EditText editText = view.getEditText();
             view.setError(null);
+            view.setErrorEnabled(false);
             if (editText == null) {
                 foundErrors = true;
                 return;
@@ -140,7 +159,7 @@ public class UpsertCounterListFragment extends CLFragment implements UpsertCount
     private HashMap<View, Integer> colorButtonMap;
 
     @OnClick(R.id.button_advanced)
-    void onAdvancedClick() {
+    private void onAdvancedClick() {
         viewAdvanced = !viewAdvanced;
         buttonAdvanced.setText(viewAdvanced ?
                 R.string.hide_advanced_settings :
@@ -185,7 +204,7 @@ public class UpsertCounterListFragment extends CLFragment implements UpsertCount
 
     }
 
-    boolean viewAdvanced = false;
+    private boolean viewAdvanced = false;
 
     public UpsertCounterListFragment() {
         // Required empty public constructor
@@ -233,7 +252,7 @@ public class UpsertCounterListFragment extends CLFragment implements UpsertCount
         colorButtonMap = new HashMap<>();
         editTextName.setText(model.getName());
         editTextNote.setText(model.getNote());
-        editTextDefaultValue.setText(model.getDefaultVaule());
+        editTextDefaultValue.setText(model.getDefaultValue());
         editTextDefaultIncrement.setText(model.getDefaultIncrement());
         editTextDefaultDecrement.setText(model.getDefaultDecrement());
         Integer backgroundColor = model.getBackgroundColor();
@@ -265,7 +284,8 @@ public class UpsertCounterListFragment extends CLFragment implements UpsertCount
             case R.id.save:
                 foundErrors = false;
                 ButterKnife.apply(textLayouts, CHECK_FOR_ERRORS);
-                if (!foundErrors && presenter.saveData(getContext(), getModelForPresenter(), getIdentifier())) {
+                if (!foundErrors) {
+                    presenter.saveData(getModelForPresenter(), getIdentifier());
                     popBackStack ();
                 }
                 break;
@@ -284,7 +304,7 @@ public class UpsertCounterListFragment extends CLFragment implements UpsertCount
         UpsertCounterListModel.CounterListSettings model = new UpsertCounterListModel.CounterListSettings();
         model.setName(editTextName.getText().toString());
         model.setNote(editTextNote.getText().toString());
-        model.setDefaultVaule(editTextDefaultValue.getText().toString());
+        model.setDefaultValue(editTextDefaultValue.getText().toString());
         model.setDefaultIncrement(editTextDefaultIncrement.getText().toString());
         model.setDefaultDecrement(editTextDefaultDecrement.getText().toString());
         model.setBackgroundColor(colorButtonMap.get(buttonBackground));

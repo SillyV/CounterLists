@@ -1,7 +1,8 @@
 package sillyv.com.counterlists.screens.lists.recycler;
 
 /**
- * Created by vasil on 2/18/2017.
+ * Created by Vasili on 2/18/2017.
+ *
  */
 
 public interface ConstraintListsContract {

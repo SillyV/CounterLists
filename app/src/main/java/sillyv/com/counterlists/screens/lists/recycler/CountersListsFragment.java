@@ -23,11 +23,8 @@ import sillyv.com.counterlists.screens.lists.upsert.UpsertCounterListFragment;
 public class CountersListsFragment extends CLFragment {
 
 
-    private LinearLayoutManager layout;
-    private CounterListAdapter adapter;
-
     @OnClick(R.id.fab)
-    public void onFabClick(View view) {
+    public void onFabClick() {
 //        ListController.getInstance().addNewList(new ListModel(0, 1, 1, 0, 0, 0, "A", true, true,
 //                true, true, false, true, "list 1"));
 //        initRecyclerView();
@@ -44,7 +41,7 @@ public class CountersListsFragment extends CLFragment {
         // Required empty public constructor
     }
 
-    public static CountersListsFragment newInstance(String param1, String param2) {
+    public static CountersListsFragment newInstance() {
         CountersListsFragment fragment = new CountersListsFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
@@ -55,6 +52,7 @@ public class CountersListsFragment extends CLFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //noinspection StatementWithEmptyBody
         if (getArguments() != null) {
         }
     }
@@ -71,9 +69,9 @@ public class CountersListsFragment extends CLFragment {
     }
 
     private void initRecyclerView() {
-        layout = new LinearLayoutManager(getContext());
+        LinearLayoutManager layout = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layout);
-        adapter = new CounterListAdapter(ListController.getInstance().getAllCounters());
+        CounterListAdapter adapter = new CounterListAdapter(ListController.getInstance().getAllCounters());
         recyclerView.setAdapter(adapter);
     }
 

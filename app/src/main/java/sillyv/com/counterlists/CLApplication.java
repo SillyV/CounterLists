@@ -13,6 +13,7 @@ import sillyv.com.counterlists.database.models.ListModel;
 
 /**
  * Created by Vasili on 1/28/2017.
+ *
  */
 public class CLApplication extends Application {
 

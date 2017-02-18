@@ -8,6 +8,7 @@ import io.realm.annotations.PrimaryKey;
 
 /**
  * Created by Vasili on 1/28/2017.
+ *
  */
 
 public class Counter extends RealmObject implements RealmModel {

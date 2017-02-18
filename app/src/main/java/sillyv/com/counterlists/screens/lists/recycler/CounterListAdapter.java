@@ -15,12 +15,13 @@ import sillyv.com.counterlists.database.models.ListModel;
 
 /**
  * Created by Vasili on 1/28/2017.
+ *
  */
-public class CounterListAdapter extends RecyclerView.Adapter<CounterListAdapter.ListHolder> {
+class CounterListAdapter extends RecyclerView.Adapter<CounterListAdapter.ListHolder> {
 
-    List<ListModel> items;
+    private final List<ListModel> items;
 
-    public CounterListAdapter(List<ListModel> counterLists) {
+    CounterListAdapter(List<ListModel> counterLists) {
         items = counterLists;
     }
 
@@ -28,8 +29,7 @@ public class CounterListAdapter extends RecyclerView.Adapter<CounterListAdapter.
     public ListHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v =  LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_counter_list, parent, false);
-        ListHolder vh = new ListHolder(v);
-        return vh;
+        return new ListHolder(v);
 
     }
 
@@ -44,13 +44,13 @@ public class CounterListAdapter extends RecyclerView.Adapter<CounterListAdapter.
     }
 
 
-    public class ListHolder extends RecyclerView.ViewHolder {
+    class ListHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.text_view_items)
         TextView items;
         @BindView(R.id.text_view_title)
         TextView title;
 
-        public ListHolder(View itemView) {
+        ListHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }

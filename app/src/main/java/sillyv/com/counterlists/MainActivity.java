@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -28,8 +29,7 @@ public class MainActivity extends AppCompatActivity implements CLFragment.Listen
     private static final String TAG = MainActivity.class.getSimpleName();
 
     @BindView(R.id.toolbar)
-    Toolbar toolbar;
-    private int currentMenu = R.menu.upsert_list_menu;
+   private Toolbar toolbar;
 
 
     @Override
@@ -38,7 +38,10 @@ public class MainActivity extends AppCompatActivity implements CLFragment.Listen
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        ActionBar supportActionBar = getSupportActionBar();
+        if (supportActionBar != null) {
+            supportActionBar.setDisplayShowTitleEnabled(false);
+        }
         addFragment(new CountersListsFragment());
         setTitle("Counter List");
         if (Realm.getDefaultInstance().isEmpty()) {
@@ -47,10 +50,10 @@ public class MainActivity extends AppCompatActivity implements CLFragment.Listen
     }
 
     private void generateInitialData() {
-        ListController.getInstance().addNewList(new ListModel(0, 1, 1, getIntFromColor(1, 1, 1), getIntFromColor(.75f, .75f, .75f), getIntFromColor(0, 0, 0), "", true, false, false, false, false, false, ""), 0);
+        ListController.getInstance().addNewList(new ListModel(0, 1, 1, getIntFromColor(1, 1, 1), getIntFromColor(.75f, .75f, .75f), getIntFromColor(0, 0, 0), "", true, false, false, false, false, false, ""), ListController.DEFAULT_LIST);
     }
 
-    public int getIntFromColor(float Red, float Green, float Blue) {
+    private int getIntFromColor(float Red, float Green, float Blue) {
         int R = Math.round(255 * Red);
         int G = Math.round(255 * Green);
         int B = Math.round(255 * Blue);
@@ -92,35 +95,39 @@ public class MainActivity extends AppCompatActivity implements CLFragment.Listen
         ((TextView) toolbar.findViewById(R.id.title_text_view)).setText(title);
     }
 
-    public void setMenu(int menu) {
-        currentMenu = menu;
-        invalidateOptionsMenu();
-    }
-
     @Override
     public void popBackStack() {
         FragmentManager fm = getSupportFragmentManager();
         fm.popBackStack();
         invalidateOptionsMenu();
-        getActiveFragment().setTitle();
+        CLFragment activeFragment = getActiveFragment();
+        if (activeFragment != null) {
+            activeFragment.setTitle();
+        }
 
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        getActiveFragment().onCreateOptionsMenu(menu, inflater);
+
+        CLFragment activeFragment = getActiveFragment();
+        if (activeFragment != null) {
+            activeFragment.onCreateOptionsMenu(menu, inflater);
+        }
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
-        getActiveFragment().onOptionsItemSelected(item);
+        CLFragment activeFragment = getActiveFragment();
+        if (activeFragment != null) {
+            activeFragment.onOptionsItemSelected(item);
+        }
         return super.onOptionsItemSelected(item);
     }
 
-    public CLFragment getActiveFragment() {
+    private CLFragment getActiveFragment() {
         if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
             return null;
         }

@@ -7,7 +7,8 @@ import android.view.Menu;
 import android.widget.Toast;
 
 /**
- * Created by vasil on 2/18/2017.
+ * Created by Vasili on 2/18/2017.
+ *
  */
 
 public abstract class CLFragment extends Fragment {
@@ -49,8 +50,6 @@ public abstract class CLFragment extends Fragment {
         void setTitle(String title);
 
         void invalidateOptionsMenu();
-
-        void setMenu(int menu);
 
         void popBackStack();
     }

@@ -8,7 +8,8 @@ import io.realm.annotations.PrimaryKey;
 import sillyv.com.counterlists.database.models.ListModel;
 
 /**
- * Created by vasil on 1/28/2017.
+ * Created by Vasili on 1/28/2017.
+ *
  */
 
 public class CounterList extends RealmObject {

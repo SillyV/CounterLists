@@ -1,7 +1,6 @@
 package sillyv.com.counterlists.screens.lists.upsert;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.support.annotation.NonNull;
 
 import java.util.Date;
@@ -11,10 +10,11 @@ import sillyv.com.counterlists.database.dbitems.CounterList;
 import sillyv.com.counterlists.database.models.ListModel;
 
 /**
- * Created by vasil on 2/18/2017.
+ * Created by Vasili on 2/18/2017.
+ *
  */
 
-public class UpsertCounterListPresenter implements UpsertCounterListContract.UpsertCounterListPresenter {
+class UpsertCounterListPresenter implements UpsertCounterListContract.UpsertCounterListPresenter {
 
     @Override
     public void getData(Context context, UpsertCounterListContract.UpsertCounterListView view, UpsertCounterListModel.Identifier identifier) {
@@ -35,12 +35,12 @@ public class UpsertCounterListPresenter implements UpsertCounterListContract.Ups
         Date dateCreated = list.getCreated();
         Date dateModified = list.getValueChanged();
         Date dateEdited = list.getEdited();
-        UpsertCounterListModel.CounterListSettings.Builder builder = counterListSettings.dateCreated(dateFormat.format(dateCreated))
+        return counterListSettings.dateCreated(dateFormat.format(dateCreated))
                 .dateModified(dateFormat.format(dateEdited))
                 .lastUsed(dateFormat.format(dateModified))
                 .toolbarTitle("Edit list");
-        counterListSettings = builder;
-        return counterListSettings;
+//        counterListSettings = builder;
+//        return builder;
     }
 
     private UpsertCounterListModel.CounterListSettings.Builder getNewListBuilderData(UpsertCounterListModel.CounterListSettings.Builder counterListSettings) {
@@ -55,7 +55,7 @@ public class UpsertCounterListPresenter implements UpsertCounterListContract.Ups
                 .Builder()
                 .name(list.getName())
                 .note(list.getNote())
-                .defaultVaule(String.valueOf(list.getDefaultValue()))
+                .defaultValue(String.valueOf(list.getDefaultValue()))
                 .defaultIncrement(String.valueOf(list.getDefaultIncrement()))
                 .defaultDecrement(String.valueOf(list.getDefaultDecrement()))
                 .backgroundColor(list.getBackground())
@@ -70,7 +70,7 @@ public class UpsertCounterListPresenter implements UpsertCounterListContract.Ups
     }
 
     @Override
-    public boolean saveData(Context context, UpsertCounterListModel.CounterListSettings model, UpsertCounterListModel.Identifier identifier) {
+    public void saveData(UpsertCounterListModel.CounterListSettings model, UpsertCounterListModel.Identifier identifier) {
 
 
         ListModel dbModel = getListModel(model);
@@ -80,12 +80,11 @@ public class UpsertCounterListPresenter implements UpsertCounterListContract.Ups
             dbModel.setId(identifier.getId());
             ListController.getInstance().updateList(dbModel);
         }
-        return true;
     }
 
     @NonNull
     private ListModel getListModel(UpsertCounterListModel.CounterListSettings model) {
-        return new ListModel(Integer.parseInt(model.getDefaultVaule()),
+        return new ListModel(Integer.parseInt(model.getDefaultValue()),
                     Integer.parseInt(model.getDefaultIncrement()),
                     Integer.parseInt(model.getDefaultDecrement()),
                     model.getBackgroundColor(),

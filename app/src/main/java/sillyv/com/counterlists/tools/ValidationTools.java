@@ -1,10 +1,13 @@
 package sillyv.com.counterlists.tools;
 
+import com.facebook.stetho.common.StringUtil;
+
 import java.text.NumberFormat;
 import java.text.ParseException;
 
 /**
- * Created by vasil on 2/18/2017.
+ * Created by Vasili on 2/18/2017.
+ *
  */
 
 public class ValidationTools {
@@ -21,9 +24,9 @@ public class ValidationTools {
     public boolean isStringNumeric(String str) {
         try {
             NumberFormat.getInstance().parse(str);
+            return true;
         } catch (ParseException e) {
             return false;
         }
-        return true;
     }
 }

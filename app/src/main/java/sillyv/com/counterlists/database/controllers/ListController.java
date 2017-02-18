@@ -17,6 +17,7 @@ import sillyv.com.counterlists.database.models.ListModel;
 
 /**
  * Created by Vasili on 1/28/2017.
+ *
  */
 
 public class ListController {
@@ -25,7 +26,7 @@ public class ListController {
     private static ListController instance;
     private final Realm realm;
 
-    public ListController() {
+    private ListController() {
         realm = Realm.getDefaultInstance();
     }
 
@@ -45,8 +46,8 @@ public class ListController {
     public List<ListModel> getAllCounters() {
         List<ListModel> result = new ArrayList<>();
         RealmResults<CounterList> list = getCounterLists();
-        for (CounterList listt : list) {
-            result.add(new ListModel(listt));
+        for (CounterList counterList : list) {
+            result.add(new ListModel(counterList));
         }
         return result;
 
@@ -54,7 +55,7 @@ public class ListController {
 
 
     //find all objects in the Book.class
-    public RealmResults<CounterList> getCounterLists() {
+    private RealmResults<CounterList> getCounterLists() {
         return realm.where(CounterList.class).greaterThan("id",0). findAll();
     }
 
@@ -125,7 +126,7 @@ public class ListController {
 
 
     //query example
-    public RealmResults<CounterList> queryedBooks() {
+    public RealmResults<CounterList> queriedBooks() {
 
         return realm.where(CounterList.class)
                 .contains("author", "Author 0")
