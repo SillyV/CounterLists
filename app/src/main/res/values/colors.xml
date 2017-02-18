@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#4CAF50</color>
+    <color name="colorPrimaryDark">#388E3C</color>
+    <color name="colorAccent">#009688</color>
+    <color name="colorPrimaryLight">#C8E6C9</color>
+    <color name="colorPrimaryText">#212121</color>
+    <color name="colorSecondaryText">#757575</color>
+    <color name="icons">#FFFFFF</color>
+    <color name="divider">#BDBDBD</color>
+    <color name="lightest_green">#ccffbb</color>
+    <color name="green">#00ff00</color>
+    <color name="dark_green">#50c040</color>
+    <color name="darkest_green">#005000</color>
+    <color name="light_blue">#80ccff</color>
+    <color name="blue">#0077ff</color>
+    <color name="dark_blue">#0000ff</color>
+    <color name="darkest_blue">#000090</color>
+    <color name="lightest_pink">#ffbbff</color>
+    <color name="pink">#dd66ff</color>
+    <color name="purple">#8800ff</color>
+    <color name="darkest_purple">#440099</color>
+    <color name="lemon_yellow">#ffffcc</color>
+    <color name="yellow">#ffff00</color>
+    <color name="orange">#ffaa00</color>
+    <color name="dark_orange">#aa6600</color>
+    <color name="reddish_white">#ff8888</color>
+    <color name="red">#ff0000</color>
+    <color name="dark_red">#990000</color>
+    <color name="bordo">#550000</color>
+    <color name="white">#ffffff</color>
+    <color name="grey1">#cacaca</color>
+    <color name="grey2">#808080</color>
+    <color name="grey3">#414141</color>
+    <color name="black">#000000</color>
+
+
+
+</resources>

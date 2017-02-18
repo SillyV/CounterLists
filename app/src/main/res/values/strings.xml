@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">CounterLists</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="date_created">Date created:</string>
+    <string name="date_modified">Date modified:</string>
+    <string name="date_changed">Date last used:</string>
+    <string name="show_advanced_settings">Show Advanced settings</string>
+    <string name="hide_advanced_settings">Hide Advanced settings</string>
+    <string name="cancel">Cancel</string>
+    <string name="ok">O.K.</string>
+    <string name="choose_color">Choose color:</string>
+    <string name="more">More…</string>
+    <string name="more_colors">More Colors</string>
+    <string name="less_colors">Less Colors</string>
+</resources>
