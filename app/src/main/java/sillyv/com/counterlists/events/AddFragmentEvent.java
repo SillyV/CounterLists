@@ -1,6 +1,6 @@
 package sillyv.com.counterlists.events;
 
-import android.support.v4.app.Fragment;
+import sillyv.com.counterlists.CLFragment;
 
 /**
  * Created by Vasili on 1/28/2017.
@@ -8,17 +8,17 @@ import android.support.v4.app.Fragment;
 
 public class AddFragmentEvent {
 
-    Fragment fragment;
+    CLFragment fragment;
 
-    public AddFragmentEvent(Fragment fragment) {
+    public AddFragmentEvent(CLFragment fragment) {
         this.fragment = fragment;
     }
 
-    public Fragment getFragment() {
+    public CLFragment getFragment() {
         return fragment;
     }
 
-    public void setFragment(Fragment fragment) {
+    public void setFragment(CLFragment fragment) {
         this.fragment = fragment;
     }
 }

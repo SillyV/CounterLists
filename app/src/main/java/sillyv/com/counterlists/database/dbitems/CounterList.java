@@ -25,7 +25,7 @@ public class CounterList extends RealmObject {
     private Date edited;
     private Date valueChanged;
     private String note;
-    private boolean clickSount;
+    private boolean clickSound;
     private boolean vibrate;
     private boolean speechOutputValue;
     private boolean speechOutputName;
@@ -49,7 +49,7 @@ public class CounterList extends RealmObject {
         edited = new Date();
         valueChanged = new Date();
         note = model.getNote();
-        clickSount = model.isClickSound();
+        clickSound = model.isClickSound();
         vibrate = model.isVibrate();
         speechOutputValue = model.isSpeechOutputValue();
         speechOutputName = model.isSpeechOutputName();
@@ -68,7 +68,7 @@ public class CounterList extends RealmObject {
         defaultCardForegroundColor = model.getDefaultCardForegroundColor();
         edited = new Date();
         note = model.getNote();
-        clickSount = model.isClickSound();
+        clickSound = model.isClickSound();
         vibrate = model.isVibrate();
         speechOutputValue = model.isSpeechOutputValue();
         speechOutputName = model.isSpeechOutputName();
@@ -151,12 +151,12 @@ public class CounterList extends RealmObject {
         this.note = note;
     }
 
-    public boolean isClickSount() {
-        return clickSount;
+    public boolean isClickSound() {
+        return clickSound;
     }
 
-    public void setClickSount(boolean clickSount) {
-        this.clickSount = clickSount;
+    public void setClickSound(boolean clickSound) {
+        this.clickSound = clickSound;
     }
 
     public boolean isVibrate() {

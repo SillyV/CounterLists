@@ -8,14 +8,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.greenrobot.eventbus.EventBus;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import sillyv.com.counterlists.CLFragment;
 import sillyv.com.counterlists.R;
 import sillyv.com.counterlists.database.controllers.ListController;
 import sillyv.com.counterlists.database.models.ListModel;
+import sillyv.com.counterlists.events.AddFragmentEvent;
+import sillyv.com.counterlists.screens.lists.upsert.UpsertCounterListFragment;
 
-public class CountersListsFragment extends Fragment {
+public class CountersListsFragment extends CLFragment {
 
 
     private LinearLayoutManager layout;
@@ -23,11 +28,11 @@ public class CountersListsFragment extends Fragment {
 
     @OnClick(R.id.fab)
     public void onFabClick(View view) {
-        ListController.getInstance().addNewList(new ListModel(0, 1, 1, 0, 0, 0, "A", true, true,
-                true, true, false, true, "list 1"));
-        initRecyclerView();
-        recyclerView.scrollToPosition(adapter.getItemCount() -1);
-
+//        ListController.getInstance().addNewList(new ListModel(0, 1, 1, 0, 0, 0, "A", true, true,
+//                true, true, false, true, "list 1"));
+//        initRecyclerView();
+//        recyclerView.scrollToPosition(adapter.getItemCount() -1);
+        EventBus.getDefault().post(new AddFragmentEvent(UpsertCounterListFragment.newInstance()));
     }
 
 
@@ -61,15 +66,20 @@ public class CountersListsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_counters_lists, container, false);
         ButterKnife.bind(this, view);
         initRecyclerView();
+        setTitle("Counter List");
         return view;
     }
 
     private void initRecyclerView() {
         layout = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layout);
-        adapter = new CounterListAdapter(ListController.with(this).getAllCounters());
+        adapter = new CounterListAdapter(ListController.getInstance().getAllCounters());
         recyclerView.setAdapter(adapter);
     }
 
 
+    @Override
+    public void setTitle() {
+        setTitle("Counter Lists");
+    }
 }

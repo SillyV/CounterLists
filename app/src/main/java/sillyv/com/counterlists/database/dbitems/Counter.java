@@ -17,7 +17,7 @@ public class Counter extends RealmObject implements RealmModel {
     private Date edited;
     private Date valueChanged;
     private String note;
-    private boolean clickSount;
+    private boolean clickSound;
     private boolean vibrate;
     private boolean speechOutputValue;
     private boolean speechOutputName;
@@ -73,12 +73,12 @@ public class Counter extends RealmObject implements RealmModel {
         this.note = note;
     }
 
-    public boolean isClickSount() {
-        return clickSount;
+    public boolean isClickSound() {
+        return clickSound;
     }
 
-    public void setClickSount(boolean clickSount) {
-        this.clickSount = clickSount;
+    public void setClickSound(boolean clickSound) {
+        this.clickSound = clickSound;
     }
 
     public boolean isVibrate() {

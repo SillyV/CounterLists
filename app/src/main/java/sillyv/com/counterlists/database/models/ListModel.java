@@ -49,7 +49,7 @@ public class ListModel {
         defaultCardForegroundColor = listt.getDefaultCardForegroundColor();
         note = listt.getNote();
         name = listt.getName();
-        clickSound = listt.isClickSount();
+        clickSound = listt.isClickSound();
         vibrate = listt.isVibrate();
         speechOutputValue = listt.isSpeechOutputValue();
         speechOutputName = listt.isSpeechOutputName();

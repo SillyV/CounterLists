@@ -14,4 +14,19 @@
     <string name="more">More…</string>
     <string name="more_colors">More Colors</string>
     <string name="less_colors">Less Colors</string>
+    <string name="save">Save</string>
+    <string name="name">Name</string>
+    <string name="note">Note</string>
+    <string name="default_value">Default value</string>
+    <string name="default_increment">Default increment</string>
+    <string name="default_decrement">Default decrement</string>
+    <string name="background_color">Background Color</string>
+    <string name="default_counter_background">Default Counter Background</string>
+    <string name="default_counter_text_color">Default Counter Text Color</string>
+    <string name="click_sound_on_count">Click Sound on count.</string>
+    <string name="vibrate_on_count">Vibrate on count</string>
+    <string name="speak_value_out_loud">Speak value out loud</string>
+    <string name="speak_name_out_loud">Speak name out loud</string>
+    <string name="keep_awake_on_this_counter">Keep Awake on this counter</string>
+    <string name="use_volume_key_to_count">Use volume key to count</string>
 </resources>

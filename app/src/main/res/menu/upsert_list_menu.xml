@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/show_advanced"
+        android:title="Show Advanced Settings"
+        android:icon="@drawable/ic_visibility_on"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/hide_advanced"
+        android:icon="@drawable/ic_visibility_off"
+        android:title="Hide Advanced Settings"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/save"
+        android:title="@string/save"
+        app:showAsAction="always" />
+
+</menu>

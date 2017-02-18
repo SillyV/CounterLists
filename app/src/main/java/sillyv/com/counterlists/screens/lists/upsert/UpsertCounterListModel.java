@@ -1,12 +1,12 @@
-package sillyv.com.counterlists.screens.lists.edit;
-
-import android.graphics.Color;
+package sillyv.com.counterlists.screens.lists.upsert;
 
 /**
  * Created by vasil on 2/18/2017.
  */
 
-public abstract class EditCounterListModel implements EditCounterListContract.EditCounterListModel {
+public abstract class UpsertCounterListModel  {
+
+    public static final long NEW_LIST_IDENTIFIER = 0L;
 
     public static class CounterListSettings {
         private String name;
@@ -14,10 +14,10 @@ public abstract class EditCounterListModel implements EditCounterListContract.Ed
         private String defaultVaule;
         private String defaultIncrement;
         private String defaultDecrement;
-        private Color backgroundColor;
-        private Color defaultColorCounterBackground;
-        private Color defaultColorCounterText;
-        private boolean clickSount;
+        private int backgroundColor;
+        private int defaultColorCounterBackground;
+        private int defaultColorCounterText;
+        private boolean clickSound;
         private boolean vibrate;
         private boolean speakValue;
         private boolean speakName;
@@ -26,6 +26,31 @@ public abstract class EditCounterListModel implements EditCounterListContract.Ed
         private String dateCreated;
         private String dateModified;
         private String lastUsed;
+        private String toolbarTitle;
+
+        public CounterListSettings() {
+        }
+
+        public CounterListSettings(String name, String note, String defaultVaule, String defaultIncrement, String defaultDecrement, int backgroundColor, int defaultColorCounterBackground, int defaultColorCounterText, boolean clickSound, boolean vibrate, boolean speakValue, boolean speakName, boolean keepAwake, boolean useVolume, String dateCreated, String dateModified, String lastUsed, String toolbarTitle) {
+            this.name = name;
+            this.note = note;
+            this.defaultVaule = defaultVaule;
+            this.defaultIncrement = defaultIncrement;
+            this.defaultDecrement = defaultDecrement;
+            this.backgroundColor = backgroundColor;
+            this.defaultColorCounterBackground = defaultColorCounterBackground;
+            this.defaultColorCounterText = defaultColorCounterText;
+            this.clickSound = clickSound;
+            this.vibrate = vibrate;
+            this.speakValue = speakValue;
+            this.speakName = speakName;
+            this.keepAwake = keepAwake;
+            this.useVolume = useVolume;
+            this.dateCreated = dateCreated;
+            this.dateModified = dateModified;
+            this.lastUsed = lastUsed;
+            this.toolbarTitle = toolbarTitle;
+        }
 
         private CounterListSettings(Builder builder) {
             name = builder.name;
@@ -36,7 +61,7 @@ public abstract class EditCounterListModel implements EditCounterListContract.Ed
             backgroundColor = builder.backgroundColor;
             defaultColorCounterBackground = builder.defaultColorCounterBackground;
             defaultColorCounterText = builder.defaultColorCounterText;
-            clickSount = builder.clickSount;
+            clickSound = builder.clickSound;
             vibrate = builder.vibrate;
             speakValue = builder.speakValue;
             speakName = builder.speakName;
@@ -45,6 +70,7 @@ public abstract class EditCounterListModel implements EditCounterListContract.Ed
             dateCreated = builder.dateCreated;
             dateModified = builder.dateModified;
             lastUsed = builder.lastUsed;
+            toolbarTitle = builder.toolbarTitle;
         }
 
         public String getName() {
@@ -87,36 +113,36 @@ public abstract class EditCounterListModel implements EditCounterListContract.Ed
             this.defaultDecrement = defaultDecrement;
         }
 
-        public Color getBackgroundColor() {
+        public int getBackgroundColor() {
             return backgroundColor;
         }
 
-        public void setBackgroundColor(Color backgroundColor) {
+        public void setBackgroundColor(int backgroundColor) {
             this.backgroundColor = backgroundColor;
         }
 
-        public Color getDefaultColorCounterBackground() {
+        public int getDefaultColorCounterBackground() {
             return defaultColorCounterBackground;
         }
 
-        public void setDefaultColorCounterBackground(Color defaultColorCounterBackground) {
+        public void setDefaultColorCounterBackground(int defaultColorCounterBackground) {
             this.defaultColorCounterBackground = defaultColorCounterBackground;
         }
 
-        public Color getDefaultColorCounterText() {
+        public int getDefaultColorCounterText() {
             return defaultColorCounterText;
         }
 
-        public void setDefaultColorCounterText(Color defaultColorCounterText) {
+        public void setDefaultColorCounterText(int defaultColorCounterText) {
             this.defaultColorCounterText = defaultColorCounterText;
         }
 
-        public boolean isClickSount() {
-            return clickSount;
+        public boolean isClickSound() {
+            return clickSound;
         }
 
-        public void setClickSount(boolean clickSount) {
-            this.clickSount = clickSount;
+        public void setClickSound(boolean clickSound) {
+            this.clickSound = clickSound;
         }
 
         public boolean isVibrate() {
@@ -183,7 +209,12 @@ public abstract class EditCounterListModel implements EditCounterListContract.Ed
             this.lastUsed = lastUsed;
         }
 
-        public CounterListSettings() {
+        public String getToolbarTitle() {
+            return toolbarTitle;
+        }
+
+        public void setToolbarTitle(String toolbarTitle) {
+            this.toolbarTitle = toolbarTitle;
         }
 
         public static final class Builder {
@@ -192,10 +223,10 @@ public abstract class EditCounterListModel implements EditCounterListContract.Ed
             private String defaultVaule;
             private String defaultIncrement;
             private String defaultDecrement;
-            private Color backgroundColor;
-            private Color defaultColorCounterBackground;
-            private Color defaultColorCounterText;
-            private boolean clickSount;
+            private int backgroundColor;
+            private int defaultColorCounterBackground;
+            private int defaultColorCounterText;
+            private boolean clickSound;
             private boolean vibrate;
             private boolean speakValue;
             private boolean speakName;
@@ -204,6 +235,7 @@ public abstract class EditCounterListModel implements EditCounterListContract.Ed
             private String dateCreated;
             private String dateModified;
             private String lastUsed;
+            private String toolbarTitle;
 
             public Builder() {
             }
@@ -233,23 +265,23 @@ public abstract class EditCounterListModel implements EditCounterListContract.Ed
                 return this;
             }
 
-            public Builder backgroundColor(Color val) {
+            public Builder backgroundColor(int val) {
                 backgroundColor = val;
                 return this;
             }
 
-            public Builder defaultColorCounterBackground(Color val) {
+            public Builder defaultColorCounterBackground(int val) {
                 defaultColorCounterBackground = val;
                 return this;
             }
 
-            public Builder defaultColorCounterText(Color val) {
+            public Builder defaultColorCounterText(int val) {
                 defaultColorCounterText = val;
                 return this;
             }
 
-            public Builder clickSount(boolean val) {
-                clickSount = val;
+            public Builder clickSound(boolean val) {
+                clickSound = val;
                 return this;
             }
 
@@ -293,8 +325,58 @@ public abstract class EditCounterListModel implements EditCounterListContract.Ed
                 return this;
             }
 
+            public Builder toolbarTitle(String val) {
+                toolbarTitle = val;
+                return this;
+            }
+
             public CounterListSettings build() {
                 return new CounterListSettings(this);
+            }
+        }
+    }
+
+    public static class Identifier {
+        long id;
+
+        public Identifier(long id) {
+            this.id = id;
+        }
+
+        public Identifier() {
+        }
+
+        private Identifier(Builder builder) {
+            setId(builder.id);
+        }
+
+        public long getId() {
+            return id;
+        }
+
+        public void setId(long id) {
+            this.id = id;
+        }
+
+
+        public static final class Builder {
+            private long id;
+
+            public Builder() {
+            }
+
+            public Builder id(long val) {
+                id = val;
+                return this;
+            }
+
+            public Builder blank(){
+                id = NEW_LIST_IDENTIFIER;
+                return this;
+            }
+
+            public Identifier build() {
+                return new Identifier(this);
             }
         }
     }
