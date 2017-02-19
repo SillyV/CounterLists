@@ -5,7 +5,7 @@ import java.util.List;
 import sillyv.com.counterlists.database.models.ListModel;
 
 /**
- * Created by vasil on 2/19/2017.
+ * Created by Vasili on 2/19/2017.
  */
 
 public interface RealmRepository<T> {
@@ -17,4 +17,6 @@ public interface RealmRepository<T> {
     void addNewList(T dbModel);
 
     void updateList(T dbModel);
+
+    void deleteItem(Long aLong);
 }

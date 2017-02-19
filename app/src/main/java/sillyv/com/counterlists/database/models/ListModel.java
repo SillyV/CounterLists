@@ -96,7 +96,8 @@ public class ListModel {
         dateCreated = list.getCreated();
         dateModified = list.getEdited();
         dateUsed = list.getValueChanged();
-
+        counterIds = new ArrayList<>();
+        counterNames = new ArrayList<>();
     }
 
     public List<String> getCounterNames() {
@@ -137,6 +138,8 @@ public class ListModel {
         dateCreated = new Date();
         dateModified = new Date();
         dateUsed = new Date();
+        counterIds = new ArrayList<>();
+        counterNames = new ArrayList<>();
 
 
     }
@@ -159,6 +162,9 @@ public class ListModel {
         this.keepAwake = keepAwake;
         this.volumeKey = volumeKey;
         this.name = name;
+        counterIds = new ArrayList<>();
+        counterNames = new ArrayList<>();
+
     }
 
     public long getId() {

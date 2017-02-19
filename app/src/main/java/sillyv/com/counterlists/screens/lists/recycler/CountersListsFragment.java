@@ -20,6 +20,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import sillyv.com.counterlists.CLFragment;
 import sillyv.com.counterlists.R;
+import sillyv.com.counterlists.database.controllers.ListController;
 import sillyv.com.counterlists.events.AddFragmentEvent;
 import sillyv.com.counterlists.screens.lists.upsert.UpsertCounterListFragment;
 
@@ -63,8 +64,8 @@ public class CountersListsFragment extends CLFragment implements CounterListsCon
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_counters_lists, container, false);
         ButterKnife.bind(this, view);
-        presenter = new CounterListsPresenter();
-        presenter.getData(getContext(), this);
+        presenter = new CounterListsPresenter(this, ListController.getInstance());
+        presenter.getData();
         setTitle("Counter List");
         return view;
     }
@@ -87,6 +88,11 @@ public class CountersListsFragment extends CLFragment implements CounterListsCon
         recyclerView.setLayoutManager(layout);
         adapter = new CounterListsAdapter(model.getItems());
         recyclerView.setAdapter(adapter);
+    }
+
+    @Override
+    public void onErrorResponse() {
+
     }
 
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -131,7 +137,7 @@ public class CountersListsFragment extends CLFragment implements CounterListsCon
         builder.setMessage(R.string.consider);
         builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                presenter.deleteItems(getContext(), CountersListsFragment.this, adapter.getItemsToDelete());
+                presenter.deleteItems(adapter.getItemsToDelete());
                 dialog.dismiss();
             }
         });

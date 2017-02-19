@@ -10,9 +10,8 @@ import java.util.Date;
 import sillyv.com.counterlists.R;
 import sillyv.com.counterlists.database.controllers.ListController;
 import sillyv.com.counterlists.database.controllers.RealmRepository;
-import sillyv.com.counterlists.database.dbitems.CounterList;
-import sillyv.com.counterlists.database.models.CounterModel;
 import sillyv.com.counterlists.database.models.ListModel;
+
 
 /**
  * Created by Vasili on 2/18/2017.
@@ -20,11 +19,12 @@ import sillyv.com.counterlists.database.models.ListModel;
 
 class UpsertCounterListPresenter implements UpsertCounterListContract.UpsertCounterListPresenter {
 
+    private static final String TAG = UpsertCounterListPresenter.class.getSimpleName();
 
     private UpsertCounterListContract.UpsertCounterListView view;
     private RealmRepository<ListModel> repo;
 
-    public UpsertCounterListPresenter(UpsertCounterListContract.UpsertCounterListView view, RealmRepository<ListModel> repo) {
+    UpsertCounterListPresenter(UpsertCounterListContract.UpsertCounterListView view, RealmRepository<ListModel> repo) {
         this.view = view;
         this.repo = repo;
     }
@@ -32,6 +32,19 @@ class UpsertCounterListPresenter implements UpsertCounterListContract.UpsertCoun
     @Override
     public void loadData(Context context, UpsertCounterListModel.Identifier identifier) {
         ListModel list = repo.getItem(identifier.getId());
+
+        if (list == null) {
+            view.onDataError();
+            return;
+        }
+
+        UpsertCounterListModel.CounterListSettings data = getCounterListSettings(context, identifier, list);
+
+        view.onDataReceived(data);
+    }
+
+    @NonNull
+    private UpsertCounterListModel.CounterListSettings getCounterListSettings(Context context, UpsertCounterListModel.Identifier identifier, ListModel list) {
 
         UpsertCounterListModel.CounterListSettings.Builder counterListSettings =
                 getBuilderFromDBItem(list);
@@ -42,7 +55,7 @@ class UpsertCounterListPresenter implements UpsertCounterListContract.UpsertCoun
             counterListSettings = getExistingListBuilderData(context, list, counterListSettings);
         }
 
-        view.onDataReceived(counterListSettings.build());
+        return counterListSettings.build();
     }
 
     private UpsertCounterListModel.CounterListSettings.Builder getExistingListBuilderData(Context context, ListModel list, UpsertCounterListModel.CounterListSettings.Builder counterListSettings) {
@@ -50,7 +63,7 @@ class UpsertCounterListPresenter implements UpsertCounterListContract.UpsertCoun
         Date dateCreated = list.getDateCreated();
         Date dateModified = list.getDateUsed();
         Date dateEdited = list.getDateModified();
-        Log.d("TAGTAG", dateCreated.toString());
+        Log.d(TAG, dateCreated.toString());
         return
                 counterListSettings
                         .dateCreated(dateFormat.format(dateCreated))
@@ -89,14 +102,13 @@ class UpsertCounterListPresenter implements UpsertCounterListContract.UpsertCoun
 
     @Override
     public void saveData(UpsertCounterListModel.CounterListSettings model, UpsertCounterListModel.Identifier identifier) {
+        ListModel repoModel = getListModel(model);
 
-
-        ListModel dbModel = getListModel(model);
         if (identifier.getId() == ListController.DEFAULT_LIST) {
-            repo.addNewList(dbModel);
+            repo.addNewList(repoModel);
         } else {
-            dbModel.setId(identifier.getId());
-            repo.updateList(dbModel);
+            repoModel.setId(identifier.getId());
+            repo.updateList(repoModel);
         }
     }
 

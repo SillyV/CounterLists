@@ -256,6 +256,11 @@ public class UpsertCounterListFragment extends CLFragment implements UpsertCount
     }
 
     @Override
+    public void onDataError() {
+
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
         switch (item.getItemId()) {

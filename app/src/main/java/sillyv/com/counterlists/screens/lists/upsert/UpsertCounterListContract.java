@@ -18,5 +18,7 @@ public interface UpsertCounterListContract {
 
     interface UpsertCounterListView {
         void onDataReceived(UpsertCounterListModel.CounterListSettings model);
+
+        void onDataError();
     }
 }

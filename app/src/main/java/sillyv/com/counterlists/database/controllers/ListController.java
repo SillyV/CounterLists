@@ -49,7 +49,6 @@ public class ListController implements RealmRepository<ListModel> {
 
     //query a single item with the given id
     public CounterList getCounterList(long id) {
-
         return realm.where(CounterList.class).equalTo("id", id).findFirst();
     }
 

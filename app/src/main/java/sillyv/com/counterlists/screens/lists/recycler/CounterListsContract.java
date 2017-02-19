@@ -11,13 +11,16 @@ import android.content.Context;
 public interface CounterListsContract {
 
     interface CounterListsPresenter {
-        void getData(Context context, CounterListsContract.CounterListsView view);
 
-        void deleteItems(Context context, CounterListsView view, CounterListsModel.IDList idList);
+        void getData();
+
+        void deleteItems(CounterListsModel.IDList idList);
     }
 
     interface CounterListsView {
         void onDataReceived(CounterListsModel model);
+
+        void onErrorResponse();
     }
 
 

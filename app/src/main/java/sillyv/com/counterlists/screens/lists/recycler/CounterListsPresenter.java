@@ -10,6 +10,7 @@ import java.util.Map;
 
 import sillyv.com.counterlists.database.controllers.CounterController;
 import sillyv.com.counterlists.database.controllers.ListController;
+import sillyv.com.counterlists.database.controllers.RealmRepository;
 import sillyv.com.counterlists.database.models.CounterModel;
 import sillyv.com.counterlists.database.models.ListModel;
 
@@ -18,30 +19,44 @@ import sillyv.com.counterlists.database.models.ListModel;
  */
 
 public class CounterListsPresenter implements CounterListsContract.CounterListsPresenter {
-    @Override
-    public void getData(Context context, CounterListsContract.CounterListsView view) {
-//        List<ListModel> items = ListController.getInstance().getItems();
-//        List<CounterListsModel.ListItem> responseModel = new ArrayList<>();
-//        for (ListModel item : items) {
-//            List<String> counterNames = item.getCounterNames();
-//            String subTitle = "";
-//            for (String str : counterNames) {
-//                subTitle += str + ", ";
-//            }
-//            responseModel.add(new CounterListsModel.ListItem(item.getName(), subTitle, item.getBackground(), item.getDefaultCardBackgroundColor(), item.getDefaultCardForegroundColor(), item.getId()));
-//        }
-//        view.onDataReceived(new CounterListsModel(responseModel));
+
+    private CounterListsContract.CounterListsView view;
+    private RealmRepository<ListModel> repo;
+
+    public CounterListsPresenter(CounterListsContract.CounterListsView view, RealmRepository<ListModel> repo) {
+        this.view = view;
+        this.repo = repo;
     }
 
     @Override
-    public void deleteItems(Context context, CounterListsContract.CounterListsView view, CounterListsModel.IDList idList) {
-        for (Long aLong : idList.getItems()) {
-            ListController.getInstance().deleteItem(aLong);
+    public void getData() {
+        List<ListModel> items = repo.getItems();
+        if (items == null) {
+            view.onErrorResponse();
+            return;
         }
-        getData(context, view);
+        List<CounterListsModel.ListItem> responseModel = new ArrayList<>();
+        for (ListModel item : items) {
+            List<String> counterNames = item.getCounterNames();
+            String subTitle = "";
+            for (String str : counterNames) {
+                subTitle += str + ", ";
+            }
+            subTitle = replaceLastComma(subTitle);
+            responseModel.add(new CounterListsModel.ListItem(item.getName(), subTitle, item.getBackground(), item.getDefaultCardBackgroundColor(), item.getDefaultCardForegroundColor(), item.getId()));
+        }
+        view.onDataReceived(new CounterListsModel(responseModel));
     }
 
-    public String replaceLastComma(String str) {
+    @Override
+    public void deleteItems(CounterListsModel.IDList idList) {
+        for (Long aLong : idList.getItems()) {
+            repo.deleteItem(aLong);
+        }
+        getData();
+    }
+
+    private String replaceLastComma(String str) {
         if (str != null && str.length() > 0 && str.charAt(str.length() - 1) == 'x') {
             str = str.substring(0, str.length() - 2);
         }
