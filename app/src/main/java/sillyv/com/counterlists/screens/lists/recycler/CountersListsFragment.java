@@ -32,7 +32,7 @@ public class CountersListsFragment extends CLFragment implements CounterListsCon
 
     @OnClick(R.id.fab)
     public void onFabClick() {
-        EventBus.getDefault().post(new AddFragmentEvent(UpsertCounterListFragment.newInstance(4)));
+        EventBus.getDefault().post(new AddFragmentEvent(UpsertCounterListFragment.newInstance()));
     }
 
     @BindView(R.id.recycler_view)
@@ -138,6 +138,8 @@ public class CountersListsFragment extends CLFragment implements CounterListsCon
         builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 presenter.deleteItems(adapter.getItemsToDelete());
+                setTitle();
+                invalidateOptionsMenu();
                 dialog.dismiss();
             }
         });

@@ -120,8 +120,8 @@ public class UpsertCounterListFragment extends CLFragment implements UpsertCount
         ButterKnife.bind(this, view);
         setAdvancedVisibility();
         invalidateOptionsMenu();
-        presenter = new UpsertCounterListPresenter(this,ListController.getInstance());
-        presenter.loadData(getContext().getApplicationContext(), getIdentifier());
+        presenter = new UpsertCounterListPresenter(this, ListController.getInstance());
+        presenter.loadData(getContext(), android.text.format.DateFormat.getDateFormat(getContext()), getIdentifier());
         return view;
     }
 

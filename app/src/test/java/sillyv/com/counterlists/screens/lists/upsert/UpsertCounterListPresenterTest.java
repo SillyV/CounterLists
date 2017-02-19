@@ -9,6 +9,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import sillyv.com.counterlists.database.controllers.RealmRepository;
@@ -23,7 +24,7 @@ public class UpsertCounterListPresenterTest {
     @Mock
     Context mMockContext;
 
-  
+
     @Test
     public void successfullyPassNewListToView() throws Exception {
         //given
@@ -31,7 +32,7 @@ public class UpsertCounterListPresenterTest {
         RealmRepository<ListModel> repo = new MockListsRepo(4);
         //when
         UpsertCounterListContract.UpsertCounterListPresenter presenter = new UpsertCounterListPresenter(view, repo);
-        presenter.loadData(mMockContext, new UpsertCounterListModel.Identifier(0L));
+        presenter.loadData(mMockContext,new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"), new UpsertCounterListModel.Identifier(0L));
         //then
         Assert.assertEquals(true, ((MockView) view).onDataReceivedCalled);
     }
@@ -43,7 +44,7 @@ public class UpsertCounterListPresenterTest {
         RealmRepository<ListModel> repo = new MockListsRepo(4);
         //when
         UpsertCounterListContract.UpsertCounterListPresenter presenter = new UpsertCounterListPresenter(view, repo);
-        presenter.loadData(mMockContext, new UpsertCounterListModel.Identifier(1L));
+        presenter.loadData(mMockContext,new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"), new UpsertCounterListModel.Identifier(1L));
         //then
         Assert.assertEquals(true, ((MockView) view).onDataReceivedCalled);
     }
@@ -55,7 +56,7 @@ public class UpsertCounterListPresenterTest {
         RealmRepository<ListModel> repo = new MockListsRepo(0);
         //when
         UpsertCounterListContract.UpsertCounterListPresenter presenter = new UpsertCounterListPresenter(view, repo);
-        presenter.loadData(mMockContext, new UpsertCounterListModel.Identifier(1L));
+        presenter.loadData(mMockContext,new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"), new UpsertCounterListModel.Identifier(1L));
         //then
         Assert.assertEquals(true, ((MockView) view).onDataErrorCalled);
     }

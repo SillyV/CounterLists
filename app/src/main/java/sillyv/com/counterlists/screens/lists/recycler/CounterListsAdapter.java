@@ -17,8 +17,10 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnLongClick;
 import sillyv.com.counterlists.R;
+import sillyv.com.counterlists.events.AddFragmentEvent;
 import sillyv.com.counterlists.events.MenuChangedEvent;
 import sillyv.com.counterlists.events.ToolbarTitleChangedEvent;
+import sillyv.com.counterlists.screens.lists.upsert.UpsertCounterListFragment;
 
 /**
  * Created by Vasili on 1/28/2017.
@@ -97,7 +99,10 @@ class CounterListsAdapter extends RecyclerView.Adapter<CounterListsAdapter.ListH
         void onClick(View view) {
             if (deleteMode) {
                 setItemSelectedOrNot();
+                return;
             }
+            EventBus.getDefault().post(new AddFragmentEvent(UpsertCounterListFragment.newInstance(currentList.get(getAdapterPosition()).getId())));
+
         }
 
         @OnLongClick(R.id.card_view)

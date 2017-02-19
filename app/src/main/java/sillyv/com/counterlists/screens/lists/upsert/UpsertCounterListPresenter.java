@@ -30,7 +30,7 @@ class UpsertCounterListPresenter implements UpsertCounterListContract.UpsertCoun
     }
 
     @Override
-    public void loadData(Context context, UpsertCounterListModel.Identifier identifier) {
+    public void loadData(Context context, DateFormat dateFormat, UpsertCounterListModel.Identifier identifier) {
         ListModel list = repo.getItem(identifier.getId());
 
         if (list == null) {
@@ -38,13 +38,13 @@ class UpsertCounterListPresenter implements UpsertCounterListContract.UpsertCoun
             return;
         }
 
-        UpsertCounterListModel.CounterListSettings data = getCounterListSettings(context, identifier, list);
+        UpsertCounterListModel.CounterListSettings data = getCounterListSettings(context, dateFormat, identifier, list);
 
         view.onDataReceived(data);
     }
 
     @NonNull
-    private UpsertCounterListModel.CounterListSettings getCounterListSettings(Context context, UpsertCounterListModel.Identifier identifier, ListModel list) {
+    private UpsertCounterListModel.CounterListSettings getCounterListSettings(Context context, DateFormat dateFormat, UpsertCounterListModel.Identifier identifier, ListModel list) {
 
         UpsertCounterListModel.CounterListSettings.Builder counterListSettings =
                 getBuilderFromDBItem(list);
@@ -52,14 +52,14 @@ class UpsertCounterListPresenter implements UpsertCounterListContract.UpsertCoun
         if (identifier.getId() == ListController.DEFAULT_LIST) {
             counterListSettings = getNewListBuilderData(context, counterListSettings);
         } else {
-            counterListSettings = getExistingListBuilderData(context, list, counterListSettings);
+            counterListSettings = getExistingListBuilderData(context, dateFormat, list, counterListSettings);
         }
 
         return counterListSettings.build();
     }
 
-    private UpsertCounterListModel.CounterListSettings.Builder getExistingListBuilderData(Context context, ListModel list, UpsertCounterListModel.CounterListSettings.Builder counterListSettings) {
-        DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(context);
+    private UpsertCounterListModel.CounterListSettings.Builder getExistingListBuilderData(Context context, DateFormat dateFormat, ListModel list, UpsertCounterListModel.CounterListSettings.Builder counterListSettings) {
+//        DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(context);
         Date dateCreated = list.getDateCreated();
         Date dateModified = list.getDateUsed();
         Date dateEdited = list.getDateModified();
