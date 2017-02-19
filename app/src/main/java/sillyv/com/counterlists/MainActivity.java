@@ -21,6 +21,8 @@ import io.realm.Realm;
 import sillyv.com.counterlists.database.controllers.ListController;
 import sillyv.com.counterlists.database.models.ListModel;
 import sillyv.com.counterlists.events.AddFragmentEvent;
+import sillyv.com.counterlists.events.MenuChangedEvent;
+import sillyv.com.counterlists.events.ToolbarTitleChangedEvent;
 import sillyv.com.counterlists.screens.lists.recycler.CountersListsFragment;
 import sillyv.com.counterlists.screens.lists.upsert.UpsertCounterListFragment;
 
@@ -29,7 +31,7 @@ public class MainActivity extends AppCompatActivity implements CLFragment.Listen
     private static final String TAG = MainActivity.class.getSimpleName();
 
     @BindView(R.id.toolbar)
-   private Toolbar toolbar;
+    Toolbar toolbar;
 
 
     @Override
@@ -135,4 +137,28 @@ public class MainActivity extends AppCompatActivity implements CLFragment.Listen
         return (CLFragment) getSupportFragmentManager().findFragmentByTag(tag);
     }
 
+    @Subscribe
+    public void onMenuChanged(MenuChangedEvent event) {
+        invalidateOptionsMenu();
+    }
+
+    @Subscribe
+    public void onToolbarTitleChanged(ToolbarTitleChangedEvent event) {
+        CLFragment activeFragment = getActiveFragment();
+        if (activeFragment != null) {
+            activeFragment.setTitle();
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        CLFragment activeFragment = getActiveFragment();
+        if (activeFragment != null) {
+            if (activeFragment instanceof CountersListsFragment) {
+                finish();
+            }
+        }
+        super.onBackPressed();
+        onMenuChanged(null);
+    }
 }

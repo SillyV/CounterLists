@@ -1,6 +1,7 @@
 package sillyv.com.counterlists.database.models;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import sillyv.com.counterlists.database.dbitems.Counter;
@@ -31,6 +32,33 @@ public class ListModel {
     private List<String> counterNames;
     private List<Long> counterIds;
     private String counterItemsString;
+   private Date dateCreated;
+   private Date dateModified;
+   private Date dateUsed;
+
+    public Date getDateCreated() {
+        return dateCreated;
+    }
+
+    public void setDateCreated(Date dateCreated) {
+        this.dateCreated = dateCreated;
+    }
+
+    public Date getDateModified() {
+        return dateModified;
+    }
+
+    public void setDateModified(Date dateModified) {
+        this.dateModified = dateModified;
+    }
+
+    public Date getDateUsed() {
+        return dateUsed;
+    }
+
+    public void setDateUsed(Date dateUsed) {
+        this.dateUsed = dateUsed;
+    }
 
     public String getCounterItemsString() {
         return counterItemsString;
@@ -65,6 +93,9 @@ public class ListModel {
             counterIds.add(counter.getId());
             counterItemsString += counter.getName();
         }
+        dateCreated = list.getCreated();
+        dateModified = list.getEdited();
+        dateUsed = list.getValueChanged();
 
     }
 
@@ -103,6 +134,11 @@ public class ListModel {
         this.keepAwake = keepAwake;
         this.volumeKey = volumeKey;
         this.name = name;
+        dateCreated = new Date();
+        dateModified = new Date();
+        dateUsed = new Date();
+
+
     }
 
     public ListModel(int defaultValue, int defaultIncrement, int defaultDecrement, int background,

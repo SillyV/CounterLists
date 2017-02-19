@@ -2,55 +2,73 @@ package sillyv.com.counterlists.screens.lists.upsert;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
+import java.text.DateFormat;
 import java.util.Date;
 
+import sillyv.com.counterlists.R;
 import sillyv.com.counterlists.database.controllers.ListController;
+import sillyv.com.counterlists.database.controllers.RealmRepository;
 import sillyv.com.counterlists.database.dbitems.CounterList;
+import sillyv.com.counterlists.database.models.CounterModel;
 import sillyv.com.counterlists.database.models.ListModel;
 
 /**
  * Created by Vasili on 2/18/2017.
- *
  */
 
 class UpsertCounterListPresenter implements UpsertCounterListContract.UpsertCounterListPresenter {
 
+
+    private UpsertCounterListContract.UpsertCounterListView view;
+    private RealmRepository<ListModel> repo;
+
+    public UpsertCounterListPresenter(UpsertCounterListContract.UpsertCounterListView view, RealmRepository<ListModel> repo) {
+        this.view = view;
+        this.repo = repo;
+    }
+
     @Override
-    public void getData(Context context, UpsertCounterListContract.UpsertCounterListView view, UpsertCounterListModel.Identifier identifier) {
-        CounterList list = ListController.getInstance().getCounterList(identifier.getId());
+    public void loadData(Context context, UpsertCounterListModel.Identifier identifier) {
+        ListModel list = repo.getItem(identifier.getId());
+
         UpsertCounterListModel.CounterListSettings.Builder counterListSettings =
                 getBuilderFromDBItem(list);
 
         if (identifier.getId() == ListController.DEFAULT_LIST) {
-            counterListSettings = getNewListBuilderData(counterListSettings);
+            counterListSettings = getNewListBuilderData(context, counterListSettings);
         } else {
             counterListSettings = getExistingListBuilderData(context, list, counterListSettings);
         }
+
         view.onDataReceived(counterListSettings.build());
     }
 
-    private UpsertCounterListModel.CounterListSettings.Builder getExistingListBuilderData(Context context, CounterList list, UpsertCounterListModel.CounterListSettings.Builder counterListSettings) {
-        java.text.DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(context);
-        Date dateCreated = list.getCreated();
-        Date dateModified = list.getValueChanged();
-        Date dateEdited = list.getEdited();
-        return counterListSettings.dateCreated(dateFormat.format(dateCreated))
-                .dateModified(dateFormat.format(dateEdited))
-                .lastUsed(dateFormat.format(dateModified))
-                .toolbarTitle("Edit list");
+    private UpsertCounterListModel.CounterListSettings.Builder getExistingListBuilderData(Context context, ListModel list, UpsertCounterListModel.CounterListSettings.Builder counterListSettings) {
+        DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(context);
+        Date dateCreated = list.getDateCreated();
+        Date dateModified = list.getDateUsed();
+        Date dateEdited = list.getDateModified();
+        Log.d("TAGTAG", dateCreated.toString());
+        return
+                counterListSettings
+                        .dateCreated(dateFormat.format(dateCreated))
+                        .dateModified(dateFormat.format(dateEdited))
+                        .lastUsed(dateFormat.format(dateModified))
+                        .toolbarTitle(context.getString(R.string.edit_list));
 //        counterListSettings = builder;
 //        return builder;
     }
 
-    private UpsertCounterListModel.CounterListSettings.Builder getNewListBuilderData(UpsertCounterListModel.CounterListSettings.Builder counterListSettings) {
-        return counterListSettings.dateCreated("new list")
-                .dateModified("new list")
-                .lastUsed("new list")
-                .toolbarTitle("New list");
+    private UpsertCounterListModel.CounterListSettings.Builder getNewListBuilderData(Context context, UpsertCounterListModel.CounterListSettings.Builder counterListSettings) {
+        return counterListSettings.dateCreated(context.getString(R.string.new_list))
+                .dateModified(context.getString(R.string.new_list))
+                .lastUsed(context.getString(R.string.new_list))
+                .toolbarTitle(context.getString(R.string.new_list));
     }
 
-    private UpsertCounterListModel.CounterListSettings.Builder getBuilderFromDBItem(CounterList list) {
+    private UpsertCounterListModel.CounterListSettings.Builder getBuilderFromDBItem(ListModel list) {
         return new UpsertCounterListModel.CounterListSettings
                 .Builder()
                 .name(list.getName())
@@ -75,28 +93,30 @@ class UpsertCounterListPresenter implements UpsertCounterListContract.UpsertCoun
 
         ListModel dbModel = getListModel(model);
         if (identifier.getId() == ListController.DEFAULT_LIST) {
-            ListController.getInstance().addNewList(dbModel);
+            repo.addNewList(dbModel);
         } else {
             dbModel.setId(identifier.getId());
-            ListController.getInstance().updateList(dbModel);
+            repo.updateList(dbModel);
         }
     }
 
     @NonNull
     private ListModel getListModel(UpsertCounterListModel.CounterListSettings model) {
         return new ListModel(Integer.parseInt(model.getDefaultValue()),
-                    Integer.parseInt(model.getDefaultIncrement()),
-                    Integer.parseInt(model.getDefaultDecrement()),
-                    model.getBackgroundColor(),
-                    model.getDefaultColorCounterBackground(),
-                    model.getDefaultColorCounterText(),
-                    model.getNote(),
-                    model.isClickSound(),
-                    model.isVibrate(),
-                    model.isSpeakValue(),
-                    model.isSpeakName(),
-                    model.isKeepAwake(),
-                    model.isUseVolume(),
-                    model.getName());
+                Integer.parseInt(model.getDefaultIncrement()),
+                Integer.parseInt(model.getDefaultDecrement()),
+                model.getBackgroundColor(),
+                model.getDefaultColorCounterBackground(),
+                model.getDefaultColorCounterText(),
+                model.getNote(),
+                model.isClickSound(),
+                model.isVibrate(),
+                model.isSpeakValue(),
+                model.isSpeakName(),
+                model.isKeepAwake(),
+                model.isUseVolume(),
+                model.getName());
     }
+
+
 }

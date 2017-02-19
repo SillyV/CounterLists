@@ -74,6 +74,23 @@ public abstract class UpsertCounterListModel  {
             toolbarTitle = builder.toolbarTitle;
         }
 
+        public CounterListSettings(String name, String note, String defaultValue, String defaultIncrement, String defaultDecrement, int backgroundColor, int defaultColorCounterBackground, int defaultColorCounterText, boolean clickSound, boolean vibrate, boolean speakValue, boolean speakName, boolean keepAwake, boolean useVolume) {
+            this.name = name;
+            this.note = note;
+            this.defaultValue = defaultValue;
+            this.defaultIncrement = defaultIncrement;
+            this.defaultDecrement = defaultDecrement;
+            this.backgroundColor = backgroundColor;
+            this.defaultColorCounterBackground = defaultColorCounterBackground;
+            this.defaultColorCounterText = defaultColorCounterText;
+            this.clickSound = clickSound;
+            this.vibrate = vibrate;
+            this.speakValue = speakValue;
+            this.speakName = speakName;
+            this.keepAwake = keepAwake;
+            this.useVolume = useVolume;
+        }
+
         public String getName() {
             return name;
         }

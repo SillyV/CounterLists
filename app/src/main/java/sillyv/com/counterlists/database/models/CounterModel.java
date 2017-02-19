@@ -1,19 +1,16 @@
-package sillyv.com.counterlists.database.dbitems;
+package sillyv.com.counterlists.database.models;
 
 import java.util.Date;
 
-import io.realm.RealmModel;
-import io.realm.RealmObject;
-import io.realm.annotations.PrimaryKey;
-import sillyv.com.counterlists.database.models.CounterModel;
+import sillyv.com.counterlists.database.dbitems.Counter;
 
 /**
- * Created by Vasili on 1/28/2017.
- *
+ * Created by vasil on 2/18/2017.
  */
 
-public class Counter extends RealmObject implements RealmModel {
-    @PrimaryKey
+public class CounterModel {
+
+    private long parentId;
     private long id;
     private Date created;
     private Date edited;
@@ -26,7 +23,6 @@ public class Counter extends RealmObject implements RealmModel {
     private boolean keepAwake;
     private boolean volumeKey;
     private String name;
-
     private int value;
     private int defaultValue;
     private int Increment;
@@ -34,19 +30,56 @@ public class Counter extends RealmObject implements RealmModel {
     private int background;
     private int foreground;
 
-    public Counter(CounterModel model, long nextID) {
-        //// TODO: 2/18/2017
+    public CounterModel(long id, Date created, Date edited, Date valueChanged, String note, boolean clickSound, boolean vibrate, boolean speechOutputValue, boolean speechOutputName, boolean keepAwake, boolean volumeKey, String name, int value, int defaultValue, int increment, int decrement, int background, int foreground) {
+        this.id = id;
+        this.created = created;
+        this.edited = edited;
+        this.valueChanged = valueChanged;
+        this.note = note;
+        this.clickSound = clickSound;
+        this.vibrate = vibrate;
+        this.speechOutputValue = speechOutputValue;
+        this.speechOutputName = speechOutputName;
+        this.keepAwake = keepAwake;
+        this.volumeKey = volumeKey;
+        this.name = name;
+        this.value = value;
+        this.defaultValue = defaultValue;
+        Increment = increment;
+        Decrement = decrement;
+        this.background = background;
+        this.foreground = foreground;
     }
 
-    public Counter() {
+    public CounterModel() {
     }
 
-    public long getId() {
-        return id;
+    public CounterModel(Counter counter) {
+        this.created = counter.getCreated();
+        this.edited = counter.getEdited();
+        this.valueChanged = counter.getValueChanged();
+        this.note = counter.getNote();
+        this.clickSound = counter.isClickSound();
+        this.vibrate = counter.isVibrate();
+        this.speechOutputValue = counter.isSpeechOutputValue();
+        this.speechOutputName = counter.isSpeechOutputName();
+        this.keepAwake = counter.isKeepAwake();
+        this.volumeKey = counter.isVolumeKey();
+        this.name = counter.getName();
+        this.value = counter.getValue();
+        this.defaultValue = counter.getDefaultValue();
+        this.Increment = counter.getIncrement();
+        this.Decrement = counter.getDecrement();
+        this.background = counter.getBackground();
+        this.foreground = counter.getForeground();
     }
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public long getId() {
+        return id;
     }
 
     public Date getCreated() {
@@ -183,13 +216,5 @@ public class Counter extends RealmObject implements RealmModel {
 
     public void setForeground(int foreground) {
         this.foreground = foreground;
-    }
-
-    public void update(CounterModel model) {
-        //// TODO: 2/18/2017
-    }
-
-    public void incremented() {
-        //// TODO: 2/18/2017
     }
 }

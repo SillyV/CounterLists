@@ -1,8 +1,6 @@
 <resources>
     <string name="app_name">CounterLists</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="date_created">Date created:</string>
     <string name="date_modified">Date modified:</string>
     <string name="date_changed">Date last used:</string>
@@ -29,4 +27,10 @@
     <string name="speak_name_out_loud">Speak name out loud</string>
     <string name="keep_awake_on_this_counter">Keep Awake on this counter</string>
     <string name="use_volume_key_to_count">Use volume key to count</string>
+    <string name="are_you_sure_you_want_to_delete">Are you sure you want to delete</string>
+    <string name="the_list">the list \'</string>
+    <string name="lists"> lists?</string>
+    <string name="consider">consider backing up your data in the settings menu before choosing this irrevocable action.</string>
+    <string name="edit_list">Edit list</string>
+    <string name="new_list">new list</string>
 </resources>

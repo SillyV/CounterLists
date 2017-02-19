@@ -10,7 +10,9 @@ import android.content.Context;
 public interface UpsertCounterListContract {
 
     interface UpsertCounterListPresenter {
-        void getData(Context context, UpsertCounterListView view, UpsertCounterListModel.Identifier identifier);
+
+        void loadData(Context context, UpsertCounterListModel.Identifier identifier);
+
         void saveData(UpsertCounterListModel.CounterListSettings model, UpsertCounterListModel.Identifier identifier);
     }
 

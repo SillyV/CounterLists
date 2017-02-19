@@ -1,37 +1,35 @@
 package sillyv.com.counterlists.database.controllers;
 
-import android.app.Activity;
-import android.app.Application;
-import android.content.Context;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import io.realm.Realm;
-import io.realm.RealmList;
 import io.realm.RealmResults;
+import sillyv.com.counterlists.database.dbitems.Counter;
 import sillyv.com.counterlists.database.dbitems.CounterList;
+import sillyv.com.counterlists.database.models.CounterModel;
 import sillyv.com.counterlists.database.models.ListModel;
 
 /**
  * Created by Vasili on 1/28/2017.
+ *
  */
 
-public class ListController implements RealmRepository<ListModel> {
-    private static final String TAG = ListController.class.getSimpleName();
+public class CounterController {
+    private static final String TAG = CounterController.class.getSimpleName();
     public static final long DEFAULT_LIST = 0L;
-    private static ListController instance;
+    private static CounterController instance;
     private final Realm realm;
 
-    private ListController() {
+    private CounterController() {
         realm = Realm.getDefaultInstance();
     }
 
-    public static ListController getInstance() {
+    public static CounterController getInstance() {
         if (instance == null) {
-            instance = new ListController();
+            instance = new CounterController();
         }
         return instance;
     }
@@ -42,26 +40,36 @@ public class ListController implements RealmRepository<ListModel> {
     }
 
 
+    public List<CounterModel> getAllCounters() {
+        List<CounterModel> result = new ArrayList<>();
+        RealmResults<Counter> list = getCounters();
+        for (Counter counter : list) {
+            result.add(new CounterModel(counter));
+        }
+        return result;
+
+    }
+
+
     //find all objects in the Book.class
-    private RealmResults<CounterList> getCounterLists() {
-        return realm.where(CounterList.class).greaterThan("id", 0).findAll();
+    private RealmResults<Counter> getCounters() {
+        return realm.where(Counter.class).greaterThan("id",0). findAll();
     }
 
     //query a single item with the given id
-    public CounterList getCounterList(long id) {
-
-        return realm.where(CounterList.class).equalTo("id", id).findFirst();
+    public Counter getCounter(long id) {
+        return realm.where(Counter.class).equalTo("id", id).findFirst();
     }
 
 
-    public void addNewList(final ListModel model) {
+    public void addNewList(final CounterModel model) {
         Realm realm = Realm.getDefaultInstance();
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
                 Log.d(TAG, "execute:");
-                long nextID = (long) (realm.where(CounterList.class).max("id")) + 1L;
-                final CounterList list = new CounterList(model, nextID);
+                long nextID = (long) (realm.where(Counter.class).max("id")) + 1L;
+                final Counter list = new Counter(model, nextID);
                 model.setId(nextID);
                 realm.copyToRealm(list);
             }
@@ -69,13 +77,13 @@ public class ListController implements RealmRepository<ListModel> {
         realm.close();
     }
 
-    public void addNewList(final ListModel model, final long nextID) {
+    public void addNewList(final CounterModel model, final long nextID) {
         Realm realm = Realm.getDefaultInstance();
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
                 Log.d(TAG, "execute:");
-                final CounterList list = new CounterList(model, nextID);
+                final Counter list = new Counter(model, nextID);
                 model.setId(nextID);
                 realm.copyToRealm(list);
             }
@@ -84,13 +92,13 @@ public class ListController implements RealmRepository<ListModel> {
     }
 
 
-    public void updateList(final ListModel model) {
+    public void updateList(final CounterModel model) {
         Realm realm = Realm.getDefaultInstance();
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
                 Log.d(TAG, "execute:");
-                final CounterList list = getCounterList(model.getId());
+                final Counter list = getCounter(model.getId());
                 list.update(model);
                 realm.copyToRealmOrUpdate(list);
             }
@@ -104,7 +112,7 @@ public class ListController implements RealmRepository<ListModel> {
             @Override
             public void execute(Realm realm) {
                 Log.d(TAG, "execute:");
-                final CounterList list = getCounterList(id);
+                final Counter list = getCounter(id);
                 list.incremented();
                 realm.copyToRealmOrUpdate(list);
             }
@@ -114,41 +122,13 @@ public class ListController implements RealmRepository<ListModel> {
 
 
     //query example
-    public RealmResults<CounterList> queriedBooks() {
+    public RealmResults<Counter> queriedBooks() {
 
-        return realm.where(CounterList.class)
+        return realm.where(Counter.class)
                 .contains("author", "Author 0")
                 .or()
                 .contains("title", "Realm")
                 .findAll();
 
-    }
-
-    public void deleteItem(final Long aLong) {
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                RealmResults<CounterList> result = realm.where(CounterList.class).equalTo("id", aLong).findAll();
-                result.deleteAllFromRealm();
-            }
-        });
-    }
-
-    @Override
-    public List<ListModel> getItems() {
-        List<ListModel> result = new ArrayList<>();
-        RealmResults<CounterList> list = getCounterLists();
-        for (CounterList counterList : list) {
-            result.add(new ListModel(counterList));
-        }
-        return result;
-    }
-
-    @Override
-    public ListModel getItem(long id) {
-        CounterList list = realm.where(CounterList.class).equalTo("id", id).findFirst();
-        if (list == null)
-            return null;
-        return new ListModel(list);
     }
 }
