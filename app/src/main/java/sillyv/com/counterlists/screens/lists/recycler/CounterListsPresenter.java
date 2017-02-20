@@ -1,29 +1,22 @@
 package sillyv.com.counterlists.screens.lists.recycler;
 
-import android.content.Context;
-import android.util.LongSparseArray;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
-import sillyv.com.counterlists.database.controllers.CounterController;
-import sillyv.com.counterlists.database.controllers.ListController;
 import sillyv.com.counterlists.database.controllers.RealmRepository;
-import sillyv.com.counterlists.database.models.CounterModel;
 import sillyv.com.counterlists.database.models.ListModel;
 
 /**
- * Created by Vasili on 2/18/2017.
+ * Created by Vasili.Fedotov on 2/18/2017.
+ *
  */
 
-public class CounterListsPresenter implements CounterListsContract.CounterListsPresenter {
+class CounterListsPresenter implements CounterListsContract.CounterListsPresenter {
 
-    private CounterListsContract.CounterListsView view;
-    private RealmRepository<ListModel> repo;
+    private final CounterListsContract.CounterListsView view;
+    private final RealmRepository<ListModel> repo;
 
-    public CounterListsPresenter(CounterListsContract.CounterListsView view, RealmRepository<ListModel> repo) {
+    CounterListsPresenter(CounterListsContract.CounterListsView view, RealmRepository<ListModel> repo) {
         this.view = view;
         this.repo = repo;
     }
@@ -66,6 +59,9 @@ public class CounterListsPresenter implements CounterListsContract.CounterListsP
             str = str.substring(0, str.length() - 2) + ".";
         }
         return str;
+
     }
+
+
 
 }

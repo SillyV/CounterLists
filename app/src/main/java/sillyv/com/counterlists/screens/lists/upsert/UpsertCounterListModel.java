@@ -5,11 +5,9 @@ package sillyv.com.counterlists.screens.lists.upsert;
  *
  */
 
-public abstract class UpsertCounterListModel  {
+abstract class UpsertCounterListModel  {
 
-    private static final long NEW_LIST_IDENTIFIER = 0L;
-
-    public static class CounterListSettings {
+    static class CounterListSettings {
         private String name;
         private String note;
         private String defaultValue;
@@ -29,28 +27,7 @@ public abstract class UpsertCounterListModel  {
         private String lastUsed;
         private String toolbarTitle;
 
-        public CounterListSettings() {
-        }
-
-        public CounterListSettings(String name, String note, String defaultValue, String defaultIncrement, String defaultDecrement, int backgroundColor, int defaultColorCounterBackground, int defaultColorCounterText, boolean clickSound, boolean vibrate, boolean speakValue, boolean speakName, boolean keepAwake, boolean useVolume, String dateCreated, String dateModified, String lastUsed, String toolbarTitle) {
-            this.name = name;
-            this.note = note;
-            this.defaultValue = defaultValue;
-            this.defaultIncrement = defaultIncrement;
-            this.defaultDecrement = defaultDecrement;
-            this.backgroundColor = backgroundColor;
-            this.defaultColorCounterBackground = defaultColorCounterBackground;
-            this.defaultColorCounterText = defaultColorCounterText;
-            this.clickSound = clickSound;
-            this.vibrate = vibrate;
-            this.speakValue = speakValue;
-            this.speakName = speakName;
-            this.keepAwake = keepAwake;
-            this.useVolume = useVolume;
-            this.dateCreated = dateCreated;
-            this.dateModified = dateModified;
-            this.lastUsed = lastUsed;
-            this.toolbarTitle = toolbarTitle;
+        CounterListSettings() {
         }
 
         private CounterListSettings(Builder builder) {
@@ -74,7 +51,7 @@ public abstract class UpsertCounterListModel  {
             toolbarTitle = builder.toolbarTitle;
         }
 
-        public CounterListSettings(String name, String note, String defaultValue, String defaultIncrement, String defaultDecrement, int backgroundColor, int defaultColorCounterBackground, int defaultColorCounterText, boolean clickSound, boolean vibrate, boolean speakValue, boolean speakName, boolean keepAwake, boolean useVolume) {
+        CounterListSettings(String name, String note, String defaultValue, String defaultIncrement, String defaultDecrement, int backgroundColor, int defaultColorCounterBackground, int defaultColorCounterText, boolean clickSound, boolean vibrate, boolean speakValue, boolean speakName, boolean keepAwake, boolean useVolume) {
             this.name = name;
             this.note = note;
             this.defaultValue = defaultValue;
@@ -107,135 +84,120 @@ public abstract class UpsertCounterListModel  {
             this.note = note;
         }
 
-        public String getDefaultValue() {
+        String getDefaultValue() {
             return defaultValue;
         }
 
-        public void setDefaultValue(String defaultValue) {
+        void setDefaultValue(String defaultValue) {
             this.defaultValue = defaultValue;
         }
 
-        public String getDefaultIncrement() {
+        String getDefaultIncrement() {
             return defaultIncrement;
         }
 
-        public void setDefaultIncrement(String defaultIncrement) {
+        void setDefaultIncrement(String defaultIncrement) {
             this.defaultIncrement = defaultIncrement;
         }
 
-        public String getDefaultDecrement() {
+        String getDefaultDecrement() {
             return defaultDecrement;
         }
 
-        public void setDefaultDecrement(String defaultDecrement) {
+        void setDefaultDecrement(String defaultDecrement) {
             this.defaultDecrement = defaultDecrement;
         }
 
-        public int getBackgroundColor() {
+        int getBackgroundColor() {
             return backgroundColor;
         }
 
-        public void setBackgroundColor(int backgroundColor) {
+        void setBackgroundColor(int backgroundColor) {
             this.backgroundColor = backgroundColor;
         }
 
-        public int getDefaultColorCounterBackground() {
+        int getDefaultColorCounterBackground() {
             return defaultColorCounterBackground;
         }
 
-        public void setDefaultColorCounterBackground(int defaultColorCounterBackground) {
+        void setDefaultColorCounterBackground(int defaultColorCounterBackground) {
             this.defaultColorCounterBackground = defaultColorCounterBackground;
         }
 
-        public int getDefaultColorCounterText() {
+        int getDefaultColorCounterText() {
             return defaultColorCounterText;
         }
 
-        public void setDefaultColorCounterText(int defaultColorCounterText) {
+        void setDefaultColorCounterText(int defaultColorCounterText) {
             this.defaultColorCounterText = defaultColorCounterText;
         }
 
-        public boolean isClickSound() {
+        boolean isClickSound() {
             return clickSound;
         }
 
-        public void setClickSound(boolean clickSound) {
+
+        void setClickSound(boolean clickSound) {
             this.clickSound = clickSound;
         }
 
-        public boolean isVibrate() {
+        boolean isVibrate() {
             return vibrate;
         }
 
-        public void setVibrate(boolean vibrate) {
+        void setVibrate(boolean vibrate) {
             this.vibrate = vibrate;
         }
 
-        public boolean isSpeakValue() {
+        boolean isSpeakValue() {
             return speakValue;
         }
 
-        public void setSpeakValue(boolean speakValue) {
+         void setSpeakValue(boolean speakValue) {
             this.speakValue = speakValue;
         }
 
-        public boolean isSpeakName() {
+         boolean isSpeakName() {
             return speakName;
         }
 
-        public void setSpeakName(boolean speakName) {
+         void setSpeakName(boolean speakName) {
             this.speakName = speakName;
         }
 
-        public boolean isKeepAwake() {
+         boolean isKeepAwake() {
             return keepAwake;
         }
 
-        public void setKeepAwake(boolean keepAwake) {
+         void setKeepAwake(boolean keepAwake) {
             this.keepAwake = keepAwake;
         }
 
-        public boolean isUseVolume() {
+         boolean isUseVolume() {
             return useVolume;
         }
 
-        public void setUseVolume(boolean useVolume) {
+         void setUseVolume(boolean useVolume) {
             this.useVolume = useVolume;
         }
 
-        public String getDateCreated() {
+         String getDateCreated() {
             return dateCreated;
         }
 
-        public void setDateCreated(String dateCreated) {
-            this.dateCreated = dateCreated;
-        }
-
-        public String getDateModified() {
+         String getDateModified() {
             return dateModified;
         }
 
-        public void setDateModified(String dateModified) {
-            this.dateModified = dateModified;
-        }
-
-        public String getLastUsed() {
+         String getLastUsed() {
             return lastUsed;
         }
 
-        public void setLastUsed(String lastUsed) {
-            this.lastUsed = lastUsed;
-        }
-
-        public String getToolbarTitle() {
+         String getToolbarTitle() {
             return toolbarTitle;
         }
 
-        public void setToolbarTitle(String toolbarTitle) {
-            this.toolbarTitle = toolbarTitle;
-        }
-
-        public static final class Builder {
+        static final class Builder {
             private String name;
             private String note;
             private String defaultValue;
@@ -255,7 +217,7 @@ public abstract class UpsertCounterListModel  {
             private String lastUsed;
             private String toolbarTitle;
 
-            public Builder() {
+             Builder() {
             }
 
             public Builder name(String val) {
@@ -268,103 +230,100 @@ public abstract class UpsertCounterListModel  {
                 return this;
             }
 
-            public Builder defaultValue(String val) {
+             Builder defaultValue(String val) {
                 defaultValue = val;
                 return this;
             }
 
-            public Builder defaultIncrement(String val) {
+             Builder defaultIncrement(String val) {
                 defaultIncrement = val;
                 return this;
             }
 
-            public Builder defaultDecrement(String val) {
+             Builder defaultDecrement(String val) {
                 defaultDecrement = val;
                 return this;
             }
 
-            public Builder backgroundColor(int val) {
+             Builder backgroundColor(int val) {
                 backgroundColor = val;
                 return this;
             }
 
-            public Builder defaultColorCounterBackground(int val) {
+             Builder defaultColorCounterBackground(int val) {
                 defaultColorCounterBackground = val;
                 return this;
             }
 
-            public Builder defaultColorCounterText(int val) {
+             Builder defaultColorCounterText(int val) {
                 defaultColorCounterText = val;
                 return this;
             }
 
-            public Builder clickSound(boolean val) {
+             Builder clickSound(boolean val) {
                 clickSound = val;
                 return this;
             }
 
-            public Builder vibrate(boolean val) {
+             Builder vibrate(boolean val) {
                 vibrate = val;
                 return this;
             }
 
-            public Builder speakValue(boolean val) {
+             Builder speakValue(boolean val) {
                 speakValue = val;
                 return this;
             }
 
-            public Builder speakName(boolean val) {
+             Builder speakName(boolean val) {
                 speakName = val;
                 return this;
             }
 
-            public Builder keepAwake(boolean val) {
+             Builder keepAwake(boolean val) {
                 keepAwake = val;
                 return this;
             }
 
-            public Builder useVolume(boolean val) {
+             Builder useVolume(boolean val) {
                 useVolume = val;
                 return this;
             }
 
-            public Builder dateCreated(String val) {
+             Builder dateCreated(String val) {
                 dateCreated = val;
                 return this;
             }
 
-            public Builder dateModified(String val) {
+             Builder dateModified(String val) {
                 dateModified = val;
                 return this;
             }
 
-            public Builder lastUsed(String val) {
+             Builder lastUsed(String val) {
                 lastUsed = val;
                 return this;
             }
 
-            public Builder toolbarTitle(String val) {
+             Builder toolbarTitle(String val) {
                 toolbarTitle = val;
                 return this;
             }
 
-            public CounterListSettings build() {
+             CounterListSettings build() {
                 return new CounterListSettings(this);
             }
         }
     }
 
-    public static class Identifier {
+     static class Identifier {
         long id;
 
-        public Identifier(long id) {
+         Identifier(long id) {
             this.id = id;
         }
 
-        public Identifier() {
-        }
-
-        private Identifier(Builder builder) {
+         private Identifier(Builder builder) {
             setId(builder.id);
         }
 
@@ -377,10 +336,10 @@ public abstract class UpsertCounterListModel  {
         }
 
 
-        public static final class Builder {
+         static final class Builder {
             private long id;
 
-            public Builder() {
+             Builder() {
             }
 
             public Builder id(long val) {
@@ -388,12 +347,8 @@ public abstract class UpsertCounterListModel  {
                 return this;
             }
 
-            public Builder blank(){
-                id = NEW_LIST_IDENTIFIER;
-                return this;
-            }
 
-            public Identifier build() {
+             Identifier build() {
                 return new Identifier(this);
             }
         }

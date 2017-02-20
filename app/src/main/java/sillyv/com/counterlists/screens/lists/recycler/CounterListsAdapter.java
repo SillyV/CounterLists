@@ -23,7 +23,8 @@ import sillyv.com.counterlists.events.ToolbarTitleChangedEvent;
 import sillyv.com.counterlists.screens.lists.upsert.UpsertCounterListFragment;
 
 /**
- * Created by Vasili on 1/28/2017.
+ * Created by Vasili.Fedotov on 1/28/2017.
+ *
  */
 class CounterListsAdapter extends RecyclerView.Adapter<CounterListsAdapter.ListHolder> {
 
@@ -33,7 +34,7 @@ class CounterListsAdapter extends RecyclerView.Adapter<CounterListsAdapter.ListH
 
     private boolean deleteMode = false;
 
-    public boolean isDeleteMode() {
+    boolean isDeleteMode() {
         return deleteMode;
     }
 
@@ -64,7 +65,7 @@ class CounterListsAdapter extends RecyclerView.Adapter<CounterListsAdapter.ListH
         return currentList.size();
     }
 
-    public String getFirstSelectedList() {
+    String getFirstSelectedList() {
         for (CounterListsModel.ListItem selectionItem : selectionItems) {
             if (selectionItem.isSelected()) {
                 return selectionItem.getTitle();
@@ -73,7 +74,7 @@ class CounterListsAdapter extends RecyclerView.Adapter<CounterListsAdapter.ListH
         return "";
     }
 
-    public CounterListsModel.IDList getItemsToDelete() {
+    CounterListsModel.IDList getItemsToDelete() {
         CounterListsModel.IDList model = new CounterListsModel.IDList();
         for (CounterListsModel.ListItem selectionItem : selectionItems) {
             if (selectionItem.isSelected()) {
@@ -96,7 +97,7 @@ class CounterListsAdapter extends RecyclerView.Adapter<CounterListsAdapter.ListH
         View checkedImageView;
 
         @OnClick(R.id.card_view)
-        void onClick(View view) {
+        void onClick() {
             if (deleteMode) {
                 setItemSelectedOrNot();
                 return;
@@ -105,8 +106,9 @@ class CounterListsAdapter extends RecyclerView.Adapter<CounterListsAdapter.ListH
 
         }
 
+        @SuppressWarnings("SameReturnValue")
         @OnLongClick(R.id.card_view)
-        boolean onLongClick(View view) {
+        boolean onLongClick() {
             currentList = selectionItems;
             deleteMode = true;
             setItemSelectedOrNot();
@@ -138,15 +140,15 @@ class CounterListsAdapter extends RecyclerView.Adapter<CounterListsAdapter.ListH
             items.setText(listModel.getSubtitle());
             title.setText(listModel.getTitle());
             itemView.setBackgroundColor(listModel.getBackgroundColor());
-            items.setTextColor(listModel.getCardForgroundColor());
-            title.setTextColor(listModel.getCardForgroundColor());
+            items.setTextColor(listModel.getCardForegroundColor());
+            title.setTextColor(listModel.getCardForegroundColor());
             title.setShadowLayer(0.11f, -2, 2, listModel.getCardBackgroundColor());
             items.setBackgroundColor(listModel.getCardBackgroundColor());
             checkedImageView.setVisibility(listModel.getVisibility());
         }
     }
 
-    public int selectedCount() {
+    int selectedCount() {
         int i = 0;
         for (CounterListsModel.ListItem selectionItem : selectionItems) {
             if (selectionItem.isSelected()) {

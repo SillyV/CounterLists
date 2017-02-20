@@ -14,15 +14,16 @@ import sillyv.com.counterlists.database.models.ListModel;
 
 
 /**
- * Created by Vasili on 2/18/2017.
+ * Created by Vasili.Fedotov on 2/18/2017.
+ *
  */
 
 class UpsertCounterListPresenter implements UpsertCounterListContract.UpsertCounterListPresenter {
 
     private static final String TAG = UpsertCounterListPresenter.class.getSimpleName();
 
-    private UpsertCounterListContract.UpsertCounterListView view;
-    private RealmRepository<ListModel> repo;
+    private final UpsertCounterListContract.UpsertCounterListView view;
+    private final  RealmRepository<ListModel> repo;
 
     UpsertCounterListPresenter(UpsertCounterListContract.UpsertCounterListView view, RealmRepository<ListModel> repo) {
         this.view = view;

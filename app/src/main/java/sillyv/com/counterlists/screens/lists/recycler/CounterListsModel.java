@@ -7,71 +7,62 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Vasili on 2/18/2017.
+ * Created by Vasili.Fedotov on 2/18/2017.
+ *
  */
 
-public class CounterListsModel {
+class CounterListsModel {
 
-    List<ListItem> items;
+    private final List<ListItem> items;
 
-    public CounterListsModel(List<ListItem> items) {
+    CounterListsModel(List<ListItem> items) {
         this.items = items;
     }
 
-    public CounterListsModel() {
-    }
-
-    public List<ListItem> getItems() {
+    List<ListItem> getItems() {
         return items;
     }
 
-    public void setItems(List<ListItem> items) {
-        this.items = items;
-    }
-
-    public static class ListItem {
-        private String title;
-        private String subtitle;
+    static class ListItem {
+        private final String title;
+        private final String subtitle;
         private int backgroundColor;
         private int cardBackgroundColor;
-        private int cardForgroundColor;
-        private long id;
+        private int cardForegroundColor;
+        private final long id;
         private boolean selected = false;
         private int visibility;
 
-        public int getVisibility() {
+        int getVisibility() {
             return visibility;
         }
 
 
-        public boolean isSelected() {
+        boolean isSelected() {
             return selected;
         }
 
-        public void setSelected(boolean selected) {
+        void setSelected(boolean selected) {
             this.selected = selected;
             if (selected) {
                 backgroundColor = Color.BLACK;
                 cardBackgroundColor = Color.BLACK;
-                cardForgroundColor = Color.WHITE;
+                cardForegroundColor = Color.WHITE;
                 visibility = View.VISIBLE;
             } else {
                 backgroundColor = Color.WHITE;
                 cardBackgroundColor = Color.WHITE;
-                cardForgroundColor = Color.BLACK;
+                cardForegroundColor = Color.BLACK;
                 visibility = View.INVISIBLE;
             }
         }
 
-        public ListItem() {
-        }
-
-        public ListItem(String title, String subtitle, int backgroundColor, int cardBackgroundColor, int cardForgroundColor, long id) {
+        ListItem(String title, String subtitle, int backgroundColor, int cardBackgroundColor, int cardForegroundColor, long id) {
             this.title = title;
             this.subtitle = subtitle;
             this.backgroundColor = backgroundColor;
             this.cardBackgroundColor = cardBackgroundColor;
-            this.cardForgroundColor = cardForgroundColor;
+            this.cardForegroundColor = cardForegroundColor;
             this.id = id;
             visibility = View.INVISIBLE;
         }
@@ -80,71 +71,44 @@ public class CounterListsModel {
             return title;
         }
 
-        public void setTitle(String title) {
-            this.title = title;
-        }
-
         public String getSubtitle() {
             return subtitle;
         }
 
-        public void setSubtitle(String subtitle) {
-            this.subtitle = subtitle;
-        }
-
-        public int getBackgroundColor() {
+        int getBackgroundColor() {
             return backgroundColor;
         }
 
-        public void setBackgroundColor(int backgroundColor) {
-            this.backgroundColor = backgroundColor;
-        }
-
-        public int getCardBackgroundColor() {
+        int getCardBackgroundColor() {
             return cardBackgroundColor;
         }
 
-        public void setCardBackgroundColor(int cardBackgroundColor) {
-            this.cardBackgroundColor = cardBackgroundColor;
-        }
-
-        public int getCardForgroundColor() {
-            return cardForgroundColor;
-        }
-
-        public void setCardForgroundColor(int cardForgroundColor) {
-            this.cardForgroundColor = cardForgroundColor;
+        int getCardForegroundColor() {
+            return cardForegroundColor;
         }
 
         public long getId() {
             return id;
         }
-
-        public void setId(long id) {
-            this.id = id;
-        }
     }
 
 
-    public static class IDList {
-        List<Long> items;
+    static class IDList {
+        final List<Long>  items;
 
-        public IDList(List<Long> items) {
+        IDList(List<Long> items) {
             this.items = items;
         }
 
-        public IDList() {
+        IDList() {
             items = new ArrayList<>();
         }
 
 
-        public List<Long> getItems() {
+        List<Long> getItems() {
             return items;
         }
 
-        public void setItems(List<Long> items) {
-            this.items = items;
-        }
     }
 
 }

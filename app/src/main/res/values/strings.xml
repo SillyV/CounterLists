@@ -33,4 +33,10 @@
     <string name="consider">consider backing up your data in the settings menu before choosing this irrevocable action.</string>
     <string name="edit_list">Edit list</string>
     <string name="new_list">new list</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="required_field">Required field</string>
+    <string name="you_need_to_enter_a">You need to enter a</string>
+    <string name="you_need_to_enter_a_number">You need to enter a number</string>
 </resources>

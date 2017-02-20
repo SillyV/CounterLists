@@ -96,13 +96,21 @@ public class UpsertCounterListFragment extends CLFragment implements UpsertCount
             String content = editText.getText().toString();
             if (content.equals("")) {
                 foundErrors = true;
-                view.setError("You need to enter a " + view.getHint().toString());
+                CharSequence hint = view.getHint();
+                if (hint != null) {
+                    view.setError(getString(R.string.you_need_to_enter_a) + hint.toString());
+                }
+                else
+                {
+                    view.setError(getString(R.string.required_field));
+
+                }
                 return;
             }
             if (editText.getInputType() == TYPE_NUMBER_FLAG_SIGNED &&
                     !ValidationTools.getInstance().isStringNumeric(content)) {
                 foundErrors = true;
-                view.setError("You need to enter a number");
+                view.setError(getString(R.string.you_need_to_enter_a_number));
             }
         }
     };
@@ -148,8 +156,6 @@ public class UpsertCounterListFragment extends CLFragment implements UpsertCount
 
     @OnClick({R.id.button_background, R.id.button_default_card_background, R.id.button_default_card_foreground})
     void onButtonColorClick(final View view) {
-
-
         ColorPickerDialogBuilder
                 .with(getContext())
                 .setTitle("Choose color")
