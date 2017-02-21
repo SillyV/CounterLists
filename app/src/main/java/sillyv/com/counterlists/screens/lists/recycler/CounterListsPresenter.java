@@ -3,6 +3,11 @@ package sillyv.com.counterlists.screens.lists.recycler;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import io.reactivex.functions.Function;
+import io.reactivex.observers.DisposableSingleObserver;
+import sillyv.com.counterlists.baseline.BaseListView;
+import sillyv.com.counterlists.baseline.BasePresenter;
 import sillyv.com.counterlists.database.controllers.RealmRepository;
 import sillyv.com.counterlists.database.models.ListModel;
 
@@ -11,29 +16,30 @@ import sillyv.com.counterlists.database.models.ListModel;
  *
  */
 
-class CounterListsPresenter implements CounterListsContract.CounterListsPresenter {
+class CounterListsPresenter extends BasePresenter
+        implements CounterListsContract.CounterListsPresenter {
 
-    private final CounterListsContract.CounterListsView view;
-    private final RealmRepository<ListModel> repo;
 
-    CounterListsPresenter(CounterListsContract.CounterListsView view, RealmRepository<ListModel> repo) {
+    private BaseListView<CounterListsModel> view;
+    private RealmRepository<ListModel> repo;
+
+    CounterListsPresenter(BaseListView<CounterListsModel> view, RealmRepository<ListModel> repo) {
+
         this.view = view;
         this.repo = repo;
     }
 
-    @Override
     public void getData() {
-        List<ListModel> items = repo.getItems();
-        if (items == null) {
-            view.onErrorResponse();
-            return;
-        }
-        List<CounterListsModel.ListItem> responseModel = new ArrayList<>();
-        for (ListModel item : items) {
-            String subTitle = getSubtitle(item);
-            responseModel.add(new CounterListsModel.ListItem(item.getName(), subTitle, item.getBackground(), item.getDefaultCardBackgroundColor(), item.getDefaultCardForegroundColor(), item.getId()));
-        }
-        view.onDataReceived(new CounterListsModel(responseModel));
+        compositeDisposable.add(repo.getItems().map(dbItemToViewItem()).
+                subscribeWith(new DisposableSingleObserver<CounterListsModel>() {
+                    @Override public void onSuccess(CounterListsModel listModels) {
+                        view.onDataReceived(listModels);
+                    }
+
+                    @Override public void onError(Throwable e) {
+                        view.onErrorResponse();
+                    }
+                }));
     }
 
     private String getSubtitle(ListModel item) {
@@ -46,9 +52,8 @@ class CounterListsPresenter implements CounterListsContract.CounterListsPresente
         return subTitle;
     }
 
-    @Override
-    public void deleteItems(CounterListsModel.IDList idList) {
-        for (Long aLong : idList.getItems()) {
+    @Override public void deleteItems(List<Long> idList) {
+        for (Long aLong : idList) {
             repo.deleteItem(aLong);
         }
         getData();
@@ -62,6 +67,22 @@ class CounterListsPresenter implements CounterListsContract.CounterListsPresente
 
     }
 
+    private Function<List<ListModel>, CounterListsModel> dbItemToViewItem() {
+        return listModels -> {
 
+            List<CounterListsModel.ListItem> responseModel = new ArrayList<>();
+
+            for (ListModel item : listModels) {
+                String subTitle = getSubtitle(item);
+                responseModel.add(new CounterListsModel.ListItem(item.getName(),
+                        subTitle,
+                        item.getBackground(),
+                        item.getDefaultCardBackgroundColor(),
+                        item.getDefaultCardForegroundColor(),
+                        item.getId()));
+            }
+            return (new CounterListsModel(responseModel));
+        };
+    }
 
 }

@@ -1,5 +1,9 @@
 package sillyv.com.counterlists.screens.lists.recycler;
 
+import java.util.List;
+
+import sillyv.com.counterlists.baseline.BaseListView;
+
 /**
  * Created by Vasili on 2/18/2017.
  *
@@ -11,13 +15,11 @@ interface CounterListsContract {
 
         void getData();
 
-        void deleteItems(CounterListsModel.IDList idList);
+        void deleteItems(List<Long> idList);
     }
 
-    interface CounterListsView {
-        void onDataReceived(CounterListsModel model);
+    interface CounterListsView<D>extends BaseListView<D> {
 
-        void onErrorResponse();
     }
 
 

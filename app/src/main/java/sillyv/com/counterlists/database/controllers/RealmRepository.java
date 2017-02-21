@@ -2,15 +2,16 @@ package sillyv.com.counterlists.database.controllers;
 
 import java.util.List;
 
+import io.reactivex.Single;
 import sillyv.com.counterlists.database.models.ListModel;
 
 /**
- * Created by Vasili on 2/19/2017.
+ * Created by Vasili.Fedotov on 2/19/2017.
+ *
  */
 
 public interface RealmRepository<T> {
 
-    List<T> getItems();
 
     T getItem(long id);
 
@@ -19,4 +20,6 @@ public interface RealmRepository<T> {
     void updateList(T dbModel);
 
     void deleteItem(Long aLong);
+
+    Single<List<T>> getItems() throws RuntimeException;
 }

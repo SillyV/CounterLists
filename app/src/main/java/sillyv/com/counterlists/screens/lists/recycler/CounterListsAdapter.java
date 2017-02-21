@@ -74,11 +74,11 @@ class CounterListsAdapter extends RecyclerView.Adapter<CounterListsAdapter.ListH
         return "";
     }
 
-    CounterListsModel.IDList getItemsToDelete() {
-        CounterListsModel.IDList model = new CounterListsModel.IDList();
+    List<Long> getItemsToDelete() {
+        List<Long> model = new ArrayList<>();
         for (CounterListsModel.ListItem selectionItem : selectionItems) {
             if (selectionItem.isSelected()) {
-                model.getItems().add(selectionItem.getId());
+                model.add(selectionItem.getId());
             }
         }
         return model;

@@ -11,58 +11,55 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Locale;
 
+import io.reactivex.Single;
 import sillyv.com.counterlists.database.controllers.RealmRepository;
 import sillyv.com.counterlists.database.models.ListModel;
 
 /**
- * Created by Vasili on 2/19/2017.
+ * Created by Vasili.Fedotov on 2/19/2017.
+ *
  */
-@RunWith(MockitoJUnitRunner.class)
-public class UpsertCounterListPresenterTest {
+@RunWith(MockitoJUnitRunner.class) public class UpsertCounterListPresenterTest {
 
-    @Mock
-    Context mMockContext;
+    @Mock Context mMockContext;
 
 
-    @Test
-    public void successfullyPassNewListToView() throws Exception {
+    @Test public void successfullyPassNewListToView() throws Exception {
         //given
         UpsertCounterListContract.UpsertCounterListView view = new MockView();
         RealmRepository<ListModel> repo = new MockListsRepo(4);
         //when
         UpsertCounterListContract.UpsertCounterListPresenter presenter = new UpsertCounterListPresenter(view, repo);
-        presenter.loadData(mMockContext,new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"), new UpsertCounterListModel.Identifier(0L));
+        presenter.loadData(mMockContext, new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.UK), new UpsertCounterListModel.Identifier(0L));
         //then
         Assert.assertEquals(true, ((MockView) view).onDataReceivedCalled);
     }
 
-    @Test
-    public void successfullyPassExistingListToView() throws Exception {
+    @Test public void successfullyPassExistingListToView() throws Exception {
         //given
         UpsertCounterListContract.UpsertCounterListView view = new MockView();
         RealmRepository<ListModel> repo = new MockListsRepo(4);
         //when
         UpsertCounterListContract.UpsertCounterListPresenter presenter = new UpsertCounterListPresenter(view, repo);
-        presenter.loadData(mMockContext,new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"), new UpsertCounterListModel.Identifier(1L));
+        presenter.loadData(mMockContext, new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.UK), new UpsertCounterListModel.Identifier(1L));
         //then
         Assert.assertEquals(true, ((MockView) view).onDataReceivedCalled);
     }
 
-    @Test
-    public void unSuccessfullyPassExistingListToView() throws Exception {
+    @Test public void unSuccessfullyPassExistingListToView() throws Exception {
         //given
         UpsertCounterListContract.UpsertCounterListView view = new MockView();
         RealmRepository<ListModel> repo = new MockListsRepo(0);
         //when
         UpsertCounterListContract.UpsertCounterListPresenter presenter = new UpsertCounterListPresenter(view, repo);
-        presenter.loadData(mMockContext,new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"), new UpsertCounterListModel.Identifier(1L));
+        presenter.loadData(mMockContext, new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.UK), new UpsertCounterListModel.Identifier(1L));
         //then
         Assert.assertEquals(true, ((MockView) view).onDataErrorCalled);
     }
 
-    @Test
-    public void addNewItem() throws Exception {
+    @Test public void addNewItem() throws Exception {
         //given
         UpsertCounterListContract.UpsertCounterListView view = new MockView();
         RealmRepository<ListModel> repo = new MockListsRepo(5);
@@ -75,8 +72,7 @@ public class UpsertCounterListPresenterTest {
 
     }
 
-    @Test
-    public void updateExistingItem() throws Exception {
+    @Test public void updateExistingItem() throws Exception {
         //given
         UpsertCounterListContract.UpsertCounterListView view = new MockView();
         RealmRepository<ListModel> repo = new MockListsRepo(5);
@@ -88,8 +84,7 @@ public class UpsertCounterListPresenterTest {
 
     }
 
-    @Test
-    public void updateNonExistingItem() throws Exception {
+    @Test public void updateNonExistingItem() throws Exception {
         //given
         UpsertCounterListContract.UpsertCounterListView view = new MockView();
         RealmRepository<ListModel> repo = new MockListsRepo(0);
@@ -100,65 +95,59 @@ public class UpsertCounterListPresenterTest {
         Assert.assertEquals(true, ((MockListsRepo) repo).passed);
     }
 
-    @NonNull
-    private UpsertCounterListModel.CounterListSettings getModel() {
+    @NonNull private UpsertCounterListModel.CounterListSettings getModel() {
         return new UpsertCounterListModel.CounterListSettings("test1", "note1", "0", "1", "1", 1, 1, 1, true, true, true, true, true, true);
     }
 
-    private class MockView implements UpsertCounterListContract.UpsertCounterListView {
+    private class MockView
+            implements UpsertCounterListContract.UpsertCounterListView {
         boolean onDataReceivedCalled;
         boolean onDataErrorCalled;
 
-        @Override
-        public void onDataReceived(UpsertCounterListModel.CounterListSettings model) {
+        @Override public void onDataReceived(UpsertCounterListModel.CounterListSettings model) {
             onDataReceivedCalled = true;
         }
 
-        @Override
-        public void onDataError() {
+        @Override public void onDataError() {
             onDataErrorCalled = true;
         }
     }
 
-    private class MockListsRepo implements RealmRepository<ListModel> {
+    private class MockListsRepo
+            implements RealmRepository<ListModel> {
 
         private int items;
 
-        public MockListsRepo(int items) {
+        MockListsRepo(int items) {
 
             this.items = items;
         }
 
-        public boolean passed;
+        boolean passed;
 
-        @Override
-        public List<ListModel> getItems() {
-            return null;
-        }
 
-        @Override
-        public ListModel getItem(long id) {
+        @Override public ListModel getItem(long id) {
             if (id > items) {
                 return null;
             }
             return new ListModel(id, 0, 0, 0, 0, 0, 0, "", true, true, true, true, true, true, "");
         }
 
-        @Override
-        public void addNewList(ListModel dbModel) {
+        @Override public void addNewList(ListModel dbModel) {
             passed = true;
         }
 
-        @Override
-        public void updateList(ListModel dbModel) {
-            if (dbModel.getId() > items)
-                passed = false;
+        @Override public void updateList(ListModel dbModel) {
+            if (dbModel.getId() > items) { passed = false; }
             passed = true;
         }
 
-        @Override
-        public void deleteItem(Long aLong) {
+        @Override public void deleteItem(Long aLong) {
 
+        }
+
+        @Override public Single<List<ListModel>> getItems() {
+            return null;
         }
     }
 }
