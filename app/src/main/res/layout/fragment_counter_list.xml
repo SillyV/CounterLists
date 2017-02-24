@@ -19,9 +19,11 @@
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"
+        android:src="@drawable/ic_add"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="@+id/recycler_view"
         app:layout_constraintBottom_toBottomOf="@+id/recycler_view"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"/>
+
 </android.support.constraint.ConstraintLayout>

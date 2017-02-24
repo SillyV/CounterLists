@@ -29,6 +29,7 @@
     <color name="dark_red">#990000</color>
     <color name="burgundy">#550000</color>
     <color name="white">#ffffff</color>
+    <color name="lightest_grey">#dfdfdf</color>
     <color name="grey1">#cacaca</color>
     <color name="grey2">#808080</color>
     <color name="grey3">#414141</color>

@@ -26,12 +26,12 @@ public class CounterList extends RealmObject {
     private Date edited;
     private Date valueChanged;
     private String note;
-    private boolean clickSound;
-    private boolean vibrate;
-    private boolean speechOutputValue;
-    private boolean speechOutputName;
-    private boolean keepAwake;
-    private boolean volumeKey;
+    private int clickSound;
+    private int vibrate;
+    private int speechOutputValue;
+    private int speechOutputName;
+    private int keepAwake;
+    private int volumeKey;
     private String name;
     private RealmList<Counter> counters;
 
@@ -50,12 +50,12 @@ public class CounterList extends RealmObject {
         edited = new Date();
         valueChanged = new Date();
         note = model.getNote();
-        clickSound = model.isClickSound();
-        vibrate = model.isVibrate();
-        speechOutputValue = model.isSpeechOutputValue();
-        speechOutputName = model.isSpeechOutputName();
-        keepAwake = model.isKeepAwake();
-        volumeKey = model.isVolumeKey();
+        clickSound = model.getClickSound();
+        vibrate = model.getVibrate();
+        speechOutputValue = model.getSpeechOutputValue();
+        speechOutputName = model.getSpeechOutputName();
+        keepAwake = model.getKeepAwake();
+        volumeKey = model.getVolumeKey();
         name = model.getName();
         counters = new RealmList<>();
     }
@@ -69,14 +69,13 @@ public class CounterList extends RealmObject {
         defaultCardForegroundColor = model.getDefaultCardForegroundColor();
         edited = new Date();
         note = model.getNote();
-        clickSound = model.isClickSound();
-        vibrate = model.isVibrate();
-        speechOutputValue = model.isSpeechOutputValue();
-        speechOutputName = model.isSpeechOutputName();
-        keepAwake = model.isKeepAwake();
-        volumeKey = model.isVolumeKey();
+        clickSound = model.getClickSound();
+        vibrate = model.getVibrate();
+        speechOutputValue = model.getSpeechOutputValue();
+        speechOutputName = model.getSpeechOutputName();
+        keepAwake = model.getKeepAwake();
+        volumeKey = model.getVolumeKey();
         name = model.getName();
-        counters = new RealmList<>();
     }
 
 
@@ -152,51 +151,51 @@ public class CounterList extends RealmObject {
         this.note = note;
     }
 
-    public boolean isClickSound() {
+    public int getClickSound() {
         return clickSound;
     }
 
-    public void setClickSound(boolean clickSound) {
+    public void setClickSound(int clickSound) {
         this.clickSound = clickSound;
     }
 
-    public boolean isVibrate() {
+    public int getVibrate() {
         return vibrate;
     }
 
-    public void setVibrate(boolean vibrate) {
+    public void setVibrate(int vibrate) {
         this.vibrate = vibrate;
     }
 
-    public boolean isSpeechOutputValue() {
+    public int getSpeechOutputValue() {
         return speechOutputValue;
     }
 
-    public void setSpeechOutputValue(boolean speechOutputValue) {
+    public void setSpeechOutputValue(int speechOutputValue) {
         this.speechOutputValue = speechOutputValue;
     }
 
-    public boolean isSpeechOutputName() {
+    public int getSpeechOutputName() {
         return speechOutputName;
     }
 
-    public void setSpeechOutputName(boolean speechOutputName) {
+    public void setSpeechOutputName(int speechOutputName) {
         this.speechOutputName = speechOutputName;
     }
 
-    public boolean isKeepAwake() {
+    public int getKeepAwake() {
         return keepAwake;
     }
 
-    public void setKeepAwake(boolean keepAwake) {
+    public void setKeepAwake(int keepAwake) {
         this.keepAwake = keepAwake;
     }
 
-    public boolean isVolumeKey() {
+    public int getVolumeKey() {
         return volumeKey;
     }
 
-    public void setVolumeKey(boolean volumeKey) {
+    public void setVolumeKey(int volumeKey) {
         this.volumeKey = volumeKey;
     }
 

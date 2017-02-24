@@ -14,6 +14,8 @@ import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -28,19 +30,17 @@ public class CountersListsFragment
         implements CounterListsContract.CounterListsView<CounterListsModel> {
 
 
+    @BindView(R.id.recycler_view) RecyclerView recyclerView;
     private CounterListsAdapter adapter;
     private CounterListsPresenter presenter;
-
-    @OnClick(R.id.fab) public void onFabClick() {
-        EventBus.getDefault().post(new AddFragmentEvent(UpsertCounterListFragment.newInstance()));
-    }
-
-    @BindView(R.id.recycler_view) RecyclerView recyclerView;
 
     public CountersListsFragment() {
         // Required empty public constructor
     }
 
+    @OnClick(R.id.fab) public void onFabClick() {
+        EventBus.getDefault().post(new AddFragmentEvent(UpsertCounterListFragment.newInstance()));
+    }
 
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,10 +49,7 @@ public class CountersListsFragment
         }
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater,
-                             ViewGroup container,
-                             Bundle savedInstanceState) {
+    @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_counters_lists, container, false);
         ButterKnife.bind(this, view);
@@ -62,9 +59,75 @@ public class CountersListsFragment
         return view;
     }
 
+    @Override public void onStop() {
+        presenter.unsubscribe();
+        super.onStop();
+    }
+
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.main_menu, menu);
+        MenuItem delete = menu.findItem(R.id.delete);
+        MenuItem edit = menu.findItem(R.id.edit);
+        if (adapter != null) {
+            delete.setVisible(adapter.isDeleteMode());
+            edit.setVisible(adapter.selectedCount() == 1);
+        }
+    }
+
+    @Override public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.settings:
+            case R.id.about:
+                Toast.makeText(getContext(), "Not yet implemented", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.delete:
+                createAndShowAlertDialogForDeleting();
+                return true;
+            case R.id.edit:
+                openSelectedFragmentForEditing();
+                return true;
+        }
+
+        return false;
+        //        return super.onOptionsItemSelected(item);
+
+
+    }
+
+    private void openSelectedFragmentForEditing() {List<Long> list = adapter.getSelectedItems();
+        if (list.size() == 1) {
+            EventBus.getDefault().post(new AddFragmentEvent(UpsertCounterListFragment.newInstance(list.get(0))));
+        }
+    }
+
+    private void createAndShowAlertDialogForDeleting() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle(getDeleteMessage());
+        builder.setMessage(R.string.consider);
+        builder.setPositiveButton(android.R.string.yes, (dialog, id) -> {
+            presenter.deleteItems(adapter.getSelectedItems());
+            setTitle();
+            invalidateOptionsMenu();
+            dialog.dismiss();
+        });
+        builder.setNegativeButton(android.R.string.cancel, (dialog, id) -> dialog.dismiss());
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    private String getDeleteMessage() {
+        String startOfString = getString(R.string.are_you_sure_you_want_to_delete) + " ";
+        if (adapter.selectedCount() == 1) {
+            return startOfString + getString(R.string.the_list) + adapter.getFirstSelectedList() + "'";
+        } else {
+            return startOfString + adapter.selectedCount() + " " + getString(R.string.lists);
+        }
+    }
+
     @Override public void setTitle() {
         if (adapter.isDeleteMode()) {
-            setTitle("Delete " + adapter.selectedCount() + " lists?");
+            setTitle(adapter.selectedCount() + " List selected");
         } else {
             setTitle("Counter Lists");
         }
@@ -79,64 +142,5 @@ public class CountersListsFragment
 
     @Override public void onErrorResponse() {
 
-    }
-
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.main_menu, menu);
-        MenuItem delete = menu.findItem(R.id.delete);
-        if (adapter != null) {
-            delete.setVisible(adapter.isDeleteMode());
-        }
-    }
-
-    @Override public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.settings:
-            case R.id.about:
-                Toast.makeText(getContext(), "Not yet implemented", Toast.LENGTH_SHORT).show();
-                return true;
-            case R.id.delete:
-                createAndShowAlertDialog();
-        }
-
-        return false;
-        //        return super.onOptionsItemSelected(item);
-
-
-    }
-
-    private String getDeleteMessage() {
-        String startOfString = getString(R.string.are_you_sure_you_want_to_delete) + " ";
-        if (adapter.selectedCount() == 1) {
-            return startOfString +
-                    getString(R.string.the_list) +
-                    adapter.getFirstSelectedList() +
-                    "'";
-        } else {
-            return startOfString + adapter.selectedCount() + " " + getString(R.string.lists);
-        }
-    }
-
-
-    private void createAndShowAlertDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle(getDeleteMessage());
-        builder.setMessage(R.string.consider);
-        builder.setPositiveButton(android.R.string.yes, (dialog, id) -> {
-            presenter.deleteItems(adapter.getItemsToDelete());
-            setTitle();
-            invalidateOptionsMenu();
-            dialog.dismiss();
-        });
-        builder.setNegativeButton(android.R.string.cancel, (dialog, id) -> dialog.dismiss());
-        AlertDialog dialog = builder.create();
-        dialog.show();
-    }
-
-
-    @Override public void onStop() {
-        presenter.unsubscribe();
-        super.onStop();
     }
 }

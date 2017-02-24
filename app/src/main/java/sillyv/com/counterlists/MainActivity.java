@@ -24,7 +24,6 @@ import sillyv.com.counterlists.events.AddFragmentEvent;
 import sillyv.com.counterlists.events.MenuChangedEvent;
 import sillyv.com.counterlists.events.ToolbarTitleChangedEvent;
 import sillyv.com.counterlists.screens.lists.recycler.CountersListsFragment;
-import sillyv.com.counterlists.screens.lists.upsert.UpsertCounterListFragment;
 
 public class MainActivity extends AppCompatActivity implements CLFragment.ListenerActivity {
 
@@ -52,7 +51,8 @@ public class MainActivity extends AppCompatActivity implements CLFragment.Listen
     }
 
     private void generateInitialData() {
-        ListController.getInstance().addNewList(new ListModel(0, 1, 1, getIntFromColor(1, 1, 1), getIntFromColor(.75f, .75f, .75f), getIntFromColor(0, 0, 0), "", true, false, false, false, false, false, ""), ListController.DEFAULT_LIST);
+        ListController.getInstance().addNewList(new ListModel(0, 1, 1, getIntFromColor(1, 1, 1), getIntFromColor(.75f, .75f, .75f), getIntFromColor
+                (0, 0, 0), "", 0, 0, 0, 0, 0, 0, ""), ListController.DEFAULT_LIST);
     }
 
     private int getIntFromColor(float Red, float Green, float Blue) {

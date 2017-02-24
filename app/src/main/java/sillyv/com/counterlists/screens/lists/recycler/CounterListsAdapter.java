@@ -20,7 +20,7 @@ import sillyv.com.counterlists.R;
 import sillyv.com.counterlists.events.AddFragmentEvent;
 import sillyv.com.counterlists.events.MenuChangedEvent;
 import sillyv.com.counterlists.events.ToolbarTitleChangedEvent;
-import sillyv.com.counterlists.screens.lists.upsert.UpsertCounterListFragment;
+import sillyv.com.counterlists.screens.counters.recycler.CounterListFragment;
 
 /**
  * Created by Vasili.Fedotov on 1/28/2017.
@@ -74,7 +74,7 @@ class CounterListsAdapter extends RecyclerView.Adapter<CounterListsAdapter.ListH
         return "";
     }
 
-    List<Long> getItemsToDelete() {
+    List<Long> getSelectedItems() {
         List<Long> model = new ArrayList<>();
         for (CounterListsModel.ListItem selectionItem : selectionItems) {
             if (selectionItem.isSelected()) {
@@ -102,7 +102,7 @@ class CounterListsAdapter extends RecyclerView.Adapter<CounterListsAdapter.ListH
                 setItemSelectedOrNot();
                 return;
             }
-            EventBus.getDefault().post(new AddFragmentEvent(UpsertCounterListFragment.newInstance(currentList.get(getAdapterPosition()).getId())));
+            EventBus.getDefault().post(new AddFragmentEvent(CounterListFragment.newInstance(currentList.get(getAdapterPosition()).getId())));
 
         }
 
@@ -112,7 +112,6 @@ class CounterListsAdapter extends RecyclerView.Adapter<CounterListsAdapter.ListH
             currentList = selectionItems;
             deleteMode = true;
             setItemSelectedOrNot();
-            EventBus.getDefault().post(new MenuChangedEvent());
             return true;
         }
 
@@ -122,8 +121,8 @@ class CounterListsAdapter extends RecyclerView.Adapter<CounterListsAdapter.ListH
             if (!me.isSelected() && selectedCount() == 0) {
                 deleteMode = false;
                 currentList = regularItems;
-                EventBus.getDefault().post(new MenuChangedEvent());
             }
+            EventBus.getDefault().post(new MenuChangedEvent());
             notifyDataSetChanged();
             EventBus.getDefault().post(new ToolbarTitleChangedEvent());
         }

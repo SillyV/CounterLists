@@ -11,7 +11,7 @@ import java.util.List;
  *
  */
 
-class CounterListsModel {
+public class CounterListsModel {
 
     private final List<ListItem> items;
 
@@ -23,7 +23,7 @@ class CounterListsModel {
         return items;
     }
 
-    static class ListItem {
+  public   static class ListItem {
         private final String title;
         private final String subtitle;
         private int backgroundColor;
@@ -57,7 +57,7 @@ class CounterListsModel {
             }
         }
 
-        ListItem(String title, String subtitle, int backgroundColor, int cardBackgroundColor, int cardForegroundColor, long id) {
+        protected ListItem(String title, String subtitle, int backgroundColor, int cardBackgroundColor, int cardForegroundColor, long id) {
             this.title = title;
             this.subtitle = subtitle;
             this.backgroundColor = backgroundColor;
@@ -75,15 +75,15 @@ class CounterListsModel {
             return subtitle;
         }
 
-        int getBackgroundColor() {
+      public   int getBackgroundColor() {
             return backgroundColor;
         }
 
-        int getCardBackgroundColor() {
+      public  int getCardBackgroundColor() {
             return cardBackgroundColor;
         }
 
-        int getCardForegroundColor() {
+      public  int getCardForegroundColor() {
             return cardForegroundColor;
         }
 

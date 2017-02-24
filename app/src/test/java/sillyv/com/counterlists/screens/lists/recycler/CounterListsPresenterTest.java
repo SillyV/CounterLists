@@ -14,63 +14,59 @@ import org.mockito.junit.MockitoRule;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 import io.reactivex.Single;
 import sillyv.com.counterlists.database.controllers.RealmRepository;
+import sillyv.com.counterlists.database.models.CounterModel;
 import sillyv.com.counterlists.database.models.ListModel;
+import sillyv.com.counterlists.screens.ParentTest;
 
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.anyLong;
+import static org.mockito.Mockito.only;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 /**
  * Created by Vasili.Fedotov on 2/19/2017.
- *
  */
-@RunWith(MockitoJUnitRunner.class) public class CounterListsPresenterTest {
-    private static final int ITEM_WITH_HEFTY_SUBTITLE = 3;
-
+@RunWith(MockitoJUnitRunner.class) public class CounterListsPresenterTest extends ParentTest {
     @Rule public MockitoRule rule = MockitoJUnit.rule();
-
     @Mock CounterListsContract.CounterListsView<CounterListsModel> view;
-
-    @Mock RealmRepository<ListModel> repo;
-
-
+    @Mock RealmRepository<ListModel,CounterModel> repo;
     private CounterListsPresenter presenter;
-    private final List<ListModel> MANY_ITEMS = getListModels(ITEM_WITH_HEFTY_SUBTITLE);
+    private List<Long> ID_LIST = getIdList();
 
     @Before public void setUp() throws Exception {
         presenter = new CounterListsPresenter(view, repo);
     }
 
-
     @Test public void deleteItems() throws Exception {
         when(repo.getItems()).thenReturn(Single.just(MANY_ITEMS));
 
-        presenter.deleteItems(getIdList());
+        presenter.deleteItems(ID_LIST);
 
-        verify(repo, times(getIdList().size())).deleteItem(anyLong());
+        verify(repo, times(ID_LIST.size())).deleteItem(anyLong());
     }
 
-
-    @Test public void getDataFromPopulatedRepo() throws Exception {
+    @Test public void getData() throws Exception {
         when(repo.getItems()).thenReturn(Single.just(MANY_ITEMS));
 
         presenter.getData();
 
         ArgumentCaptor<CounterListsModel> argument = ArgumentCaptor.forClass(CounterListsModel.class);
 
-        verify(view).onDataReceived(Mockito.any(CounterListsModel.class));
-        verify(view, Mockito.times(0)).onErrorResponse();
+        verify(view, only()).onDataReceived(any(CounterListsModel.class));
         verify(view).onDataReceived(argument.capture());
         assertEquals(argument.getValue().getItems().size(), MANY_ITEMS.size());
 
     }
 
-    @Test public void getDataFromEmptyRepo() throws Exception {
+    @Test public void getData_whenRepoIsEmpty() throws Exception {
         when(repo.getItems()).thenReturn(Single.just(Collections.emptyList()));
 
         presenter.getData();
@@ -82,7 +78,20 @@ import static org.mockito.Mockito.*;
         assertEquals(argument.getValue().getItems().size(), 0);
     }
 
-    @Test public void errorGettingItems() throws Exception {
+    @Test public void getData_whenRepoReturnsNull() throws Exception {
+        when(repo.getItems()).thenReturn(null);
+
+        presenter.getData();
+
+        verify(view).onErrorResponse();
+        //        ArgumentCaptor<CounterListsModel> argument = ArgumentCaptor.forClass(CounterListsModel.class);
+        //        verify(view).onDataReceived(Mockito.any(CounterListsModel.class));
+        //        verify(view, Mockito.times(0)).onErrorResponse();
+        //        verify(view).onDataReceived(argument.capture());
+        //        assertEquals(argument.getValue().getItems().size(), 0);
+    }
+
+    @Test public void getData_whenRepoThrowsException() throws Exception {
 
         when(repo.getItems()).thenReturn(Single.error(new RuntimeException("test")));
 
@@ -92,11 +101,7 @@ import static org.mockito.Mockito.*;
         verify(view).onErrorResponse();
     }
 
-    /**
-     * @throws Exception Tests for private methods getSubtitle and replaceLastComma
-     */
-
-    public void getSubtitleRx() throws Exception {
+    @Test public void getData_checkForSubtitle() throws Exception {
         when(repo.getItems()).thenReturn(Single.just(MANY_ITEMS));
 
         presenter.getData();
@@ -110,36 +115,21 @@ import static org.mockito.Mockito.*;
 
     }
 
+    @Test public void getData_checkForFields() throws Exception {
+        when(repo.getItems()).thenReturn(Single.just(MANY_ITEMS));
 
-    private List<ListModel> getListModels(int itemType) {
-        List<ListModel> response = new ArrayList<>();
+        presenter.getData();
 
-        int items = 4;
-        if (itemType == ITEM_WITH_HEFTY_SUBTITLE) {
-            ListModel a = new ListModel(0, 0, 0, 0, 0, 0, 0, "", true, true, true, true, true, true, "");
-            a.setCounterNames(Arrays.asList("AAA", "BBB", "CCC", "DDD"));
-            response.add(a);
+        ArgumentCaptor<CounterListsModel> argument = ArgumentCaptor.forClass(CounterListsModel.class);
+        verify(view).onDataReceived(argument.capture());
 
-            ListModel b = new ListModel(1, 0, 0, 0, 0, 0, 0, "", true, true, true, true, true, true, "");
-            b.setCounterNames(Collections.singletonList("AAA"));
-            response.add(b);
-
-
-            ListModel c = new ListModel(2, 0, 0, 0, 0, 0, 0, "", true, true, true, true, true, true, "");
-            c.setCounterNames(Collections.emptyList());
-            response.add(c);
+        assertEquals(argument.getValue().getItems().get(0).getTitle(), "Super Test Name");
+        assertEquals(argument.getValue().getItems().get(0).getBackgroundColor(), 100);
+        assertEquals(argument.getValue().getItems().get(0).getCardBackgroundColor(), 200);
+        assertEquals(argument.getValue().getItems().get(0).getCardForegroundColor(), 300);
+        assertEquals(argument.getValue().getItems().get(0).getId(), 20);
 
 
-            items += 3;
-        }
-
-        for (int i = itemType; i < items; i++) {
-            ListModel e = new ListModel(i, 0, 0, 0, 0, 0, 0, "", true, true, true, true, true, true, "");
-            e.setCounterNames(Arrays.asList("AAA", "BBB", "CCC", "DDD"));
-            response.add(e);
-        }
-
-        return response;
     }
 
     @NonNull private List<Long> getIdList() {
@@ -148,52 +138,6 @@ import static org.mockito.Mockito.*;
         return items;
     }
 
-
-    //    private class MockRepo implements RealmRepository<ListModel> {
-    //
-    //        private int items;
-    //        public boolean deleteItemsCalled;
-    //        private int itemType;
-    //
-    //        public MockRepo(int items) {
-    //            this.items = items;
-    //        }
-    //
-    //
-    //        public MockRepo(int items, int itemType) {
-    //            this.itemType = itemType;
-    //            this.items = items;
-    //        }
-    //
-    //        @Override
-    //        public List<ListModel> getItems() {
-    //            if (items == -1)
-    //                return null;
-    //            return getListModels();
-    //        }
-    //
-    //
-    //
-    //        @Override
-    //        public ListModel getItem(long id) {
-    //            return null;
-    //        }
-    //
-    //        @Override
-    //        public void addNewList(ListModel dbModel) {
-    //
-    //        }
-    //
-    //        @Override
-    //        public void updateList(ListModel dbModel) {
-    //
-    //        }
-    //
-    //        @Override
-    //        public void deleteItem(Long aLong) {
-    //            deleteItemsCalled = true;
-    //        }
-    //    }
-
+    //// TODO: 2/21/2017 Test Mapping
 
 }

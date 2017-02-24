@@ -5,7 +5,7 @@ package sillyv.com.counterlists.baseline;
  *
  */
 
-interface BaseView<D> {
+public interface BaseView<D> {
     void onDataReceived(D d);
 
     void onErrorResponse();

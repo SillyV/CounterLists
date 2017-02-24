@@ -39,4 +39,11 @@
     <string name="required_field">Required field</string>
     <string name="you_need_to_enter_a">You need to enter a</string>
     <string name="you_need_to_enter_a_number">You need to enter a number</string>
+    <string name="increment">Increment</string>
+    <string name="decrement">Decrement</string>
+    <string name="on">on</string>
+    <string name="default_label">default</string>
+    <string name="off">off</string>
+    <string name="current_value">Current Value</string>
+    <string name="new_counter">New counter</string>
 </resources>

@@ -3,37 +3,38 @@ package sillyv.com.counterlists;
 
 import android.content.Context;
 import android.support.v4.app.Fragment;
-import android.view.Menu;
-import android.widget.Toast;
+
+import org.greenrobot.eventbus.EventBus;
 
 /**
  * Created by Vasili on 2/18/2017.
- *
  */
 
-public abstract class CLFragment extends Fragment {
+public abstract class CLFragment
+        extends Fragment {
 
     private ListenerActivity mListener;
 
-    protected void setTitle(String title) {
-        mListener.setTitle(title);
-    }
-
-    @Override
-    public void onAttach(Context context) {
+    @Override public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof ListenerActivity) {
             mListener = (ListenerActivity) context;
         } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
+            throw new RuntimeException(context.toString() + " must implement OnFragmentInteractionListener");
         }
     }
 
-    @Override
-    public void onDetach() {
+
+
+    @Override public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    public abstract void setTitle();
+
+    protected void setTitle(String title) {
+        mListener.setTitle(title);
     }
 
     protected void invalidateOptionsMenu() {
@@ -44,8 +45,6 @@ public abstract class CLFragment extends Fragment {
         mListener.popBackStack();
     }
 
-    public abstract void setTitle();
-
     public interface ListenerActivity {
         void setTitle(String title);
 
@@ -53,7 +52,5 @@ public abstract class CLFragment extends Fragment {
 
         void popBackStack();
     }
-
-
 }
 

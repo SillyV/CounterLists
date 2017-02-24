@@ -4,33 +4,42 @@ package sillyv.com.counterlists.screens.lists.recycler;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.Single;
 import io.reactivex.functions.Function;
 import io.reactivex.observers.DisposableSingleObserver;
 import sillyv.com.counterlists.baseline.BaseListView;
 import sillyv.com.counterlists.baseline.BasePresenter;
 import sillyv.com.counterlists.database.controllers.RealmRepository;
+import sillyv.com.counterlists.database.models.CounterModel;
 import sillyv.com.counterlists.database.models.ListModel;
 
 /**
  * Created by Vasili.Fedotov on 2/18/2017.
- *
  */
 
-class CounterListsPresenter extends BasePresenter
+class CounterListsPresenter
+        extends BasePresenter
         implements CounterListsContract.CounterListsPresenter {
 
 
     private BaseListView<CounterListsModel> view;
-    private RealmRepository<ListModel> repo;
+    private RealmRepository<ListModel,CounterModel> repo;
 
-    CounterListsPresenter(BaseListView<CounterListsModel> view, RealmRepository<ListModel> repo) {
+    CounterListsPresenter(BaseListView<CounterListsModel> view, RealmRepository<ListModel,CounterModel> repo) {
 
         this.view = view;
         this.repo = repo;
     }
 
     public void getData() {
-        compositeDisposable.add(repo.getItems().map(dbItemToViewItem()).
+        Single<List<ListModel>> items = repo.getItems();
+
+        if (items == null) {
+            view.onErrorResponse();
+            return;
+        }
+
+        compositeDisposable.add(items.map(dbItemToViewItem()).
                 subscribeWith(new DisposableSingleObserver<CounterListsModel>() {
                     @Override public void onSuccess(CounterListsModel listModels) {
                         view.onDataReceived(listModels);
@@ -42,15 +51,6 @@ class CounterListsPresenter extends BasePresenter
                 }));
     }
 
-    private String getSubtitle(ListModel item) {
-        List<String> counterNames = item.getCounterNames();
-        String subTitle = "";
-        for (String str : counterNames) {
-            subTitle += str + ", ";
-        }
-        subTitle = replaceLastComma(subTitle);
-        return subTitle;
-    }
 
     @Override public void deleteItems(List<Long> idList) {
         for (Long aLong : idList) {
@@ -59,13 +59,7 @@ class CounterListsPresenter extends BasePresenter
         getData();
     }
 
-    private String replaceLastComma(String str) {
-        if (str != null && str.length() > 1) {
-            str = str.substring(0, str.length() - 2) + ".";
-        }
-        return str;
 
-    }
 
     private Function<List<ListModel>, CounterListsModel> dbItemToViewItem() {
         return listModels -> {
@@ -73,7 +67,7 @@ class CounterListsPresenter extends BasePresenter
             List<CounterListsModel.ListItem> responseModel = new ArrayList<>();
 
             for (ListModel item : listModels) {
-                String subTitle = getSubtitle(item);
+                String subTitle = item.getCounterItemsString();
                 responseModel.add(new CounterListsModel.ListItem(item.getName(),
                         subTitle,
                         item.getBackground(),

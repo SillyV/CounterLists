@@ -16,12 +16,12 @@ public class CounterModel {
     private Date edited;
     private Date valueChanged;
     private String note;
-    private boolean clickSound;
-    private boolean vibrate;
-    private boolean speechOutputValue;
-    private boolean speechOutputName;
-    private boolean keepAwake;
-    private boolean volumeKey;
+    private int clickSound;
+    private int vibrate;
+    private int speechOutputValue;
+    private int speechOutputName;
+    private int keepAwake;
+    private int volumeKey;
     private String name;
     private int value;
     private int defaultValue;
@@ -29,8 +29,27 @@ public class CounterModel {
     private int Decrement;
     private int background;
     private int foreground;
+    private int customOrder;
 
-    public CounterModel(long id, Date created, Date edited, Date valueChanged, String note, boolean clickSound, boolean vibrate, boolean speechOutputValue, boolean speechOutputName, boolean keepAwake, boolean volumeKey, String name, int value, int defaultValue, int increment, int decrement, int background, int foreground) {
+    public CounterModel(long id,
+                        Date created,
+                        Date edited,
+                        Date valueChanged,
+                        String note,
+                        int clickSound,
+                        int vibrate,
+                        int speechOutputValue,
+                        int speechOutputName,
+                        int keepAwake,
+                        int volumeKey,
+                        String name,
+                        int value,
+                        int defaultValue,
+                        int increment,
+                        int decrement,
+                        int background,
+                        int foreground,
+                        int customOrder) {
         this.id = id;
         this.created = created;
         this.edited = edited;
@@ -49,6 +68,7 @@ public class CounterModel {
         Decrement = decrement;
         this.background = background;
         this.foreground = foreground;
+        this.customOrder = customOrder;
     }
 
     public CounterModel() {
@@ -59,12 +79,12 @@ public class CounterModel {
         this.edited = counter.getEdited();
         this.valueChanged = counter.getValueChanged();
         this.note = counter.getNote();
-        this.clickSound = counter.isClickSound();
-        this.vibrate = counter.isVibrate();
-        this.speechOutputValue = counter.isSpeechOutputValue();
-        this.speechOutputName = counter.isSpeechOutputName();
-        this.keepAwake = counter.isKeepAwake();
-        this.volumeKey = counter.isVolumeKey();
+        this.clickSound = counter.getClickSound();
+        this.vibrate = counter.getVibrate();
+        this.speechOutputValue = counter.getSpeechOutputValue();
+        this.speechOutputName = counter.getSpeechOutputName();
+        this.keepAwake = counter.getKeepAwake();
+        this.volumeKey = counter.getVolumeKey();
         this.name = counter.getName();
         this.value = counter.getValue();
         this.defaultValue = counter.getDefaultValue();
@@ -72,14 +92,15 @@ public class CounterModel {
         this.Decrement = counter.getDecrement();
         this.background = counter.getBackground();
         this.foreground = counter.getForeground();
-    }
-
-    public void setId(long id) {
-        this.id = id;
+        this.customOrder = counter.getCustomOrder();
     }
 
     public long getId() {
         return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public Date getCreated() {
@@ -114,51 +135,51 @@ public class CounterModel {
         this.note = note;
     }
 
-    public boolean isClickSound() {
+    public int getClickSound() {
         return clickSound;
     }
 
-    public void setClickSound(boolean clickSound) {
+    public void setClickSound(int clickSound) {
         this.clickSound = clickSound;
     }
 
-    public boolean isVibrate() {
+    public int getVibrate() {
         return vibrate;
     }
 
-    public void setVibrate(boolean vibrate) {
+    public void setVibrate(int vibrate) {
         this.vibrate = vibrate;
     }
 
-    public boolean isSpeechOutputValue() {
+    public int getSpeechOutputValue() {
         return speechOutputValue;
     }
 
-    public void setSpeechOutputValue(boolean speechOutputValue) {
+    public void setSpeechOutputValue(int speechOutputValue) {
         this.speechOutputValue = speechOutputValue;
     }
 
-    public boolean isSpeechOutputName() {
+    public int getSpeechOutputName() {
         return speechOutputName;
     }
 
-    public void setSpeechOutputName(boolean speechOutputName) {
+    public void setSpeechOutputName(int speechOutputName) {
         this.speechOutputName = speechOutputName;
     }
 
-    public boolean isKeepAwake() {
+    public int getKeepAwake() {
         return keepAwake;
     }
 
-    public void setKeepAwake(boolean keepAwake) {
+    public void setKeepAwake(int keepAwake) {
         this.keepAwake = keepAwake;
     }
 
-    public boolean isVolumeKey() {
+    public int getVolumeKey() {
         return volumeKey;
     }
 
-    public void setVolumeKey(boolean volumeKey) {
+    public void setVolumeKey(int volumeKey) {
         this.volumeKey = volumeKey;
     }
 
@@ -216,5 +237,9 @@ public class CounterModel {
 
     public void setForeground(int foreground) {
         this.foreground = foreground;
+    }
+
+    public int getCustomOrder() {
+        return customOrder;
     }
 }

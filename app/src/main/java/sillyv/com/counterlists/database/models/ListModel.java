@@ -9,7 +9,6 @@ import sillyv.com.counterlists.database.dbitems.CounterList;
 
 /**
  * Created by Vasili on 1/28/2017.
- *
  */
 
 public class ListModel {
@@ -23,18 +22,111 @@ public class ListModel {
     private int defaultCardForegroundColor;
     private String note;
     private String name;
-    private boolean clickSound;
-    private boolean vibrate;
-    private boolean speechOutputValue;
-    private boolean speechOutputName;
-    private boolean keepAwake;
-    private boolean volumeKey;
-    private List<String> counterNames;
-    private List<Long> counterIds;
+    private int clickSound;
+    private int vibrate;
+    private int speechOutputValue;
+    private int speechOutputName;
+    private int keepAwake;
+    private int volumeKey;
+    private List<CounterModel> counters;
     private String counterItemsString;
-   private Date dateCreated;
-   private Date dateModified;
-   private Date dateUsed;
+    private Date dateCreated;
+    private Date dateModified;
+    private Date dateUsed;
+
+    public ListModel(CounterList list) {
+        id = list.getId();
+        defaultCardBackgroundColor = list.getDefaultCardBackgroundColor();
+        defaultValue = list.getDefaultValue();
+        defaultIncrement = list.getDefaultIncrement();
+        defaultDecrement = list.getDefaultDecrement();
+        background = list.getBackground();
+        defaultCardForegroundColor = list.getDefaultCardForegroundColor();
+        note = list.getNote();
+        name = list.getName();
+        clickSound = list.getClickSound();
+        vibrate = list.getVibrate();
+        speechOutputValue = list.getSpeechOutputValue();
+        speechOutputName = list.getSpeechOutputName();
+        keepAwake = list.getKeepAwake();
+        volumeKey = list.getVolumeKey();
+        counters = new ArrayList<>();
+        counterItemsString = "";
+        for (Counter counter : list.getCounters()) {
+            counters.add(new CounterModel(counter));
+            counterItemsString += counter.getName() + ", ";
+        }
+        counterItemsString = replaceLastComma(counterItemsString);
+        dateCreated = list.getCreated();
+        dateModified = list.getEdited();
+        dateUsed = list.getValueChanged();
+    }
+
+    public ListModel(long id,
+                     int defaultValue,
+                     int defaultIncrement,
+                     int defaultDecrement,
+                     int background,
+                     int defaultCardBackgroundColor,
+                     int defaultCardForegroundColor,
+                     String note,
+                     int clickSound,
+                     int vibrate,
+                     int speechOutputValue,
+                     int speechOutputName,
+                     int keepAwake,
+                     int volumeKey,
+                     String name) {
+        this.id = id;
+        this.defaultValue = defaultValue;
+        this.defaultIncrement = defaultIncrement;
+        this.defaultDecrement = defaultDecrement;
+        this.background = background;
+        this.defaultCardBackgroundColor = defaultCardBackgroundColor;
+        this.defaultCardForegroundColor = defaultCardForegroundColor;
+        this.note = note;
+        this.clickSound = clickSound;
+        this.vibrate = vibrate;
+        this.speechOutputValue = speechOutputValue;
+        this.speechOutputName = speechOutputName;
+        this.keepAwake = keepAwake;
+        this.volumeKey = volumeKey;
+        this.name = name;
+        dateCreated = new Date();
+        counters = new ArrayList<>();
+        dateModified = new Date();
+        dateUsed = new Date();
+    }
+
+    public ListModel(int defaultValue,
+                     int defaultIncrement,
+                     int defaultDecrement,
+                     int background,
+                     int defaultCardBackgroundColor,
+                     int defaultCardForegroundColor,
+                     String note,
+                     int clickSound,
+                     int vibrate,
+                     int speechOutputValue,
+                     int speechOutputName,
+                     int keepAwake,
+                     int volumeKey,
+                     String name) {
+        this.defaultValue = defaultValue;
+        this.defaultIncrement = defaultIncrement;
+        this.defaultDecrement = defaultDecrement;
+        this.background = background;
+        this.defaultCardBackgroundColor = defaultCardBackgroundColor;
+        this.defaultCardForegroundColor = defaultCardForegroundColor;
+        this.note = note;
+        this.clickSound = clickSound;
+        this.vibrate = vibrate;
+        this.speechOutputValue = speechOutputValue;
+        this.speechOutputName = speechOutputName;
+        this.keepAwake = keepAwake;
+        this.volumeKey = volumeKey;
+        this.name = name;
+    }
 
     public Date getDateCreated() {
         return dateCreated;
@@ -62,109 +154,6 @@ public class ListModel {
 
     public String getCounterItemsString() {
         return counterItemsString;
-    }
-
-    public void setCounterItemsString(String counterItemsString) {
-        this.counterItemsString = counterItemsString;
-    }
-
-    public ListModel(CounterList list) {
-        id = list.getId();
-        defaultCardBackgroundColor = list.getDefaultCardBackgroundColor();
-        defaultValue = list.getDefaultValue();
-        defaultIncrement = list.getDefaultIncrement();
-        defaultDecrement = list.getDefaultDecrement();
-        background = list.getBackground();
-        defaultCardForegroundColor = list.getDefaultCardForegroundColor();
-        note = list.getNote();
-        name = list.getName();
-        clickSound = list.isClickSound();
-        vibrate = list.isVibrate();
-        speechOutputValue = list.isSpeechOutputValue();
-        speechOutputName = list.isSpeechOutputName();
-        keepAwake = list.isKeepAwake();
-        volumeKey = list.isVolumeKey();
-        counterNames = new ArrayList<>();
-        counterIds = new ArrayList<>();
-        counterItemsString = "";
-        for (Counter counter :
-                list.getCounters()) {
-            counterNames.add(counter.getName());
-            counterIds.add(counter.getId());
-            counterItemsString += counter.getName();
-        }
-        dateCreated = list.getCreated();
-        dateModified = list.getEdited();
-        dateUsed = list.getValueChanged();
-        counterIds = new ArrayList<>();
-        counterNames = new ArrayList<>();
-    }
-
-    public List<String> getCounterNames() {
-        return counterNames;
-    }
-
-    public void setCounterNames(List<String> counterNames) {
-        this.counterNames = counterNames;
-    }
-
-    public List<Long> getCounterIds() {
-        return counterIds;
-    }
-
-    public void setCounterIds(List<Long> counterIds) {
-        this.counterIds = counterIds;
-    }
-
-    public ListModel(long id, int defaultValue, int defaultIncrement, int defaultDecrement,
-                     int background, int defaultCardBackgroundColor, int defaultCardForegroundColor,
-                     String note, boolean clickSound, boolean vibrate, boolean speechOutputValue,
-                     boolean speechOutputName, boolean keepAwake, boolean volumeKey, String name) {
-        this.id = id;
-        this.defaultValue = defaultValue;
-        this.defaultIncrement = defaultIncrement;
-        this.defaultDecrement = defaultDecrement;
-        this.background = background;
-        this.defaultCardBackgroundColor = defaultCardBackgroundColor;
-        this.defaultCardForegroundColor = defaultCardForegroundColor;
-        this.note = note;
-        this.clickSound = clickSound;
-        this.vibrate = vibrate;
-        this.speechOutputValue = speechOutputValue;
-        this.speechOutputName = speechOutputName;
-        this.keepAwake = keepAwake;
-        this.volumeKey = volumeKey;
-        this.name = name;
-        dateCreated = new Date();
-        dateModified = new Date();
-        dateUsed = new Date();
-        counterIds = new ArrayList<>();
-        counterNames = new ArrayList<>();
-
-
-    }
-
-    public ListModel(int defaultValue, int defaultIncrement, int defaultDecrement, int background,
-                     int defaultCardBackgroundColor, int defaultCardForegroundColor, String note,
-                     boolean clickSound, boolean vibrate, boolean speechOutputValue,
-                     boolean speechOutputName, boolean keepAwake, boolean volumeKey, String name) {
-        this.defaultValue = defaultValue;
-        this.defaultIncrement = defaultIncrement;
-        this.defaultDecrement = defaultDecrement;
-        this.background = background;
-        this.defaultCardBackgroundColor = defaultCardBackgroundColor;
-        this.defaultCardForegroundColor = defaultCardForegroundColor;
-        this.note = note;
-        this.clickSound = clickSound;
-        this.vibrate = vibrate;
-        this.speechOutputValue = speechOutputValue;
-        this.speechOutputName = speechOutputName;
-        this.keepAwake = keepAwake;
-        this.volumeKey = volumeKey;
-        this.name = name;
-        counterIds = new ArrayList<>();
-        counterNames = new ArrayList<>();
-
     }
 
     public long getId() {
@@ -231,59 +220,88 @@ public class ListModel {
         this.note = note;
     }
 
-    public boolean isClickSound() {
-        return clickSound;
-    }
-
-    public void setClickSound(boolean clickSound) {
-        this.clickSound = clickSound;
-    }
-
-    public boolean isVibrate() {
-        return vibrate;
-    }
-
-    public void setVibrate(boolean vibrate) {
-        this.vibrate = vibrate;
-    }
-
-    public boolean isSpeechOutputValue() {
-        return speechOutputValue;
-    }
-
-    public void setSpeechOutputValue(boolean speechOutputValue) {
-        this.speechOutputValue = speechOutputValue;
-    }
-
-    public boolean isSpeechOutputName() {
-        return speechOutputName;
-    }
-
-    public void setSpeechOutputName(boolean speechOutputName) {
-        this.speechOutputName = speechOutputName;
-    }
-
-    public boolean isKeepAwake() {
-        return keepAwake;
-    }
-
-    public void setKeepAwake(boolean keepAwake) {
-        this.keepAwake = keepAwake;
-    }
-
-    public boolean isVolumeKey() {
-        return volumeKey;
-    }
-
-    public void setVolumeKey(boolean volumeKey) {
-        this.volumeKey = volumeKey;
-    }
-
     public String getName() {
         return name;
     }
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public int getClickSound() {
+        return clickSound;
+    }
+
+    public void setClickSound(int clickSound) {
+        this.clickSound = clickSound;
+    }
+
+    public int getVibrate() {
+        return vibrate;
+    }
+
+    public void setVibrate(int vibrate) {
+        this.vibrate = vibrate;
+    }
+
+    public int getSpeechOutputValue() {
+        return speechOutputValue;
+    }
+
+    public void setSpeechOutputValue(int speechOutputValue) {
+        this.speechOutputValue = speechOutputValue;
+    }
+
+    public int getSpeechOutputName() {
+        return speechOutputName;
+    }
+
+    public void setSpeechOutputName(int speechOutputName) {
+        this.speechOutputName = speechOutputName;
+    }
+
+    public int getKeepAwake() {
+        return keepAwake;
+    }
+
+    public void setKeepAwake(int keepAwake) {
+        this.keepAwake = keepAwake;
+    }
+
+    public int getVolumeKey() {
+        return volumeKey;
+    }
+
+    public void setVolumeKey(int volumeKey) {
+        this.volumeKey = volumeKey;
+    }
+
+    public void setCounterItemsString(String counterItemsString) {
+        this.counterItemsString = counterItemsString;
+    }
+
+    public List<CounterModel> getCounters() {
+        return counters;
+    }
+
+    public void setCounters(List<CounterModel> counters) {
+        this.counters = counters;
+        setCounterItemsFromString(counters);
+    }
+
+    private void setCounterItemsFromString(List<CounterModel> counters) {
+        counterItemsString = "";
+        for (CounterModel counter : counters) {
+            counterItemsString += counter.getName() + ", ";
+        }
+        counterItemsString =    replaceLastComma(counterItemsString);
+    }
+
+    private String replaceLastComma(String str) {
+        if (str != null && str.length() > 1) {
+            str = str.substring(0, str.length() - 2) + ".";
+        }
+        return str;
+
     }
 }

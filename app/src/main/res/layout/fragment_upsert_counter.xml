@@ -1,13 +1,486 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="sillyv.com.counterlists.screens.counters.upsert.UpsertCounterFragment">
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true"
+            tools:context="sillyv.com.counterlists.screens.lists.upsert.UpsertCounterListFragment">
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/parent_constraint_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="wrap_content">
 
-</FrameLayout>
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/text_input_layout_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:tag="1"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <EditText
+                android:id="@+id/edit_text_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/name"
+                android:inputType="text"
+                android:maxLines="1"/>
+        </android.support.design.widget.TextInputLayout>
+
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/text_input_layout_note"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:tag="1"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_input_layout_name">
+
+            <EditText
+                android:id="@+id/edit_text_note"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/note"
+                android:inputType="text"/>
+        </android.support.design.widget.TextInputLayout>
+
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/text_input_layout_default_value"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_input_layout_note">
+
+            <EditText
+                android:id="@+id/edit_text_default_value"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/default_value"
+                android:inputType="numberSigned"
+                android:maxLines="1"/>
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/text_input_layout_value"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_input_layout_default_value">
+
+            <EditText
+                android:id="@+id/edit_text_value"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/current_value"
+                android:inputType="numberSigned"
+                android:maxLines="1"/>
+        </android.support.design.widget.TextInputLayout>
+
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/text_input_layout_increment"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_input_layout_value">
+
+            <EditText
+                android:id="@+id/edit_text_increment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/increment"
+                android:inputType="numberSigned"
+                android:maxLines="1"/>
+        </android.support.design.widget.TextInputLayout>
+
+
+
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/text_input_layout_decrement"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_input_layout_increment">
+
+            <EditText
+                android:id="@+id/edit_text_decrement"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/decrement"
+                android:inputType="numberSigned"
+                android:maxLines="1"/>
+
+        </android.support.design.widget.TextInputLayout>
+
+
+        <Button
+            android:id="@+id/button_background"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="8dp"
+            android:tag="1"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_input_layout_decrement"/>
+
+        <TextView
+            android:id="@+id/text_view_button_background"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:tag="1"
+            android:text="@string/background_color"
+            app:layout_constraintBottom_toBottomOf="@+id/button_background"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/button_background"
+            tools:layout_editor_absoluteY="730dp"/>
+
+
+        <Button
+            android:id="@+id/button_foreground"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/button_background"/>
+
+
+        <TextView
+            android:id="@+id/text_view_button_foreground"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="@string/default_counter_text_color"
+            app:layout_constraintBottom_toBottomOf="@+id/button_foreground"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/button_foreground"/>
+
+        <it.beppi.tristatetogglebutton_library.TriStateToggleButton
+            android:id="@+id/switch_click_sound"
+            android:foregroundGravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="16dp"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/button_foreground"
+            app:tbBorderWidth="3dp"
+
+            app:tbMidColor="@color/colorPrimaryDark"
+            app:tbOffBorderColor="@color/lightest_grey"
+            app:tbOffColor="@color/lightest_grey"
+            app:tbOnColor="@color/reddish_white"/>
+
+        <TextView
+            android:id="@+id/switch_click_sound_hint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            tools:text="on"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="@id/switch_click_sound"
+            app:layout_constraintEnd_toStartOf="@id/switch_click_sound"
+            app:layout_constraintTop_toTopOf="@id/switch_click_sound"/>
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="@string/click_sound_on_count"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/switch_click_sound"/>
+
+        <it.beppi.tristatetogglebutton_library.TriStateToggleButton
+            android:id="@+id/switch_vibrate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="16dp"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/switch_click_sound"
+            app:tbBorderWidth="3dp"
+
+            app:tbMidColor="@color/colorPrimaryDark"
+            app:tbOffBorderColor="@color/lightest_grey"
+            app:tbOffColor="@color/lightest_grey"
+            app:tbOnColor="@color/reddish_white"/>
+
+
+        <TextView
+            android:id="@+id/switch_vibrate_hint"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+
+            tools:text="off"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="@id/switch_vibrate"
+            app:layout_constraintEnd_toStartOf="@id/switch_vibrate"
+            app:layout_constraintTop_toTopOf="@id/switch_vibrate"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="@string/vibrate_on_count"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/switch_vibrate"/>
+
+        <it.beppi.tristatetogglebutton_library.TriStateToggleButton
+            android:id="@+id/switch_speech_output_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="16dp"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/switch_vibrate"
+            app:tbBorderWidth="3dp"
+
+            app:tbMidColor="@color/colorPrimaryDark"
+            app:tbOffBorderColor="@color/lightest_grey"
+            app:tbOffColor="@color/lightest_grey"
+            app:tbOnColor="@color/reddish_white"/>
+
+
+        <TextView
+            android:id="@+id/switch_speech_output_value_hint"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            tools:text="default"
+
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="@id/switch_speech_output_value"
+            app:layout_constraintEnd_toStartOf="@id/switch_speech_output_value"
+            app:layout_constraintTop_toTopOf="@id/switch_speech_output_value"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="@string/speak_value_out_loud"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/switch_speech_output_value"/>
+
+        <it.beppi.tristatetogglebutton_library.TriStateToggleButton
+            android:id="@+id/switch_speech_output_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="16dp"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/switch_speech_output_value"
+            app:tbBorderWidth="3dp"
+
+            app:tbMidColor="@color/colorPrimaryDark"
+            app:tbOffBorderColor="@color/lightest_grey"
+            app:tbOffColor="@color/lightest_grey"
+            app:tbOnColor="@color/reddish_white"/>
+
+
+        <TextView
+            android:id="@+id/switch_speech_output_name_hint"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            tools:text="on"
+            android:visibility="invisible"
+
+            app:layout_constraintBottom_toBottomOf="@id/switch_speech_output_name"
+            app:layout_constraintEnd_toStartOf="@id/switch_speech_output_name"
+            app:layout_constraintTop_toTopOf="@id/switch_speech_output_name"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="@string/speak_name_out_loud"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/switch_speech_output_name"/>
+
+        <it.beppi.tristatetogglebutton_library.TriStateToggleButton
+            android:id="@+id/switch_keep_awake"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="16dp"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/switch_speech_output_name"
+            app:tbBorderWidth="3dp"
+
+            app:tbMidColor="@color/colorPrimaryDark"
+            app:tbOffBorderColor="@color/lightest_grey"
+            app:tbOffColor="@color/lightest_grey"
+            app:tbOnColor="@color/reddish_white"/>
+
+
+        <TextView
+            android:id="@+id/switch_keep_awake_hint"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            tools:text="on"
+            android:visibility="invisible"
+
+            app:layout_constraintBottom_toBottomOf="@id/switch_keep_awake"
+            app:layout_constraintEnd_toStartOf="@id/switch_keep_awake"
+            app:layout_constraintTop_toTopOf="@id/switch_keep_awake"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="@string/keep_awake_on_this_counter"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/switch_keep_awake"/>
+
+        <it.beppi.tristatetogglebutton_library.TriStateToggleButton
+            android:id="@+id/switch_volume_key"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="16dp"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/switch_keep_awake"
+            app:tbBorderWidth="3dp"
+            app:tbMidColor="@color/colorPrimaryDark"
+            app:tbOffBorderColor="@color/lightest_grey"
+            app:tbOffColor="@color/lightest_grey"
+            app:tbOnColor="@color/reddish_white"/>
+
+
+        <TextView
+            android:id="@+id/switch_volume_key_hint"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+
+            tools:text="on"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="@id/switch_volume_key"
+            app:layout_constraintEnd_toStartOf="@id/switch_volume_key"
+            app:layout_constraintTop_toTopOf="@id/switch_volume_key"/>
+
+        <TextView
+            android:id="@+id/text_view_volume"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="@string/use_volume_key_to_count"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/switch_volume_key"
+            />
+
+        <TextView
+            android:id="@+id/text_view_date_created"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/date_created"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_view_volume"/>
+
+
+        <TextView
+            android:id="@+id/text_view_date_created_stats"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text=""
+            app:layout_constraintStart_toEndOf="@+id/text_view_date_created"
+            app:layout_constraintTop_toTopOf="@+id/text_view_date_created"/>
+
+
+        <TextView
+            android:id="@+id/text_view_date_modified"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/date_modified"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_view_date_created"/>
+
+
+        <TextView
+            android:id="@+id/text_view_date_modified_stats"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text=""
+            app:layout_constraintStart_toEndOf="@+id/text_view_date_modified"
+            app:layout_constraintTop_toTopOf="@+id/text_view_date_modified"/>
+
+        <TextView
+            android:id="@+id/text_view_date_changed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/date_changed"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_view_date_modified"/>
+
+
+        <TextView
+            android:id="@+id/text_view_date_changed_stats"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text=""
+            app:layout_constraintStart_toEndOf="@+id/text_view_date_changed"
+            app:layout_constraintTop_toTopOf="@+id/text_view_date_changed"/>
+
+
+        <TextView
+            android:id="@+id/button_advanced"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:padding="8dp"
+            android:tag="1"
+            android:text="@string/show_advanced_settings"
+            android:textColor="@color/colorAccent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_view_date_changed"/>
+
+
+    </android.support.constraint.ConstraintLayout>
+
+
+</ScrollView>

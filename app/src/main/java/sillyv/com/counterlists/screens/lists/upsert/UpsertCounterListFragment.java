@@ -1,24 +1,12 @@
 package sillyv.com.counterlists.screens.lists.upsert;
 
-import android.content.DialogInterface;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.Switch;
 import android.widget.TextView;
-
-import com.flask.colorpicker.ColorPickerView;
-import com.flask.colorpicker.OnColorSelectedListener;
-import com.flask.colorpicker.builder.ColorPickerClickListener;
-import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
 
 import java.util.HashMap;
 import java.util.List;
@@ -27,168 +15,26 @@ import butterknife.BindView;
 import butterknife.BindViews;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import sillyv.com.counterlists.CLFragment;
 import sillyv.com.counterlists.R;
 import sillyv.com.counterlists.database.controllers.ListController;
-import sillyv.com.counterlists.tools.ValidationTools;
+import sillyv.com.counterlists.screens.Contracts;
+import sillyv.com.counterlists.screens.UpsertFragment;
 
-import static android.text.InputType.TYPE_NUMBER_FLAG_SIGNED;
-
-public class UpsertCounterListFragment extends CLFragment implements UpsertCounterListContract.UpsertCounterListView {
-    private static final String LIST_IDENTIFIER = "ListIdentifier";
-    //region ButterKnife View Binding
-    @BindView(R.id.edit_text_name)
-    TextView editTextName;
-    @BindView(R.id.parent_constraint_layout)
-    ViewGroup constraintLayout;
-    @BindView(R.id.button_advanced)
-    TextView buttonAdvanced;
-    @BindView(R.id.edit_text_note)
-    TextView editTextNote;
-    @BindView(R.id.edit_text_default_value)
-    TextView editTextDefaultValue;
-    @BindView(R.id.edit_text_default_increment)
-    TextView editTextDefaultIncrement;
-    @BindView(R.id.edit_text_default_decrement)
-    TextView editTextDefaultDecrement;
-    @BindView(R.id.button_background)
-    View buttonBackground;
-    @BindView(R.id.button_default_card_background)
-    View buttonDefaultCardBackground;
-    @BindView(R.id.button_default_card_foreground)
-    View buttonDefaultCardForeground;
-    @BindView(R.id.switch_click_sound)
-    Switch switchClickSound;
-    @BindView(R.id.switch_vibrate)
-    Switch switchVibrate;
-    @BindView(R.id.switch_speech_output_value)
-    Switch switchSpeechOutputValue;
-    @BindView(R.id.switch_speech_output_name)
-    Switch switchSpeechOutputName;
-    @BindView(R.id.switch_keep_awake)
-    Switch switchKeepAwake;
-    @BindView(R.id.switch_volume_key)
-    Switch switchVolumeKey;
-    @BindView(R.id.text_view_date_created_stats)
-    TextView textViewDateCreatedStats;
-    @BindView(R.id.text_view_date_modified_stats)
-    TextView textViewDateModifiedStats;
-    @BindView(R.id.text_view_date_changed_stats)
-    TextView textViewDateChangedStats;
-
-    private boolean foundErrors;
-
-    @BindViews({R.id.text_input_layout_default_decrement, R.id.text_input_layout_default_increment, R.id.text_input_layout_default_value, R.id.text_input_layout_name, R.id.text_input_layout_note})
-    List<TextInputLayout> textLayouts;
+public class UpsertCounterListFragment
+        extends UpsertFragment
+        implements UpsertCounterListContract.UpsertCounterListView<UpsertCounterListModel.CounterListSettings> {
 
 
-    private final ButterKnife.Action<TextInputLayout> CHECK_FOR_ERRORS = new ButterKnife.Action<TextInputLayout>() {
-        @Override
+    @BindView(R.id.edit_text_default_increment) TextView editTextDefaultIncrement;
+    @BindView(R.id.edit_text_default_decrement) TextView editTextDefaultDecrement;
+    @BindView(R.id.button_default_card_background) View buttonDefaultCardBackground;
+    @BindView(R.id.button_default_card_foreground) View buttonDefaultCardForeground;
+    @BindViews({R.id.text_input_layout_default_decrement,
+            R.id.text_input_layout_default_increment,
+            R.id.text_input_layout_default_value,
+            R.id.text_input_layout_name}) List<TextInputLayout> requiredFieldsTextLayouts;
 
-        public void apply(@NonNull TextInputLayout view, int index) {
-            EditText editText = view.getEditText();
-            view.setError(null);
-            view.setErrorEnabled(false);
-            if (editText == null) {
-                foundErrors = true;
-                return;
-            }
-            String content = editText.getText().toString();
-            if (content.equals("")) {
-                foundErrors = true;
-                CharSequence hint = view.getHint();
-                if (hint != null) {
-                    view.setError(getString(R.string.you_need_to_enter_a) + hint.toString());
-                }
-                else
-                {
-                    view.setError(getString(R.string.required_field));
-
-                }
-                return;
-            }
-            if (editText.getInputType() == TYPE_NUMBER_FLAG_SIGNED &&
-                    !ValidationTools.getInstance().isStringNumeric(content)) {
-                foundErrors = true;
-                view.setError(getString(R.string.you_need_to_enter_a_number));
-            }
-        }
-    };
     private UpsertCounterListContract.UpsertCounterListPresenter presenter;
-    private String toolbarTitle;
-
-
-//endregion
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_edit_counter_list, container, false);
-        ButterKnife.bind(this, view);
-        setAdvancedVisibility();
-        invalidateOptionsMenu();
-        presenter = new UpsertCounterListPresenter(this, ListController.getInstance());
-        presenter.loadData(getContext(), android.text.format.DateFormat.getDateFormat(getContext()), getIdentifier());
-        return view;
-    }
-
-    @NonNull
-    private UpsertCounterListModel.Identifier getIdentifier() {
-        return new UpsertCounterListModel.Identifier.Builder().id(id).build();
-    }
-
-    private long id;
-
-
-    private HashMap<View, Integer> colorButtonMap;
-
-    @OnClick(R.id.button_advanced)
-    void onAdvancedClick() {
-        viewAdvanced = !viewAdvanced;
-        buttonAdvanced.setText(viewAdvanced ?
-                R.string.hide_advanced_settings :
-                R.string.show_advanced_settings);
-        setAdvancedVisibility();
-        invalidateOptionsMenu();
-
-    }
-
-    @OnClick({R.id.button_background, R.id.button_default_card_background, R.id.button_default_card_foreground})
-    void onButtonColorClick(final View view) {
-        ColorPickerDialogBuilder
-                .with(getContext())
-                .setTitle("Choose color")
-                .initialColor(colorButtonMap.get(view))
-                .wheelType(ColorPickerView.WHEEL_TYPE.FLOWER)
-                .showAlphaSlider(false)
-                .density(12)
-                .setOnColorSelectedListener(new OnColorSelectedListener() {
-                    @Override
-                    public void onColorSelected(int selectedColor) {
-//                        Toast.makeText(getContext(), "onColorSelected: 0x" + Integer.toHexString(selectedColor), Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .setPositiveButton("ok", new ColorPickerClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int selectedColor, Integer[] allColors) {
-                        view.getBackground().setColorFilter(selectedColor, PorterDuff.Mode.MULTIPLY);
-                        Integer selected = selectedColor;
-                        colorButtonMap.put(view, selected);
-                    }
-                })
-                .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                    }
-                })
-                .build()
-                .show();
-
-
-    }
-
-    private boolean viewAdvanced = false;
 
     public UpsertCounterListFragment() {
         // Required empty public constructor
@@ -210,9 +56,15 @@ public class UpsertCounterListFragment extends CLFragment implements UpsertCount
         return fragment;
     }
 
+    @Override protected void saveData() {
+        {presenter.saveData((UpsertCounterListModel.CounterListSettings) getModelForPresenter(), getIdentifier());}
+    }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
+    @Override public List<TextInputLayout> getRequiredFieldsTextLayouts() {
+        return requiredFieldsTextLayouts;
+    }
+
+    @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             id = getArguments().getLong(LIST_IDENTIFIER);
@@ -221,18 +73,38 @@ public class UpsertCounterListFragment extends CLFragment implements UpsertCount
 
     }
 
-
-    private void setAdvancedVisibility() {
-        for (int i = 0; i < constraintLayout.getChildCount(); i++) {
-            View v = constraintLayout.getChildAt(i);
-            if (v.getTag() == null) {
-                v.setVisibility(viewAdvanced ? View.VISIBLE : View.GONE);
-            }
-        }
+    @Override public UpsertCounterListContract.UpsertCounterListPresenter getPresenter() {
+        return presenter;
     }
 
-    @Override
-    public void onDataReceived(UpsertCounterListModel.CounterListSettings model) {
+
+    //usage
+
+    protected Contracts.UpsertContract.UpsertModel getModelForPresenter() {
+        Contracts.UpsertContract.UpsertModel model = super.getModelForPresenter(new UpsertCounterListModel.CounterListSettings(
+                editTextDefaultIncrement.getText().toString(),
+                editTextDefaultDecrement.getText().toString(),
+                (Integer) colorButtonMap.get(buttonDefaultCardBackground),
+                (Integer) colorButtonMap.get(buttonDefaultCardForeground)));
+        return model;
+    }
+
+    @OnClick({R.id.button_background, R.id.button_default_card_background, R.id.button_default_card_foreground})
+    void onButtonColorClick(final View view) {
+        showPickColorDialog(view);
+    }
+
+    @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View view = inflater.inflate(R.layout.fragment_edit_counter_list, container, false);
+        ButterKnife.bind(this, view);
+        presenter = new UpsertCounterListPresenter(this, ListController.getInstance());
+        presenter.loadData(getContext(), getDateFormat(), getIdentifier());
+        initComponents();
+        return view;
+    }
+
+    @Override public void onDataReceived(UpsertCounterListModel.CounterListSettings model) {
         colorButtonMap = new HashMap<>();
         editTextName.setText(model.getName());
         editTextNote.setText(model.getNote());
@@ -248,12 +120,12 @@ public class UpsertCounterListFragment extends CLFragment implements UpsertCount
         colorButtonMap.put(buttonBackground, backgroundColor);
         colorButtonMap.put(buttonDefaultCardBackground, defaultColorCounterBackground);
         colorButtonMap.put(buttonDefaultCardForeground, defaultColorCounterText);
-        switchClickSound.setChecked(model.isClickSound());
-        switchVibrate.setChecked(model.isVibrate());
-        switchSpeechOutputValue.setChecked(model.isSpeakValue());
-        switchSpeechOutputName.setChecked(model.isSpeakName());
-        switchKeepAwake.setChecked(model.isKeepAwake());
-        switchVolumeKey.setChecked(model.isUseVolume());
+        switchClickSound.setToggleStatus(getToggleStatus(model.getClickSound()), true);
+        switchVibrate.setToggleStatus(getToggleStatus(model.getVibrate()), true);
+        switchSpeechOutputValue.setToggleStatus(getToggleStatus(model.getSpeakValue()), true);
+        switchSpeechOutputName.setToggleStatus(getToggleStatus(model.getSpeakName()), true);
+        switchKeepAwake.setToggleStatus(getToggleStatus(model.getKeepAwake()), true);
+        switchVolumeKey.setToggleStatus(getToggleStatus(model.getUseVolume()), true);
         textViewDateCreatedStats.setText(model.getDateCreated());
         textViewDateModifiedStats.setText(model.getDateModified());
         textViewDateChangedStats.setText(model.getLastUsed());
@@ -261,71 +133,11 @@ public class UpsertCounterListFragment extends CLFragment implements UpsertCount
         setTitle(toolbarTitle);
     }
 
-    @Override
-    public void onDataError() {
+    @Override public void onErrorResponse() {
 
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        switch (item.getItemId()) {
-            case R.id.save:
-                foundErrors = false;
-                ButterKnife.apply(textLayouts, CHECK_FOR_ERRORS);
-                if (!foundErrors) {
-                    presenter.saveData(getModelForPresenter(), getIdentifier());
-                    popBackStack();
-                }
-                break;
-            case R.id.show_advanced:
-            case R.id.hide_advanced:
-                onAdvancedClick();
-                break;
-
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    private UpsertCounterListModel.CounterListSettings getModelForPresenter() {
-
-
-        UpsertCounterListModel.CounterListSettings model = new UpsertCounterListModel.CounterListSettings();
-        model.setName(editTextName.getText().toString());
-        model.setNote(editTextNote.getText().toString());
-        model.setDefaultValue(editTextDefaultValue.getText().toString());
-        model.setDefaultIncrement(editTextDefaultIncrement.getText().toString());
-        model.setDefaultDecrement(editTextDefaultDecrement.getText().toString());
-        model.setBackgroundColor(colorButtonMap.get(buttonBackground));
-        model.setDefaultColorCounterBackground(colorButtonMap.get(buttonDefaultCardBackground));
-        model.setDefaultColorCounterText(colorButtonMap.get(buttonDefaultCardForeground));
-        model.setClickSound(switchClickSound.isChecked());
-        model.setVibrate(switchVibrate.isChecked());
-        model.setSpeakValue(switchSpeechOutputValue.isChecked());
-        model.setSpeakName(switchSpeechOutputName.isChecked());
-        model.setKeepAwake(switchKeepAwake.isChecked());
-        model.setUseVolume(switchVolumeKey.isChecked());
-
-
-        textViewDateCreatedStats.setText(model.getDateCreated());
-        textViewDateModifiedStats.setText(model.getDateModified());
-        textViewDateChangedStats.setText(model.getLastUsed());
-        setTitle(model.getToolbarTitle());
-        return model;
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.upsert_list_menu, menu);
-        MenuItem show = menu.findItem(R.id.show_advanced);
-        MenuItem hide = menu.findItem(R.id.hide_advanced);
-        show.setVisible(!viewAdvanced);
-        hide.setVisible(viewAdvanced);
-    }
-
-    @Override
-    public void setTitle() {
+    @Override public void setTitle() {
         setTitle(toolbarTitle);
     }
 }
