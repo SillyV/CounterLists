@@ -8,7 +8,6 @@ import java.util.List;
 
 /**
  * Created by Vasili.Fedotov on 2/18/2017.
- *
  */
 
 public class CounterListsModel {
@@ -23,20 +22,53 @@ public class CounterListsModel {
         return items;
     }
 
-  public   static class ListItem {
+    public static class ListItem {
         private final String title;
-        private final String subtitle;
+        private final long id;
+        private List<String> subtitle;
         private int backgroundColor;
         private int cardBackgroundColor;
         private int cardForegroundColor;
-        private final long id;
         private boolean selected = false;
         private int visibility;
+
+        protected ListItem(String title, List<String> subtitle, int backgroundColor, int cardBackgroundColor, int cardForegroundColor, long id) {
+            this.title = title;
+            this.subtitle = subtitle;
+            this.backgroundColor = backgroundColor;
+            this.cardBackgroundColor = cardBackgroundColor;
+            this.cardForegroundColor = cardForegroundColor;
+            this.id = id;
+            visibility = View.INVISIBLE;
+        }
+
+        public String getTitle() {
+            return title;
+        }
+
+        public List<String> getSubtitle() {
+            return subtitle;
+        }
+
+        public int getBackgroundColor() {
+            return backgroundColor;
+        }
+
+        public int getCardBackgroundColor() {
+            return cardBackgroundColor;
+        }
+
+        public int getCardForegroundColor() {
+            return cardForegroundColor;
+        }
+
+        public long getId() {
+            return id;
+        }
 
         int getVisibility() {
             return visibility;
         }
-
 
         boolean isSelected() {
             return selected;
@@ -56,45 +88,11 @@ public class CounterListsModel {
                 visibility = View.INVISIBLE;
             }
         }
-
-        protected ListItem(String title, String subtitle, int backgroundColor, int cardBackgroundColor, int cardForegroundColor, long id) {
-            this.title = title;
-            this.subtitle = subtitle;
-            this.backgroundColor = backgroundColor;
-            this.cardBackgroundColor = cardBackgroundColor;
-            this.cardForegroundColor = cardForegroundColor;
-            this.id = id;
-            visibility = View.INVISIBLE;
-        }
-
-        public String getTitle() {
-            return title;
-        }
-
-        public String getSubtitle() {
-            return subtitle;
-        }
-
-      public   int getBackgroundColor() {
-            return backgroundColor;
-        }
-
-      public  int getCardBackgroundColor() {
-            return cardBackgroundColor;
-        }
-
-      public  int getCardForegroundColor() {
-            return cardForegroundColor;
-        }
-
-        public long getId() {
-            return id;
-        }
     }
 
 
     static class IDList {
-        final List<Long>  items;
+        final List<Long> items;
 
         IDList(List<Long> items) {
             this.items = items;

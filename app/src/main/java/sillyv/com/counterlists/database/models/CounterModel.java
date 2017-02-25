@@ -75,6 +75,7 @@ public class CounterModel {
     }
 
     public CounterModel(Counter counter) {
+        this.id = counter.getId();
         this.created = counter.getCreated();
         this.edited = counter.getEdited();
         this.valueChanged = counter.getValueChanged();

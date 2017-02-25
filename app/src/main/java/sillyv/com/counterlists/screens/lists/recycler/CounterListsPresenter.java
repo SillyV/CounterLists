@@ -69,7 +69,7 @@ class CounterListsPresenter
             for (ListModel item : listModels) {
                 String subTitle = item.getCounterItemsString();
                 responseModel.add(new CounterListsModel.ListItem(item.getName(),
-                        subTitle,
+                        item.getItemStrings(),
                         item.getBackground(),
                         item.getDefaultCardBackgroundColor(),
                         item.getDefaultCardForegroundColor(),

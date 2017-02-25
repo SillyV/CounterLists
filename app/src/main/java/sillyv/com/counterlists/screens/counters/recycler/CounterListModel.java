@@ -17,7 +17,7 @@ public class CounterListModel
     List<CounterModel> counterModels;
 
     CounterListModel(String title,
-                     String subtitle,
+                     List<String> subtitle,
                      int backgroundColor,
                      int cardBackgroundColor,
                      int cardForegroundColor,

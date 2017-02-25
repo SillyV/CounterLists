@@ -33,6 +33,7 @@ public class ListModel {
     private Date dateCreated;
     private Date dateModified;
     private Date dateUsed;
+    private List<String> itemStrings;
 
     public ListModel(CounterList list) {
         id = list.getId();
@@ -51,8 +52,10 @@ public class ListModel {
         keepAwake = list.getKeepAwake();
         volumeKey = list.getVolumeKey();
         counters = new ArrayList<>();
+        itemStrings = new ArrayList<>();
         counterItemsString = "";
         for (Counter counter : list.getCounters()) {
+            itemStrings.add(counter.getName());
             counters.add(new CounterModel(counter));
             counterItemsString += counter.getName() + ", ";
         }
@@ -60,6 +63,14 @@ public class ListModel {
         dateCreated = list.getCreated();
         dateModified = list.getEdited();
         dateUsed = list.getValueChanged();
+    }
+
+    private String replaceLastComma(String str) {
+        if (str != null && str.length() > 1) {
+            str = str.substring(0, str.length() - 2) + ".";
+        }
+        return str;
+
     }
 
     public ListModel(long id,
@@ -154,6 +165,10 @@ public class ListModel {
 
     public String getCounterItemsString() {
         return counterItemsString;
+    }
+
+    public void setCounterItemsString(String counterItemsString) {
+        this.counterItemsString = counterItemsString;
     }
 
     public long getId() {
@@ -276,10 +291,6 @@ public class ListModel {
         this.volumeKey = volumeKey;
     }
 
-    public void setCounterItemsString(String counterItemsString) {
-        this.counterItemsString = counterItemsString;
-    }
-
     public List<CounterModel> getCounters() {
         return counters;
     }
@@ -287,21 +298,20 @@ public class ListModel {
     public void setCounters(List<CounterModel> counters) {
         this.counters = counters;
         setCounterItemsFromString(counters);
+
     }
 
     private void setCounterItemsFromString(List<CounterModel> counters) {
+        itemStrings = new ArrayList<>();
         counterItemsString = "";
         for (CounterModel counter : counters) {
             counterItemsString += counter.getName() + ", ";
+            itemStrings.add(counter.getName());
         }
-        counterItemsString =    replaceLastComma(counterItemsString);
+        counterItemsString = replaceLastComma(counterItemsString);
     }
 
-    private String replaceLastComma(String str) {
-        if (str != null && str.length() > 1) {
-            str = str.substring(0, str.length() - 2) + ".";
-        }
-        return str;
-
+    public List<String> getItemStrings() {
+        return itemStrings;
     }
 }

@@ -58,7 +58,7 @@ public class CounterListPresenter
 
     private Function<ListModel, CounterListModel> dbItemToViewItem() {
         return listModel -> new CounterListModel(listModel.getName(),
-                listModel.getNote(),
+                listModel.getItemStrings(),
                 listModel.getBackground(),
                 listModel.getDefaultCardBackgroundColor(),
                 listModel.getDefaultCardForegroundColor(),

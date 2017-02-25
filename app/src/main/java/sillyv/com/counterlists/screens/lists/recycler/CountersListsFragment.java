@@ -66,7 +66,7 @@ public class CountersListsFragment
 
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.main_menu, menu);
+        inflater.inflate(R.menu.main_list_list_menu, menu);
         MenuItem delete = menu.findItem(R.id.delete);
         MenuItem edit = menu.findItem(R.id.edit);
         if (adapter != null) {
@@ -95,12 +95,6 @@ public class CountersListsFragment
 
     }
 
-    private void openSelectedFragmentForEditing() {List<Long> list = adapter.getSelectedItems();
-        if (list.size() == 1) {
-            EventBus.getDefault().post(new AddFragmentEvent(UpsertCounterListFragment.newInstance(list.get(0))));
-        }
-    }
-
     private void createAndShowAlertDialogForDeleting() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle(getDeleteMessage());
@@ -114,6 +108,13 @@ public class CountersListsFragment
         builder.setNegativeButton(android.R.string.cancel, (dialog, id) -> dialog.dismiss());
         AlertDialog dialog = builder.create();
         dialog.show();
+    }
+
+    private void openSelectedFragmentForEditing() {
+        List<Long> list = adapter.getSelectedItems();
+        if (list.size() == 1) {
+            EventBus.getDefault().post(new AddFragmentEvent(UpsertCounterListFragment.newInstance(list.get(0))));
+        }
     }
 
     private String getDeleteMessage() {
@@ -136,7 +137,7 @@ public class CountersListsFragment
     @Override public void onDataReceived(CounterListsModel model) {
         LinearLayoutManager layout = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layout);
-        adapter = new CounterListsAdapter(model.getItems());
+        adapter = new CounterListsAdapter(getContext(), model.getItems());
         recyclerView.setAdapter(adapter);
     }
 

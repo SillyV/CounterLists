@@ -112,7 +112,7 @@ public class CounterController
         Realm realm = Realm.getDefaultInstance();
         realm.executeTransaction(realm1 -> {
             Log.d(TAG, "execute:");
-            final Counter list = getCounter(id);
+            Counter list = getCounter(id);
             list.setValue(value);
             list.setValueChanged(new Date());
             realm1.copyToRealmOrUpdate(list);

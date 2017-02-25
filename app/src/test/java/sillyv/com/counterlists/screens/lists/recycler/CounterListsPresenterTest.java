@@ -108,10 +108,12 @@ import static org.mockito.Mockito.when;
 
         ArgumentCaptor<CounterListsModel> argument = ArgumentCaptor.forClass(CounterListsModel.class);
         verify(view).onDataReceived(argument.capture());
-
-        assertEquals(argument.getValue().getItems().get(0).getSubtitle(), "AAA, BBB, CCC, DDD.");
-        assertEquals(argument.getValue().getItems().get(1).getSubtitle(), "AAA.");
-        assertEquals(argument.getValue().getItems().get(2).getSubtitle(), "");
+        List<String> abcdList = new ArrayList<>();
+        abcdList.add("AAA");
+        abcdList.add("BBB");
+        abcdList.add("CCC");
+        abcdList.add("DDD");
+        assertEquals(argument.getValue().getItems().get(0).getSubtitle(),abcdList);
 
     }
 
