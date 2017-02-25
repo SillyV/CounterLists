@@ -46,4 +46,11 @@
     <string name="off">off</string>
     <string name="current_value">Current Value</string>
     <string name="new_counter">New counter</string>
+    <string name="sort">sort</string>
+    <string name="sort_by_date">Sort by date</string>
+    <string name="sort_by_name">Sort by name</string>
+    <string name="custom_sort">Custom sort</string>
+    <string name="delete">Delete</string>
+    <string name="settings">Settings</string>
+    <string name="about">About</string>
 </resources>

@@ -156,6 +156,7 @@ public class MainActivity extends AppCompatActivity implements CLFragment.Listen
         if (activeFragment != null) {
             if (activeFragment instanceof CountersListsFragment) {
                 finish();
+                return;
             }
         }
         super.onBackPressed();
