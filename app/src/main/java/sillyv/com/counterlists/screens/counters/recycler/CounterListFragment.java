@@ -94,6 +94,14 @@ public class CounterListFragment
 
     }
 
+    @Override public void onSaveDataErrorResponse() {
+
+    }
+
+    @Override public void onSaveDataSuccess() {
+
+    }
+
     @Subscribe public void valueChanged(NotifyValueChangedEvent event) {
         presenter.saveInteraction(event.getId(), event.getParentId(), event.getValue());
 

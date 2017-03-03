@@ -15,6 +15,7 @@ import sillyv.com.counterlists.database.models.CounterModel;
 
 /**
  * Created by Vasili on 1/28/2017.
+ *
  */
 
 public class CounterController
@@ -61,40 +62,40 @@ public class CounterController
         return null;
     }
 
-    public void insert(final CounterModel model) {
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override public void execute(Realm realm) {
+    public Completable insert(final CounterModel model) {
+        return Completable.fromAction(() -> {
+            Realm realm = Realm.getDefaultInstance();
+            realm.executeTransaction(realm1 -> {
                 Log.d(TAG, "execute:");
-                long nextID = (long) (realm.where(Counter.class).max("id")) + 1L;
+                long nextID = (long) (realm1.where(Counter.class).max("id")) + 1L;
                 final Counter list = new Counter(model, nextID);
                 model.setId(nextID);
-                realm.copyToRealm(list);
-            }
+                realm1.copyToRealm(list);
+            });
+            realm.close();
         });
-        realm.close();
     }
 
-    public void updateItem(final CounterModel model) {
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override public void execute(Realm realm) {
+    public Completable updateItem(final CounterModel model) {
+        return Completable.fromAction(() -> {
+            Realm realm = Realm.getDefaultInstance();
+            realm.executeTransaction(realm1 -> {
                 Log.d(TAG, "execute:");
                 final Counter list = getCounter(model.getId());
                 list.update(model);
-                realm.copyToRealmOrUpdate(list);
-            }
+                realm1.copyToRealmOrUpdate(list);
+            });
+            realm.close();
         });
-        realm.close();
     }
 
     //query a single item with the given id
-    public Counter getCounter(long id) {
+    private Counter getCounter(long id) {
         return realm.where(Counter.class).equalTo("id", id).findFirst();
     }
 
     @Override public Completable deleteItem(Long aLong) {
-return null;
+        return null;
     }
 
     @Override public Single<List<CounterModel>> getItems() throws RuntimeException {
@@ -105,20 +106,22 @@ return null;
         return null;
     }
 
-    @Override public void insertNewChildItem(Long parentId, Object model) {
-
+    @Override public Completable insertNewChildItem(Long parentId, Object model) {
+        return Completable.fromAction(() -> {});
     }
 
-    @Override public void updateItemValue(Long id, Integer value) {
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(realm1 -> {
-            Log.d(TAG, "execute:");
-            Counter list = getCounter(id);
-            list.setValue(value);
-            list.setValueChanged(new Date());
-            realm1.copyToRealmOrUpdate(list);
+    @Override public Completable updateItemValue(Long id, Integer value) {
+        return Completable.fromAction(() -> {
+            Realm realm = Realm.getDefaultInstance();
+            realm.executeTransaction(realm1 -> {
+                Log.d(TAG, "execute:");
+                Counter list = getCounter(id);
+                list.setValue(value);
+                list.setValueChanged(new Date());
+                realm1.copyToRealmOrUpdate(list);
+            });
+            realm.close();
         });
-        realm.close();
     }
 
     @Override public Completable deleteItems(List<Long> idList) {
@@ -127,35 +130,23 @@ return null;
 
     public void addNewList(final CounterModel model, final long nextID) {
         Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override public void execute(Realm realm) {
-                Log.d(TAG, "execute:");
-                final Counter list = new Counter(model, nextID);
-                model.setId(nextID);
-                realm.copyToRealm(list);
-            }
+        realm.executeTransaction(realm1 -> {
+            Log.d(TAG, "execute:");
+            final Counter list = new Counter(model, nextID);
+            model.setId(nextID);
+            realm1.copyToRealm(list);
         });
         realm.close();
     }
 
     public void childIncremented(final long id) {
         Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override public void execute(Realm realm) {
-                Log.d(TAG, "execute:");
-                final Counter list = getCounter(id);
-                list.incremented();
-                realm.copyToRealmOrUpdate(list);
-            }
+        realm.executeTransaction(realm1 -> {
+            Log.d(TAG, "execute:");
+            final Counter list = getCounter(id);
+            list.incremented();
+            realm1.copyToRealmOrUpdate(list);
         });
         realm.close();
-    }
-
-
-    //query example
-    public RealmResults<Counter> queriedBooks() {
-
-        return realm.where(Counter.class).contains("author", "Author 0").or().contains("title", "Realm").findAll();
-
     }
 }

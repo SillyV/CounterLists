@@ -149,4 +149,12 @@ public class CountersListsFragment
     @Override public void onDeleteBooksErrorResponse() {
 
     }
+
+    @Override public void onSaveDataErrorResponse() {
+
+    }
+
+    @Override public void onSaveDataSuccess() {
+
+    }
 }

@@ -2,6 +2,7 @@ package sillyv.com.counterlists.baseline;
 
 /**
  * Created by Vasili.Fedotov on 2/21/2017.
+ *
  */
 
 public interface BaseView<D> {
@@ -10,4 +11,8 @@ public interface BaseView<D> {
     void onGetDataErrorResponse();
 
     void onDeleteBooksErrorResponse();
+
+    void onSaveDataErrorResponse();
+
+    void onSaveDataSuccess();
 }

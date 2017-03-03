@@ -18,6 +18,7 @@ import sillyv.com.counterlists.database.models.ListModel;
 
 /**
  * Created by Vasili.Fedotov on 1/28/2017.
+ *
  */
 
 public class ListController
@@ -71,33 +72,34 @@ public class ListController
     }
 
     @Override public Single<ListModel> getItem(long id) {
-        return Single.fromCallable(() -> {
-            ListModel id1 = new ListModel(realm.where(CounterList.class).equalTo("id", id).findFirst());
-            return id1;
+        return Single.fromCallable(() -> new ListModel(realm.where(CounterList.class).equalTo("id", id).findFirst()));
+    }
+
+    public Completable insert(final ListModel model) {
+        return Completable.fromAction(() -> {
+            Realm realm = Realm.getDefaultInstance();
+            realm.executeTransaction(realm1 -> {
+                Log.d(TAG, "execute:");
+                long nextID = (long) (realm1.where(CounterList.class).max("id")) + 1L;
+                final CounterList list = new CounterList(model, nextID);
+                model.setId(nextID);
+                realm1.copyToRealm(list);
+            });
+            realm.close();
         });
     }
 
-    public void insert(final ListModel model) {
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(realm1 -> {
-            Log.d(TAG, "execute:");
-            long nextID = (long) (realm1.where(CounterList.class).max("id")) + 1L;
-            final CounterList list = new CounterList(model, nextID);
-            model.setId(nextID);
-            realm1.copyToRealm(list);
+    public Completable updateItem(final ListModel model) {
+        return Completable.fromAction(() -> {
+            Realm realm = Realm.getDefaultInstance();
+            realm.executeTransaction(realm1 -> {
+                Log.d(TAG, "execute:");
+                final CounterList list = ListController.this.getCounterList(model.getId());
+                list.update(model);
+                realm1.copyToRealmOrUpdate(list);
+            });
+            realm.close();
         });
-        realm.close();
-    }
-
-    public void updateItem(final ListModel model) {
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(realm1 -> {
-            Log.d(TAG, "execute:");
-            final CounterList list = ListController.this.getCounterList(model.getId());
-            list.update(model);
-            realm1.copyToRealmOrUpdate(list);
-        });
-        realm.close();
     }
 
     public Completable deleteItem(final Long aLong) {
@@ -124,37 +126,41 @@ public class ListController
         return null;
     }
 
-    @Override public void insertNewChildItem(Long parentId, CounterModel model) {
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(realm1 -> {
-            Log.d(TAG, "execute:");
-            CounterList list = ListController.this.getCounterList(parentId);
-            RealmList<Counter> counters = list.getCounters();
-            long nextID;
-            try {
-                nextID = ((Long) realm1.where(Counter.class).max("id")) + 1L;
-            } catch (Exception ex) {
-                nextID = 1;
-            }
-            Counter counter = realm.createObject(Counter.class, nextID);
-            counter.setData(model);
-            realm1.copyToRealmOrUpdate(counter);
-            counters.add(counter);
-            //            list.setCounters(counters);
-            realm1.copyToRealmOrUpdate(list);
+    @Override public Completable insertNewChildItem(Long parentId, CounterModel model) {
+        return Completable.fromAction(() -> {
+            Realm realm = Realm.getDefaultInstance();
+            realm.executeTransaction(realm1 -> {
+                Log.d(TAG, "execute:");
+                CounterList list = ListController.this.getCounterList(parentId);
+                RealmList<Counter> counters = list.getCounters();
+                long nextID;
+                try {
+                    nextID = ((Long) realm1.where(Counter.class).max("id")) + 1L;
+                } catch (Exception ex) {
+                    nextID = 1;
+                }
+                Counter counter = realm.createObject(Counter.class, nextID);
+                counter.setData(model);
+                realm1.copyToRealmOrUpdate(counter);
+                counters.add(counter);
+                //            list.setCounters(counters);
+                realm1.copyToRealmOrUpdate(list);
+            });
+            realm.close();
         });
-        realm.close();
     }
 
-    @Override public void updateItemValue(Long id, Integer value) {
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(realm1 -> {
-            Log.d(TAG, "execute:");
-            final CounterList list = ListController.this.getCounterList(id);
-            list.setValueChanged(new Date());
-            realm1.copyToRealmOrUpdate(list);
+    @Override public Completable updateItemValue(Long id, Integer value) {
+        return Completable.fromAction(() -> {
+            Realm realm = Realm.getDefaultInstance();
+            realm.executeTransaction(realm1 -> {
+                Log.d(TAG, "execute:");
+                final CounterList list = ListController.this.getCounterList(id);
+                list.setValueChanged(new Date());
+                realm1.copyToRealmOrUpdate(list);
+            });
+            realm.close();
         });
-        realm.close();
     }
 
     @Override public Completable deleteItems(List<Long> idList) {

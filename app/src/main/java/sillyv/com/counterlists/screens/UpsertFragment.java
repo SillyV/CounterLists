@@ -46,28 +46,29 @@ public abstract class UpsertFragment<D extends UpsertModel>
             view.setBackgroundColor(view.getMidColor());
         }
     };
-    public static final ButterKnife.Action<TriStateToggleButton> TEMPORARY_BROKEN_TOGGLE_FIX = (view, index) -> {
-        view.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            int oldVis = View.GONE;
+    public static final ButterKnife.Action<TriStateToggleButton>
+            TEMPORARY_BROKEN_TOGGLE_FIX =
+            (view, index) -> view.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                int oldVis = View.GONE;
 
-            @Override public void onGlobalLayout() {
-                int newVis = view.getVisibility();
-                if (oldVis != newVis) {
-                    oldVis = (view.getVisibility());
-                    if (view.getToggleStatus() == TriStateToggleButton.ToggleStatus.mid) {
-                        view.setToggleOn(false);
-                        view.setToggleMid(false);
-                    }
-                    if (oldVis == View.VISIBLE) {
-                        view.callOnClick();
-                        view.callOnClick();
-                        view.callOnClick();
+                @Override public void onGlobalLayout() {
+                    int newVis = view.getVisibility();
+                    if (oldVis != newVis) {
+                        oldVis = (view.getVisibility());
+                        if (view.getToggleStatus() == TriStateToggleButton.ToggleStatus.mid) {
+                            view.setToggleOn(false);
+                            view.setToggleMid(false);
+                        }
+                        if (oldVis == View.VISIBLE) {
+                            view.callOnClick();
+                            view.callOnClick();
+                            view.callOnClick();
+                        }
                     }
                 }
-            }
-        });
-    };
+            });
     protected static final String LIST_IDENTIFIER = "ListIdentifier";
+    public HashMap<View, Integer> colorButtonMap;
     @BindView(R.id.edit_text_name) protected TextView editTextName;
     @BindView(R.id.parent_constraint_layout) protected ViewGroup constraintLayout;
     @BindView(R.id.button_advanced) protected TextView buttonAdvanced;
@@ -102,7 +103,6 @@ public abstract class UpsertFragment<D extends UpsertModel>
             R.id.switch_vibrate,
             R.id.switch_volume_key}) protected List<TriStateToggleButton> toggles;
     protected boolean viewAdvanced = false;
-    protected HashMap<View, Integer> colorButtonMap;
     //endregion
     protected long id;
     protected String toolbarTitle;
@@ -140,27 +140,6 @@ public abstract class UpsertFragment<D extends UpsertModel>
 
     public UpsertFragment() {
         // Required empty public constructor
-    }
-
-    protected void showPickColorDialog(View view) {
-        ColorPickerDialogBuilder.with(getContext())
-                .setTitle("Choose color")
-                .initialColor(colorButtonMap.get(view))
-                .wheelType(ColorPickerView.WHEEL_TYPE.FLOWER)
-                .showAlphaSlider(false)
-                .density(12)
-                .setOnColorSelectedListener(selectedColor -> {
-                    //                        Toast.makeText(getContext(), "onColorSelected: 0x" + Integer.toHexString(selectedColor), Toast.LENGTH_SHORT).show();
-                })
-                .setPositiveButton("ok", (dialog, selectedColor, allColors) -> {
-                    view.getBackground().setColorFilter(selectedColor, PorterDuff.Mode.MULTIPLY);
-                    Integer selected = selectedColor;
-                    colorButtonMap.put(view, selected);
-                })
-                .setNegativeButton("cancel", (dialog, which) -> {
-                })
-                .build()
-                .show();
     }
 
     @Override public void onCreate(Bundle savedInstanceState) {
@@ -222,6 +201,29 @@ public abstract class UpsertFragment<D extends UpsertModel>
         ButterKnife.apply(hints, INVISIBLE);
         ButterKnife.apply(toggles, SET_STATE_AGAIN);
 
+    }
+
+    public abstract UpsertCounterListContract.UpsertCounterListPresenter getPresenter();
+
+    protected void showPickColorDialog(View view) {
+        ColorPickerDialogBuilder.with(getContext())
+                .setTitle("Choose color")
+                .initialColor(colorButtonMap.get(view))
+                .wheelType(ColorPickerView.WHEEL_TYPE.FLOWER)
+                .showAlphaSlider(false)
+                .density(12)
+                .setOnColorSelectedListener(selectedColor -> {
+                    //                        Toast.makeText(getContext(), "onColorSelected: 0x" + Integer.toHexString(selectedColor), Toast.LENGTH_SHORT).show();
+                })
+                .setPositiveButton("ok", (dialog, selectedColor, allColors) -> {
+                    view.getBackground().setColorFilter(selectedColor, PorterDuff.Mode.MULTIPLY);
+                    Integer selected = selectedColor;
+                    colorButtonMap.put(view, selected);
+                })
+                .setNegativeButton("cancel", (dialog, which) -> {
+                })
+                .build()
+                .show();
     }
 
     @NonNull protected UpsertCounterListModel.Identifier getIdentifier() {
@@ -323,6 +325,4 @@ public abstract class UpsertFragment<D extends UpsertModel>
         }
         return TriStateToggleButton.ToggleStatus.on;
     }
-
-    public abstract UpsertCounterListContract.UpsertCounterListPresenter getPresenter();
 }

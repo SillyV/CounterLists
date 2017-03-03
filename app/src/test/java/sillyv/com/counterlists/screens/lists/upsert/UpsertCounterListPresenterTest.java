@@ -2,6 +2,7 @@ package sillyv.com.counterlists.screens.lists.upsert;
 
 import android.content.Context;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -12,7 +13,10 @@ import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import io.reactivex.Completable;
 import io.reactivex.Single;
+import io.reactivex.plugins.RxJavaPlugins;
+import io.reactivex.schedulers.Schedulers;
 import sillyv.com.counterlists.R;
 import sillyv.com.counterlists.baseline.BaseView;
 import sillyv.com.counterlists.database.controllers.ListController;
@@ -30,23 +34,26 @@ import static org.mockito.Mockito.when;
 
 /**
  * Created by Vasili.Fedotov on 2/19/2017.
+ *
  */
-@RunWith(MockitoJUnitRunner.class) public class UpsertCounterListPresenterTest  extends ParentTest{
-    @Rule public MockitoRule rule = MockitoJUnit.rule();
-
+@RunWith(MockitoJUnitRunner.class) public class UpsertCounterListPresenterTest
+        extends ParentTest {
     private final UpsertCounterListModel.CounterListSettings MODEL = getModel();
+    private final ListModel LIST_ITEM_NEW_ITEM = getListModel(true);
+    private final ListModel LIST_ITEM_EXISTING_ITEM = getListModel(true);
+    @Rule public MockitoRule rule = MockitoJUnit.rule();
     @Mock Context mMockContext;
-    @Mock RealmRepository<ListModel,CounterModel> repo;
+    @Mock RealmRepository<ListModel, CounterModel> repo;
     @Mock BaseView<UpsertCounterListModel.CounterListSettings> view;
     private UpsertCounterListContract.UpsertCounterListPresenter presenter;
     private UpsertCounterListModel.CounterListSettings MODEL_TO_SAVE = getModel();
-    private final ListModel LIST_ITEM_NEW_ITEM = getListModel(true);
-    private final ListModel LIST_ITEM_EXISTING_ITEM = getListModel(true);
 
     @Before public void setUp() throws Exception {
-        presenter = new UpsertCounterListPresenter(view, repo);
+        presenter = new UpsertCounterListPresenter(view, repo, Schedulers.trampoline());
         when(mMockContext.getString(R.string.new_list)).thenReturn("new list");
         when(mMockContext.getString(R.string.edit_list)).thenReturn("Edit List");
+        RxJavaPlugins.setIoSchedulerHandler(scheduler -> Schedulers.trampoline());
+
     }
 
     @Test public void loadData_newList() throws Exception {
@@ -136,6 +143,7 @@ import static org.mockito.Mockito.when;
     }/*.format(dateCreated)*/
 
     @Test public void saveData_newItem() throws Exception {
+        when(repo.insert(any())).thenReturn(Completable.complete());
         //when
         presenter.saveData(MODEL, new UpsertCounterListModel.Identifier(0));
         //then
@@ -145,6 +153,8 @@ import static org.mockito.Mockito.when;
     }
 
     @Test public void saveData_existingItem() throws Exception {
+        when(repo.updateItem(any())).thenReturn(Completable.complete());
+
         //given
         presenter.saveData(MODEL_TO_SAVE, new UpsertCounterListModel.Identifier(1));
         //then
@@ -153,6 +163,7 @@ import static org.mockito.Mockito.when;
     }
 
     @Test public void saveData_newItem_testForFields() throws Exception {
+        when(repo.insert(any())).thenReturn(Completable.complete());
         presenter.saveData(MODEL, new UpsertCounterListModel.Identifier(0));
         //then
 
@@ -175,7 +186,8 @@ import static org.mockito.Mockito.when;
     }
 
     @Test public void saveData_existingItem_testForFields() throws Exception {
-
+        when(repo.updateItem(any())).thenReturn(Completable.complete());
+//        when(repo.updateItem(any())).thenReturn(Completable.error(new RuntimeException("Test")));
         presenter.saveData(MODEL_TO_SAVE, new UpsertCounterListModel.Identifier(1));
         //then
         ArgumentCaptor<ListModel> argument = ArgumentCaptor.forClass(ListModel.class);
@@ -198,11 +210,22 @@ import static org.mockito.Mockito.when;
 
     }
 
+    @Test public void saveData_whenRepoThrowsException() throws Exception {
+        when(repo.updateItem(any())).thenReturn(Completable.error(new RuntimeException("Test")));
+        presenter.saveData(MODEL_TO_SAVE, new UpsertCounterListModel.Identifier(1));
+        verify(view,only()).onSaveDataErrorResponse();
+
+
+    }
+
     @Test(expected = Exception.class) public void saveData_existingItem_whenItemDoesNotExist() throws Exception {
 
         doThrow(new Exception()).when(repo).updateItem(any(ListModel.class));
 
         presenter.saveData(getModel(), new UpsertCounterListModel.Identifier(1));
+    }
+    @After public void tearDown() throws Exception {
+        RxJavaPlugins.reset();
     }
 
 }

@@ -82,8 +82,7 @@ public class UpsertCounterFragment
 
     protected Contracts.UpsertContract.UpsertModel getModelForPresenter() {
 
-        return super.getModelForPresenter(new UpsertCounterModel.CounterModel(editTextValue.getText()
-                .toString(),
+        return super.getModelForPresenter(new UpsertCounterModel.CounterModel(editTextValue.getText().toString(),
                 editTextIncrement.getText().toString(),
                 editTextDecrement.getText().toString(),
                 (Integer) colorButtonMap.get(buttonForeground)));
@@ -108,7 +107,7 @@ public class UpsertCounterFragment
     }
 
     @Override public void onDataReceived(UpsertCounterModel.CounterModel model) {
-        colorButtonMap = new HashMap<View, Integer>();
+        HashMap<View, Integer> colorButtonMap = new HashMap<>();
         editTextName.setText(model.getName());
         editTextNote.setText(model.getNote());
         editTextDefaultValue.setText(model.getDefaultValue());
@@ -132,6 +131,7 @@ public class UpsertCounterFragment
         textViewDateChangedStats.setText(model.getLastUsed());
         toolbarTitle = model.getToolbarTitle();
         setTitle(toolbarTitle);
+        this.colorButtonMap = colorButtonMap;
     }
 
     @Override public void onGetDataErrorResponse() {
@@ -139,6 +139,14 @@ public class UpsertCounterFragment
     }
 
     @Override public void onDeleteBooksErrorResponse() {
+
+    }
+
+    @Override public void onSaveDataErrorResponse() {
+
+    }
+
+    @Override public void onSaveDataSuccess() {
 
     }
 

@@ -2,7 +2,6 @@ package sillyv.com.counterlists.screens.counters.recycler;
 
 import java.util.List;
 
-import io.reactivex.Single;
 import io.reactivex.functions.Function;
 import io.reactivex.observers.DisposableSingleObserver;
 import sillyv.com.counterlists.baseline.BaseListView;
@@ -13,6 +12,7 @@ import sillyv.com.counterlists.database.models.ListModel;
 
 /**
  * Created by Vasili.Fedotov on 2/19/2017.
+ *
  */
 
 public class CounterListPresenter
@@ -35,16 +35,7 @@ public class CounterListPresenter
     }
 
     public void getData(long id) {
-
-
-        Single<ListModel> item = parentRepo.getItem(id);
-
-        if (item == null) {
-            view.onGetDataErrorResponse();
-            return;
-        }
-
-        compositeDisposable.add(item.map(dbItemToViewItem()).
+        compositeDisposable.add(parentRepo.getItem(id).map(dbItemToViewItem()).
                 subscribeWith(new DisposableSingleObserver<CounterListModel>() {
                     @Override public void onSuccess(CounterListModel listModels) {
                         view.onDataReceived(listModels);

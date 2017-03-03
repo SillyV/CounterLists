@@ -7,6 +7,7 @@ import io.reactivex.Single;
 
 /**
  * Created by Vasili.Fedotov on 2/19/2017.
+ *
  */
 
 public interface RealmRepository<P, C> {
@@ -14,9 +15,9 @@ public interface RealmRepository<P, C> {
 
     Single<P> getItem(long id) throws RuntimeException;
 
-    void insert(P dbModel);
+    Completable insert(P dbModel);
 
-    void updateItem(P dbModel);
+    Completable updateItem(P dbModel);
 
     Completable deleteItem(Long aLong);
 
@@ -25,9 +26,9 @@ public interface RealmRepository<P, C> {
     Single<List<P>> getItems(long id) throws RuntimeException;
 
 
-    void insertNewChildItem(Long parentId, C model);
+    Completable insertNewChildItem(Long parentId, C model);
 
-    void updateItemValue(Long id, Integer value);
+    Completable updateItemValue(Long id, Integer value);
 
     Completable deleteItems(List<Long> idList);
 }

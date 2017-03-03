@@ -15,6 +15,7 @@ import butterknife.BindView;
 import butterknife.BindViews;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import sillyv.com.counterlists.R;
 import sillyv.com.counterlists.database.controllers.ListController;
 import sillyv.com.counterlists.screens.Contracts;
@@ -81,12 +82,11 @@ public class UpsertCounterListFragment
     //usage
 
     protected Contracts.UpsertContract.UpsertModel getModelForPresenter() {
-        Contracts.UpsertContract.UpsertModel model = super.getModelForPresenter(new UpsertCounterListModel.CounterListSettings(
+        return super.getModelForPresenter(new UpsertCounterListModel.CounterListSettings(
                 editTextDefaultIncrement.getText().toString(),
                 editTextDefaultDecrement.getText().toString(),
                 (Integer) colorButtonMap.get(buttonDefaultCardBackground),
                 (Integer) colorButtonMap.get(buttonDefaultCardForeground)));
-        return model;
     }
 
     @OnClick({R.id.button_background, R.id.button_default_card_background, R.id.button_default_card_foreground})
@@ -98,14 +98,14 @@ public class UpsertCounterListFragment
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_edit_counter_list, container, false);
         ButterKnife.bind(this, view);
-        presenter = new UpsertCounterListPresenter(this, ListController.getInstance());
+        presenter = new UpsertCounterListPresenter(this, ListController.getInstance(), AndroidSchedulers.mainThread());
         presenter.loadData(getContext(), getDateFormat(), getIdentifier());
         initComponents();
         return view;
     }
 
     @Override public void onDataReceived(UpsertCounterListModel.CounterListSettings model) {
-        colorButtonMap = new HashMap<>();
+        HashMap<View, Integer> colorButtonMap = new HashMap<>();
         editTextName.setText(model.getName());
         editTextNote.setText(model.getNote());
         editTextDefaultValue.setText(model.getDefaultValue());
@@ -131,6 +131,7 @@ public class UpsertCounterListFragment
         textViewDateChangedStats.setText(model.getLastUsed());
         toolbarTitle = model.getToolbarTitle();
         setTitle(toolbarTitle);
+        this.colorButtonMap = colorButtonMap;
     }
 
     @Override public void onGetDataErrorResponse() {
@@ -138,6 +139,14 @@ public class UpsertCounterListFragment
     }
 
     @Override public void onDeleteBooksErrorResponse() {
+
+    }
+
+    @Override public void onSaveDataErrorResponse() {
+
+    }
+
+    @Override public void onSaveDataSuccess() {
 
     }
 
