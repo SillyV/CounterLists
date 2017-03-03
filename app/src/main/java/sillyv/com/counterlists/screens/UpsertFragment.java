@@ -10,7 +10,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.view.animation.AlphaAnimation;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -46,27 +45,6 @@ public abstract class UpsertFragment<D extends UpsertModel>
             view.setBackgroundColor(view.getMidColor());
         }
     };
-    public static final ButterKnife.Action<TriStateToggleButton>
-            TEMPORARY_BROKEN_TOGGLE_FIX =
-            (view, index) -> view.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-                int oldVis = View.GONE;
-
-                @Override public void onGlobalLayout() {
-                    int newVis = view.getVisibility();
-                    if (oldVis != newVis) {
-                        oldVis = (view.getVisibility());
-                        if (view.getToggleStatus() == TriStateToggleButton.ToggleStatus.mid) {
-                            view.setToggleOn(false);
-                            view.setToggleMid(false);
-                        }
-                        if (oldVis == View.VISIBLE) {
-                            view.callOnClick();
-                            view.callOnClick();
-                            view.callOnClick();
-                        }
-                    }
-                }
-            });
     protected static final String LIST_IDENTIFIER = "ListIdentifier";
     public HashMap<View, Integer> colorButtonMap;
     @BindView(R.id.edit_text_name) protected TextView editTextName;
@@ -234,7 +212,6 @@ public abstract class UpsertFragment<D extends UpsertModel>
         bindSwitchesToHints();
         setAdvancedVisibility();
         invalidateOptionsMenu();
-        ButterKnife.apply(toggles, TEMPORARY_BROKEN_TOGGLE_FIX); //// FIXME: 2/24/2017 Check if fixed in library and remove this.
 
     }
 
