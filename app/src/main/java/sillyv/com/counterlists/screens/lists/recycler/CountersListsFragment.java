@@ -19,6 +19,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import sillyv.com.counterlists.CLFragment;
 import sillyv.com.counterlists.R;
 import sillyv.com.counterlists.database.controllers.ListController;
@@ -53,7 +54,7 @@ public class CountersListsFragment
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_counters_lists, container, false);
         ButterKnife.bind(this, view);
-        presenter = new CounterListsPresenter(this, ListController.getInstance());
+        presenter = new CounterListsPresenter(this, ListController.getInstance(), AndroidSchedulers.mainThread());
         presenter.getData();
         setTitle("Counter List");
         return view;
@@ -141,7 +142,11 @@ public class CountersListsFragment
         recyclerView.setAdapter(adapter);
     }
 
-    @Override public void onErrorResponse() {
+    @Override public void onGetDataErrorResponse() {
+
+    }
+
+    @Override public void onDeleteBooksErrorResponse() {
 
     }
 }

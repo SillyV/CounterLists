@@ -2,6 +2,7 @@ package sillyv.com.counterlists.screens.lists.recycler;
 
 import android.support.annotation.NonNull;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -18,6 +19,8 @@ import java.util.Collections;
 import java.util.List;
 
 import io.reactivex.Single;
+import io.reactivex.plugins.RxJavaPlugins;
+import io.reactivex.schedulers.Schedulers;
 import sillyv.com.counterlists.database.controllers.RealmRepository;
 import sillyv.com.counterlists.database.models.CounterModel;
 import sillyv.com.counterlists.database.models.ListModel;
@@ -34,15 +37,17 @@ import static org.mockito.Mockito.when;
 /**
  * Created by Vasili.Fedotov on 2/19/2017.
  */
-@RunWith(MockitoJUnitRunner.class) public class CounterListsPresenterTest extends ParentTest {
+@RunWith(MockitoJUnitRunner.class) public class ListRecyclerPresenterTest
+        extends ParentTest {
     @Rule public MockitoRule rule = MockitoJUnit.rule();
     @Mock CounterListsContract.CounterListsView<CounterListsModel> view;
-    @Mock RealmRepository<ListModel,CounterModel> repo;
+    @Mock RealmRepository<ListModel, CounterModel> repo;
     private CounterListsPresenter presenter;
     private List<Long> ID_LIST = getIdList();
 
     @Before public void setUp() throws Exception {
-        presenter = new CounterListsPresenter(view, repo);
+        presenter = new CounterListsPresenter(view, repo, Schedulers.trampoline());
+        RxJavaPlugins.setIoSchedulerHandler(scheduler -> Schedulers.trampoline());
     }
 
     @Test public void deleteItems() throws Exception {
@@ -73,22 +78,9 @@ import static org.mockito.Mockito.when;
 
         ArgumentCaptor<CounterListsModel> argument = ArgumentCaptor.forClass(CounterListsModel.class);
         verify(view).onDataReceived(Mockito.any(CounterListsModel.class));
-        verify(view, Mockito.times(0)).onErrorResponse();
+        verify(view, Mockito.times(0)).onGetDataErrorResponse();
         verify(view).onDataReceived(argument.capture());
         assertEquals(argument.getValue().getItems().size(), 0);
-    }
-
-    @Test public void getData_whenRepoReturnsNull() throws Exception {
-        when(repo.getItems()).thenReturn(null);
-
-        presenter.getData();
-
-        verify(view).onErrorResponse();
-        //        ArgumentCaptor<CounterListsModel> argument = ArgumentCaptor.forClass(CounterListsModel.class);
-        //        verify(view).onDataReceived(Mockito.any(CounterListsModel.class));
-        //        verify(view, Mockito.times(0)).onErrorResponse();
-        //        verify(view).onDataReceived(argument.capture());
-        //        assertEquals(argument.getValue().getItems().size(), 0);
     }
 
     @Test public void getData_whenRepoThrowsException() throws Exception {
@@ -98,7 +90,7 @@ import static org.mockito.Mockito.when;
         presenter.getData();
 
         verify(view, times(0)).onDataReceived(Mockito.any(CounterListsModel.class));
-        verify(view).onErrorResponse();
+        verify(view).onGetDataErrorResponse();
     }
 
     @Test public void getData_checkForSubtitle() throws Exception {
@@ -113,7 +105,7 @@ import static org.mockito.Mockito.when;
         abcdList.add("BBB");
         abcdList.add("CCC");
         abcdList.add("DDD");
-        assertEquals(argument.getValue().getItems().get(0).getSubtitle(),abcdList);
+        assertEquals(argument.getValue().getItems().get(0).getSubtitle(), abcdList);
 
     }
 
@@ -131,6 +123,11 @@ import static org.mockito.Mockito.when;
         assertEquals(argument.getValue().getItems().get(0).getCardForegroundColor(), 300);
         assertEquals(argument.getValue().getItems().get(0).getId(), 20);
 
+
+    }
+
+    @After public void tearDown() throws Exception {
+        RxJavaPlugins.reset();
 
     }
 

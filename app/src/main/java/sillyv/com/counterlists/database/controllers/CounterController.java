@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import io.reactivex.Completable;
 import io.reactivex.Single;
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -92,8 +93,8 @@ public class CounterController
         return realm.where(Counter.class).equalTo("id", id).findFirst();
     }
 
-    @Override public void deleteItem(Long aLong) {
-
+    @Override public Completable deleteItem(Long aLong) {
+return null;
     }
 
     @Override public Single<List<CounterModel>> getItems() throws RuntimeException {
@@ -118,6 +119,10 @@ public class CounterController
             realm1.copyToRealmOrUpdate(list);
         });
         realm.close();
+    }
+
+    @Override public Completable deleteItems(List<Long> idList) {
+        return null;
     }
 
     public void addNewList(final CounterModel model, final long nextID) {

@@ -43,7 +43,7 @@ class UpsertCounterListPresenter
         Single<ListModel> item = repo.getItem(identifier.getId());
 
         if (item == null) {
-            view.onErrorResponse();
+            view.onGetDataErrorResponse();
             return;
         }
 
@@ -55,7 +55,7 @@ class UpsertCounterListPresenter
                     }
 
                     @Override public void onError(Throwable e) {
-                        view.onErrorResponse();
+                        view.onGetDataErrorResponse();
                     }
                 }));
     }

@@ -126,6 +126,7 @@ class CounterListsAdapter
             title.setTextColor(listModel.getCardForegroundColor());
             title.setShadowLayer(0.11f, -2, 2, listModel.getCardBackgroundColor());
             checkedImageView.setVisibility(listModel.getVisibility());
+            flexboxLayout.removeAllViews();
             for (String s : listModel.getSubtitle()) {
                 createCounterTextView(listModel, s);
             }

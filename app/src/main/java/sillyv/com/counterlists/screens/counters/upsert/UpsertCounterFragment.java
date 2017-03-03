@@ -134,7 +134,11 @@ public class UpsertCounterFragment
         setTitle(toolbarTitle);
     }
 
-    @Override public void onErrorResponse() {
+    @Override public void onGetDataErrorResponse() {
+
+    }
+
+    @Override public void onDeleteBooksErrorResponse() {
 
     }
 

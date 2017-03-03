@@ -86,7 +86,11 @@ public class CounterListFragment
         recyclerView.setBackgroundColor(counterListModel.getBackgroundColor());
     }
 
-    @Override public void onErrorResponse() {
+    @Override public void onGetDataErrorResponse() {
+
+    }
+
+    @Override public void onDeleteBooksErrorResponse() {
 
     }
 

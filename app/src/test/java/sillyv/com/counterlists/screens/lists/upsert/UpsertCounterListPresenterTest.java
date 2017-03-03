@@ -73,7 +73,7 @@ import static org.mockito.Mockito.when;
         //when
         presenter.loadData(mMockContext, DATE_FORMAT, new UpsertCounterListModel.Identifier(2L));
         //then
-        verify(view, only()).onErrorResponse();
+        verify(view, only()).onGetDataErrorResponse();
     }
 
     @Test public void loadData_newList_testForFields() throws Exception {  //given

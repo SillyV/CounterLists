@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import io.reactivex.Completable;
 import io.reactivex.Single;
 import io.realm.Realm;
 import io.realm.RealmList;
@@ -24,7 +25,7 @@ public class ListController
     public static final long DEFAULT_LIST = 0L;
     private static final String TAG = ListController.class.getSimpleName();
     private static ListController instance;
-    private final Realm realm;
+    private Realm realm;
 
     private ListController() {
         realm = Realm.getDefaultInstance();
@@ -99,15 +100,17 @@ public class ListController
         realm.close();
     }
 
-    public void deleteItem(final Long aLong) {
-        realm.executeTransaction(realm1 -> {
+    public Completable deleteItem(final Long aLong) {
+        return Completable.fromAction(() -> Realm.getDefaultInstance().executeTransaction(realm1 -> {
             RealmResults<CounterList> result = realm1.where(CounterList.class).equalTo("id", aLong).findAll();
             result.deleteAllFromRealm();
-        });
+        }));
     }
 
     @Override public Single<List<ListModel>> getItems() throws RuntimeException {
         return Single.fromCallable(() -> {
+            System.out.println("Thread DB: " + Thread.currentThread().getId());
+            realm = Realm.getDefaultInstance();
             List<ListModel> result = new ArrayList<>();
             RealmResults<CounterList> list = getCounterLists();
             for (CounterList counterList : list) {
@@ -152,6 +155,16 @@ public class ListController
             realm1.copyToRealmOrUpdate(list);
         });
         realm.close();
+    }
+
+    @Override public Completable deleteItems(List<Long> idList) {
+        return Completable.fromAction(() -> Realm.getDefaultInstance().executeTransaction(realm1 -> {
+            for (Long aLong : idList) {
+                RealmResults<CounterList> result = realm1.where(CounterList.class).equalTo("id", aLong).findAll();
+                result.deleteAllFromRealm();
+            }
+        }));
+
     }
 
 

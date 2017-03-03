@@ -68,7 +68,7 @@ public class CounterListPresenterTest {
 
         presenter.getData(2);
 
-        verify(view).onErrorResponse();
+        verify(view).onGetDataErrorResponse();
     }
 
     @Test public void getData_whenRepoThrowsException() throws Exception {
@@ -77,7 +77,7 @@ public class CounterListPresenterTest {
 
         presenter.getData(2);
 
-        verify(view, only()).onErrorResponse();
+        verify(view, only()).onGetDataErrorResponse();
     }
 
     @Test public void getData_checkForFields() throws Exception {

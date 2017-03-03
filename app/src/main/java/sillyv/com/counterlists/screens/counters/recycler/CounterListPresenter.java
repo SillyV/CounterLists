@@ -40,7 +40,7 @@ public class CounterListPresenter
         Single<ListModel> item = parentRepo.getItem(id);
 
         if (item == null) {
-            view.onErrorResponse();
+            view.onGetDataErrorResponse();
             return;
         }
 
@@ -51,7 +51,7 @@ public class CounterListPresenter
                     }
 
                     @Override public void onError(Throwable e) {
-                        view.onErrorResponse();
+                        view.onGetDataErrorResponse();
                     }
                 }));
     }

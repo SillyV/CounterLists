@@ -2,6 +2,7 @@ package sillyv.com.counterlists.database.controllers;
 
 import java.util.List;
 
+import io.reactivex.Completable;
 import io.reactivex.Single;
 
 /**
@@ -17,7 +18,7 @@ public interface RealmRepository<P, C> {
 
     void updateItem(P dbModel);
 
-    void deleteItem(Long aLong);
+    Completable deleteItem(Long aLong);
 
     Single<List<P>> getItems() throws RuntimeException;
 
@@ -27,4 +28,6 @@ public interface RealmRepository<P, C> {
     void insertNewChildItem(Long parentId, C model);
 
     void updateItemValue(Long id, Integer value);
+
+    Completable deleteItems(List<Long> idList);
 }

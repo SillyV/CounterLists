@@ -48,7 +48,11 @@ public class MainActivity extends AppCompatActivity implements CLFragment.Listen
         if (Realm.getDefaultInstance().isEmpty()) {
             generateInitialData();
         }
+
+
     }
+
+
 
     private void generateInitialData() {
         ListController.getInstance().addNewList(new ListModel(0, 1, 1, getIntFromColor(1, 1, 1), getIntFromColor(.75f, .75f, .75f), getIntFromColor

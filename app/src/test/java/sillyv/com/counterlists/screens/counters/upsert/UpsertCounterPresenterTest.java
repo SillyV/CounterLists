@@ -119,7 +119,7 @@ public class UpsertCounterPresenterTest
 
         presenter.loadNewList(context, DATE_FORMAT, 1L);
 
-        verify(view, only()).onErrorResponse();
+        verify(view, only()).onGetDataErrorResponse(any());
     }
 
     @Test public void loadNewList_whenRepoReturnsNull() throws Exception {
@@ -127,7 +127,7 @@ public class UpsertCounterPresenterTest
 
         presenter.loadNewList(context, DATE_FORMAT, 1L);
 
-        verify(view, only()).onErrorResponse();
+        verify(view, only()).onGetDataErrorResponse(any());
     }
 
     @Test public void loadData_existingList() throws Exception {
@@ -144,7 +144,7 @@ public class UpsertCounterPresenterTest
         //when
         presenter.loadData(context, DATE_FORMAT, 2L, 2L);
         //then
-        verify(view, only()).onErrorResponse();
+        verify(view, only()).onGetDataErrorResponse(any());
 
     }
 
@@ -154,7 +154,7 @@ public class UpsertCounterPresenterTest
         //when
         presenter.loadData(context, DATE_FORMAT, 2L, 2L);
         //then
-        verify(view, only()).onErrorResponse();
+        verify(view, only()).onGetDataErrorResponse(any());
 
     }
 
