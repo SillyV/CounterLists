@@ -17,7 +17,6 @@ import sillyv.com.counterlists.database.models.ListModel;
 
 /**
  * Created by Vasili.Fedotov on 2/18/2017.
- *
  */
 
 class CounterListsPresenter
@@ -52,16 +51,19 @@ class CounterListsPresenter
 
 
     @Override public void deleteItems(List<Long> idList) {
-        compositeDisposable.add(repo.deleteItems(idList).subscribeOn(Schedulers.io()).subscribeWith(new DisposableCompletableObserver() {
-            @Override public void onComplete() {
-                getData();
-            }
+        compositeDisposable.add(repo.deleteItems(idList)
+                .subscribeOn(Schedulers.io())
+                .observeOn(mainScheduler)
+                .subscribeWith(new DisposableCompletableObserver() {
+                    @Override public void onComplete() {
+                        getData();
+                    }
 
-            @Override public void onError(Throwable e) {
-                view.onDeleteBooksErrorResponse();
-                getData();
-            }
-        }));
+                    @Override public void onError(Throwable e) {
+                        view.onDeleteBooksErrorResponse();
+                        getData();
+                    }
+                }));
     }
 
     private Function<List<ListModel>, CounterListsModel> dbItemToViewItem() {
