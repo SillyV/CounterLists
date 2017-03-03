@@ -32,13 +32,14 @@ import static org.mockito.Mockito.when;
 
 /**
  * Created by Vasili.Fedotov on 2/24/2017.
+ *
  */
 public class UpsertCounterPresenterTest
         extends ParentTest {
-    public static final UpsertCounterModel.CounterModel MODEL = getNewCounterModel();
-    public static final long PARENT_ID = 1l;
+    private static final UpsertCounterModel.CounterModel MODEL = getNewCounterModel();
+    private static final long PARENT_ID = 1L;
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.UK);
-    public static final long EXISTING_ID = 1L;
+    private static final long EXISTING_ID = 1L;
     private final CounterModel NEW_COUNTER = getCounterModel(0);
     private final CounterModel EXISTING_COUNTER = getCounterModel(1);
     private final ListModel PARENT_LIST = getListModel(true);
@@ -119,7 +120,7 @@ public class UpsertCounterPresenterTest
 
         presenter.loadNewList(context, DATE_FORMAT, 1L);
 
-        verify(view, only()).onGetDataErrorResponse(any());
+        verify(view, only()).onGetDataErrorResponse();
     }
 
     @Test public void loadNewList_whenRepoReturnsNull() throws Exception {
@@ -127,7 +128,7 @@ public class UpsertCounterPresenterTest
 
         presenter.loadNewList(context, DATE_FORMAT, 1L);
 
-        verify(view, only()).onGetDataErrorResponse(any());
+        verify(view, only()).onGetDataErrorResponse();
     }
 
     @Test public void loadData_existingList() throws Exception {
@@ -144,7 +145,7 @@ public class UpsertCounterPresenterTest
         //when
         presenter.loadData(context, DATE_FORMAT, 2L, 2L);
         //then
-        verify(view, only()).onGetDataErrorResponse(any());
+        verify(view, only()).onGetDataErrorResponse();
 
     }
 
@@ -154,7 +155,7 @@ public class UpsertCounterPresenterTest
         //when
         presenter.loadData(context, DATE_FORMAT, 2L, 2L);
         //then
-        verify(view, only()).onGetDataErrorResponse(any());
+        verify(view, only()).onGetDataErrorResponse();
 
     }
 

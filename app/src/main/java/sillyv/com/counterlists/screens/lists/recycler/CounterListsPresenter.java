@@ -59,6 +59,7 @@ class CounterListsPresenter
 
             @Override public void onError(Throwable e) {
                 view.onDeleteBooksErrorResponse();
+                getData();
             }
         }));
     }

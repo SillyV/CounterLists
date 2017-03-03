@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import io.reactivex.Completable;
 import io.reactivex.Single;
 import io.reactivex.plugins.RxJavaPlugins;
 import io.reactivex.schedulers.Schedulers;
@@ -28,7 +29,6 @@ import sillyv.com.counterlists.screens.ParentTest;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.anyLong;
 import static org.mockito.Mockito.only;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -36,6 +36,7 @@ import static org.mockito.Mockito.when;
 
 /**
  * Created by Vasili.Fedotov on 2/19/2017.
+ *
  */
 @RunWith(MockitoJUnitRunner.class) public class ListRecyclerPresenterTest
         extends ParentTest {
@@ -50,13 +51,52 @@ import static org.mockito.Mockito.when;
         RxJavaPlugins.setIoSchedulerHandler(scheduler -> Schedulers.trampoline());
     }
 
+
     @Test public void deleteItems() throws Exception {
         when(repo.getItems()).thenReturn(Single.just(MANY_ITEMS));
+        when(repo.deleteItems(any())).thenReturn(Completable.complete());
 
         presenter.deleteItems(ID_LIST);
 
-        verify(repo, times(ID_LIST.size())).deleteItem(anyLong());
+        verify(repo, times(ID_LIST.size())).deleteItems(any());
     }
+
+    @Test public void deleteItems_whenRepoThrowsException() throws Exception {
+        when(repo.getItems()).thenReturn(Single.just(MANY_ITEMS));
+        when(repo.deleteItems(any())).thenReturn(Completable.error(new RuntimeException("test")));
+
+        presenter.deleteItems(ID_LIST);
+
+        verify(view, times(1)).onDeleteBooksErrorResponse();
+    }
+
+    @Test public void deleteItems_checkGetDataIsCalled() throws Exception {
+
+        when(repo.getItems()).thenReturn(Single.just(MANY_ITEMS));
+        when(repo.deleteItems(any())).thenReturn(Completable.complete());
+
+        presenter.deleteItems(ID_LIST);
+
+        ArgumentCaptor<CounterListsModel> argument = ArgumentCaptor.forClass(CounterListsModel.class);
+
+        verify(view, only()).onDataReceived(any(CounterListsModel.class));
+        verify(view).onDataReceived(argument.capture());
+        assertEquals(argument.getValue().getItems().size(), MANY_ITEMS.size());
+    }
+
+    @Test public void deleteItems_whenRepoThrowsException_checkGetDataIsCalled() throws Exception {
+        when(repo.getItems()).thenReturn(Single.just(MANY_ITEMS));
+        when(repo.deleteItems(any())).thenReturn(Completable.error(new RuntimeException("test")));
+
+        presenter.deleteItems(ID_LIST);
+
+        ArgumentCaptor<CounterListsModel> argument = ArgumentCaptor.forClass(CounterListsModel.class);
+
+        verify(view, times(1)).onDataReceived(any(CounterListsModel.class));
+        verify(view).onDataReceived(argument.capture());
+        assertEquals(argument.getValue().getItems().size(), MANY_ITEMS.size());
+    }
+
 
     @Test public void getData() throws Exception {
         when(repo.getItems()).thenReturn(Single.just(MANY_ITEMS));
@@ -126,9 +166,9 @@ import static org.mockito.Mockito.when;
 
     }
 
+
     @After public void tearDown() throws Exception {
         RxJavaPlugins.reset();
-
     }
 
     @NonNull private List<Long> getIdList() {
