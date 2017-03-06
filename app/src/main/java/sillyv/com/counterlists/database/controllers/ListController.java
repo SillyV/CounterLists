@@ -18,7 +18,6 @@ import sillyv.com.counterlists.database.models.ListModel;
 
 /**
  * Created by Vasili.Fedotov on 1/28/2017.
- *
  */
 
 public class ListController
@@ -72,7 +71,7 @@ public class ListController
     }
 
     @Override public Single<ListModel> getItem(long id) {
-        return Single.fromCallable(() -> new ListModel(realm.where(CounterList.class).equalTo("id", id).findFirst()));
+        return Single.fromCallable(() -> new ListModel(Realm.getDefaultInstance().where(CounterList.class).equalTo("id", id).findFirst()));
     }
 
     public Completable insert(final ListModel model) {
@@ -111,7 +110,6 @@ public class ListController
 
     @Override public Single<List<ListModel>> getItems() throws RuntimeException {
         return Single.fromCallable(() -> {
-            System.out.println("Thread DB: " + Thread.currentThread().getId());
             realm = Realm.getDefaultInstance();
             List<ListModel> result = new ArrayList<>();
             RealmResults<CounterList> list = getCounterLists();

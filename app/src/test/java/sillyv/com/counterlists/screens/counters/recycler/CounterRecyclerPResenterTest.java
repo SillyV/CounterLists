@@ -1,5 +1,6 @@
 package sillyv.com.counterlists.screens.counters.recycler;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -11,23 +12,29 @@ import org.mockito.junit.MockitoRule;
 import java.util.ArrayList;
 import java.util.Date;
 
+import io.reactivex.Completable;
 import io.reactivex.Single;
+import io.reactivex.plugins.RxJavaPlugins;
+import io.reactivex.schedulers.Schedulers;
 import sillyv.com.counterlists.database.controllers.RealmRepository;
 import sillyv.com.counterlists.database.models.CounterModel;
 import sillyv.com.counterlists.database.models.ListModel;
+import sillyv.com.counterlists.screens.ParentTest;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyLong;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.only;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 /**
  * Created by Vasili.Fedotov on 2/21/2017.
  */
-public class CounterListPresenterTest {
+public class CounterRecyclerPResenterTest
+        extends ParentTest {
     public static final int NEW_VALUE = 19;
     public static final long CHILD_ID = 7L;
     public static final long PARENT_ID = 91L;
@@ -40,7 +47,9 @@ public class CounterListPresenterTest {
     private CounterListPresenter presenter;
 
     @Before public void setUp() throws Exception {
-        presenter = new CounterListPresenter(view, childRepo, parentRepo);
+        presenter = new CounterListPresenter(view, childRepo, parentRepo,Schedulers.trampoline());
+        RxJavaPlugins.setIoSchedulerHandler(scheduler -> Schedulers.trampoline());
+
     }
 
     @Test public void getData() throws Exception {
@@ -63,17 +72,9 @@ public class CounterListPresenterTest {
         assertEquals(argument.getValue().getCounterModels().size(), 0);
     }
 
-    @Test public void getData_whenRepoReturnsNull() throws Exception {
-        when(parentRepo.getItems(2)).thenReturn(null);
-
-        presenter.getData(2);
-
-        verify(view).onGetDataErrorResponse();
-    }
-
     @Test public void getData_whenRepoThrowsException() throws Exception {
 
-        when(parentRepo.getItems(2)).thenReturn(Single.error(new RuntimeException("test")));
+        when(parentRepo.getItem(2)).thenReturn(Single.error(new RuntimeException("test")));
 
         presenter.getData(2);
 
@@ -100,27 +101,68 @@ public class CounterListPresenterTest {
 
 
     @Test public void deleteCounters() throws Exception {
-        assertEquals(1, 2);
+        when(parentRepo.getItem(PARENT_ID)).thenReturn(Single.just(LIST_ITEM));
+        when(childRepo.deleteItems(any())).thenReturn(Completable.complete());
+
+        presenter.deleteCounter(ID_LIST, PARENT_ID);
+
+        verify(childRepo, only()).deleteItems(any());
+        verify(view, only()).onSaveDataSuccess();
     }
+
+    @Test public void deleteCounters_whenRepoThrowsException() throws Exception {
+        when(parentRepo.getItem(PARENT_ID)).thenReturn(Single.just(LIST_ITEM));
+        when(childRepo.deleteItems(any())).thenReturn(Completable.error(new RuntimeException("test")));
+
+        presenter.deleteCounter(ID_LIST, PARENT_ID);
+
+        verify(view, times(1)).onDeleteItemsErrorResponse();
+    }
+
+    //    @Test public void deleteCounters_checkGetDataIsCalled() throws Exception {
 
     @Test public void saveInteraction() throws Exception {
+        when(parentRepo.updateItemValue(any(), anyInt())).thenReturn(Completable.complete());
+        when(childRepo.updateItemValue(any(), anyInt())).thenReturn(Completable.complete());
+
+
         presenter.saveInteraction(CHILD_ID, PARENT_ID, NEW_VALUE);
+
         verify(childRepo).updateItemValue(anyLong(), anyInt());
         verify(parentRepo).updateItemValue(anyLong(), anyInt());
-    }
+        verify(view).onSaveInteractionSuccess();
 
+    }
+    //        when(parentRepo.getItem(PARENT_ID)).thenReturn(Single.just(LIST_ITEM));
+    //        when(childRepo.deleteItems(any())).thenReturn(Completable.complete());
 
     @Test public void saveInteraction_checkForFields() throws Exception {
+        when(parentRepo.updateItemValue(any(), anyInt())).thenReturn(Completable.complete());
+        when(childRepo.updateItemValue(any(), anyInt())).thenReturn(Completable.complete());
+
         presenter.saveInteraction(CHILD_ID, PARENT_ID, NEW_VALUE);
 
-        assertEquals(1, 2);
+        ArgumentCaptor<Long> childId = ArgumentCaptor.forClass(Long.class);
+        ArgumentCaptor<Long> parentID = ArgumentCaptor.forClass(Long.class);
+        ArgumentCaptor<Integer> newValue = ArgumentCaptor.forClass(Integer.class);
+        ArgumentCaptor<Integer> newValueForParent = ArgumentCaptor.forClass(Integer.class);
+
+        verify(childRepo).updateItemValue(childId.capture(), newValue.capture());
+        verify(parentRepo).updateItemValue(parentID.capture(), newValueForParent.capture());
+
+        assertEquals(childId.getValue().longValue(), CHILD_ID);
+        assertEquals(parentID.getValue().longValue(), PARENT_ID);
+        assertEquals(newValue.getValue().intValue(), NEW_VALUE);
+        assertEquals(newValueForParent.getValue().intValue(), NEW_VALUE);
     }
+    //        presenter.deleteItems(ID_LIST);
 
     @Test public void saveCustomOrder() throws Exception {
         assertEquals(1, 2);
     }
+    //        ArgumentCaptor<CounterListsModel> argument = ArgumentCaptor.forClass(CounterListsModel.class);
 
-    private ListModel getListModel(boolean addCounters) {
+    protected ListModel getListModel(boolean addCounters) {
         ListModel e = new ListModel(1, 0, 0, 0, 0, 0, 0, "", 0, 1, 2, 0, 1, 2, "");
         if (addCounters) {
             ArrayList<CounterModel> counters = new ArrayList<>();
@@ -211,6 +253,30 @@ public class CounterListPresenterTest {
             e.setCounters(counters);
         }
         return e;
+    }
+    //        verify(view, only()).onDataReceived(any(CounterListsModel.class));
+    //        verify(view).onDataReceived(argument.capture());
+    //        assertEquals(argument.getValue().getItems().size(), MANY_ITEMS.size());
+    //    }
+    //
+    //    @Test public void deleteCounters_whenRepoThrowsException_checkGetDataIsCalled() throws Exception {
+    //        when(repo.getItems()).thenReturn(Single.just(MANY_ITEMS));
+    //        when(repo.deleteItems(any())).thenReturn(Completable.error(new RuntimeException("test")));
+    //
+    //        presenter.deleteItems(ID_LIST);
+    //
+    //        ArgumentCaptor<CounterListsModel> argument = ArgumentCaptor.forClass(CounterListsModel.class);
+    //
+    //        verify(view, times(1)).onDataReceived(any(CounterListsModel.class));
+    //        verify(view).onDataReceived(argument.capture());
+    //        assertEquals(argument.getValue().getItems().size(), MANY_ITEMS.size());
+    //    }
+    //
+    //
+    //
+    //
+    @After public void tearDown() throws Exception {
+        RxJavaPlugins.reset();
     }
 
 }

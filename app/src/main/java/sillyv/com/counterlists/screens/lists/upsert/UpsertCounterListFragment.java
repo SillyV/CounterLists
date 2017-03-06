@@ -138,7 +138,7 @@ public class UpsertCounterListFragment
 
     }
 
-    @Override public void onDeleteBooksErrorResponse() {
+    @Override public void onDeleteItemsErrorResponse() {
 
     }
 

@@ -29,6 +29,7 @@ import sillyv.com.counterlists.screens.counters.recycler.CounterListFragment;
 
 /**
  * Created by Vasili.Fedotov on 1/28/2017.
+ *
  */
 class CounterListsAdapter
         extends RecyclerView.Adapter<CounterListsAdapter.ListHolder> {
@@ -48,7 +49,7 @@ class CounterListsAdapter
             selectionItems.add(new CounterListsModel.ListItem(item.getTitle(),
                     item.getSubtitle(),
                     Color.WHITE,
-                    Color.BLACK,
+                    Color.WHITE,
                     Color.BLACK,
                     item.getId()));
         }

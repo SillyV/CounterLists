@@ -1,7 +1,5 @@
 package sillyv.com.counterlists.screens.lists.recycler;
 
-import android.support.annotation.NonNull;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -36,7 +34,6 @@ import static org.mockito.Mockito.when;
 
 /**
  * Created by Vasili.Fedotov on 2/19/2017.
- *
  */
 @RunWith(MockitoJUnitRunner.class) public class ListRecyclerPresenterTest
         extends ParentTest {
@@ -44,7 +41,6 @@ import static org.mockito.Mockito.when;
     @Mock CounterListsContract.CounterListsView<CounterListsModel> view;
     @Mock RealmRepository<ListModel, CounterModel> repo;
     private CounterListsPresenter presenter;
-    private List<Long> ID_LIST = getIdList();
 
     @Before public void setUp() throws Exception {
         presenter = new CounterListsPresenter(view, repo, Schedulers.trampoline());
@@ -58,7 +54,9 @@ import static org.mockito.Mockito.when;
 
         presenter.deleteItems(ID_LIST);
 
-        verify(repo, times(ID_LIST.size())).deleteItems(any());
+        verify(repo, times(1)).deleteItems(any());
+
+        verify(view, only()).onDeleteItemsSuccess();
     }
 
     @Test public void deleteItems_whenRepoThrowsException() throws Exception {
@@ -67,7 +65,7 @@ import static org.mockito.Mockito.when;
 
         presenter.deleteItems(ID_LIST);
 
-        verify(view, times(1)).onDeleteBooksErrorResponse();
+        verify(view, only()).onDeleteItemsErrorResponse();
     }
 
     @Test public void deleteItems_checkGetDataIsCalled() throws Exception {
@@ -169,12 +167,6 @@ import static org.mockito.Mockito.when;
 
     @After public void tearDown() throws Exception {
         RxJavaPlugins.reset();
-    }
-
-    @NonNull private List<Long> getIdList() {
-        List<Long> items = new ArrayList<>();
-        items.add(3L);
-        return items;
     }
 
     //// TODO: 2/21/2017 Test Mapping

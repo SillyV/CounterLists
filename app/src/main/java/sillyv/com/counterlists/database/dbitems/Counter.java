@@ -57,6 +57,9 @@ public class Counter
         this.customOrder = model.getCustomOrder();
     }
 
+    public Counter() {
+    }
+
     public void setData(CounterModel model) {
         this.created = model.getCreated();
         this.edited = model.getEdited();
@@ -76,9 +79,6 @@ public class Counter
         this.background = model.getBackground();
         this.foreground = model.getForeground();
         this.customOrder = model.getCustomOrder();
-    }
-
-    public Counter() {
     }
 
     public long getId() {
@@ -226,11 +226,26 @@ public class Counter
     }
 
     public void update(CounterModel model) {
-        //// TODO: 2/18/2017
+        this.setName(model.getName());
+        this.setNote(model.getNote());
+        this.setClickSound(model.getClickSound());
+        this.setVibrate(model.getVibrate());
+        this.setSpeechOutputName(model.getSpeechOutputName());
+        this.setSpeechOutputValue(model.getSpeechOutputValue());
+        this.setKeepAwake(model.getKeepAwake());
+        this.setVolumeKey(model.getVolumeKey());
+        this.setValue(model.getValue());
+        this.setDefaultValue(model.getDefaultValue());
+        this.setIncrement(model.getIncrement());
+        this.setDecrement(model.getDecrement());
+        this.setBackground(model.getBackground());
+        this.setForeground(model.getForeground());
+        this.setCustomOrder(model.getCustomOrder());
+        this.setEdited(new Date());
     }
 
     public void incremented() {
-        //// TODO: 2/18/2017
+        this.setValueChanged(new Date());
     }
 
     public int getCustomOrder() {
@@ -240,7 +255,6 @@ public class Counter
     public void setCustomOrder(int customOrder) {
         this.customOrder = customOrder;
     }
-
 
 
 }

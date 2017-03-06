@@ -8,4 +8,6 @@ package sillyv.com.counterlists.baseline;
 public interface BaseListView<D> extends BaseView<D> {
 
 
+    void onDeleteItemsSuccess();
+
 }

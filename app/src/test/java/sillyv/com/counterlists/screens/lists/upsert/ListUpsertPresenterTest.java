@@ -26,6 +26,7 @@ import sillyv.com.counterlists.database.models.ListModel;
 import sillyv.com.counterlists.screens.ParentTest;
 
 import static junit.framework.Assert.assertEquals;
+import static org.mockito.Matchers.anyLong;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.only;
@@ -34,9 +35,8 @@ import static org.mockito.Mockito.when;
 
 /**
  * Created by Vasili.Fedotov on 2/19/2017.
- *
  */
-@RunWith(MockitoJUnitRunner.class) public class UpsertCounterListPresenterTest
+@RunWith(MockitoJUnitRunner.class) public class ListUpsertPresenterTest
         extends ParentTest {
     private final UpsertCounterListModel.CounterListSettings MODEL = getModel();
     private final ListModel LIST_ITEM_NEW_ITEM = getListModel(true);
@@ -65,6 +65,15 @@ import static org.mockito.Mockito.when;
         verify(view, only()).onDataReceived(any(UpsertCounterListModel.CounterListSettings.class));
     }
 
+    @Test public void loadData_newList_whenRepoThrowsError() throws Exception {
+        //given
+        when(repo.getItem(0)).thenReturn(Single.error(new RuntimeException("test")));
+        //when
+        presenter.loadData(mMockContext, DATE_FORMAT, new UpsertCounterListModel.Identifier(0L));
+        //then
+        verify(view, only()).onGetDataErrorResponse();
+    }
+
     @Test public void loadData_existingList() throws Exception {
         //given
         when(repo.getItem(2)).thenReturn(Single.just(LIST_ITEM_EXISTING_ITEM));
@@ -74,14 +83,24 @@ import static org.mockito.Mockito.when;
         verify(view, only()).onDataReceived(any(UpsertCounterListModel.CounterListSettings.class));
     }
 
-    @Test public void loadData_whenRepoThrowsException() throws Exception {
+    @Test public void loadData_existingList_whenErrorFromRepo() throws Exception {
         //given
-        when(repo.getItem(2)).thenReturn(Single.error(new RuntimeException("test")));
+        when(repo.getItem(anyLong())).thenReturn(Single.error(new RuntimeException("Test")));
         //when
         presenter.loadData(mMockContext, DATE_FORMAT, new UpsertCounterListModel.Identifier(2L));
         //then
         verify(view, only()).onGetDataErrorResponse();
     }
+
+
+    //    @Test public void loadData_whenRepoThrowsException() throws Exception {
+    //        //given
+    //        when(repo.getItem(2)).thenReturn(Single.error(new RuntimeException("test")));
+    //        //when
+    //        presenter.loadData(mMockContext, DATE_FORMAT, new UpsertCounterListModel.Identifier(2L));
+    //        //then
+    //        verify(view, only()).onGetDataErrorResponse();
+    //    }
 
     @Test public void loadData_newList_testForFields() throws Exception {  //given
         when(repo.getItem(ListController.DEFAULT_LIST)).thenReturn(Single.just(LIST_ITEM_NEW_ITEM));
@@ -148,7 +167,7 @@ import static org.mockito.Mockito.when;
         presenter.saveData(MODEL, new UpsertCounterListModel.Identifier(0));
         //then
         verify(repo, only()).insert(any(ListModel.class));
-
+        verify(view, only()).onSaveDataSuccess();
 
     }
 
@@ -159,6 +178,7 @@ import static org.mockito.Mockito.when;
         presenter.saveData(MODEL_TO_SAVE, new UpsertCounterListModel.Identifier(1));
         //then
         verify(repo, only()).updateItem(any(ListModel.class));
+        verify(view, only()).onSaveDataSuccess();
 
     }
 
@@ -187,7 +207,7 @@ import static org.mockito.Mockito.when;
 
     @Test public void saveData_existingItem_testForFields() throws Exception {
         when(repo.updateItem(any())).thenReturn(Completable.complete());
-//        when(repo.updateItem(any())).thenReturn(Completable.error(new RuntimeException("Test")));
+        //        when(repo.updateItem(any())).thenReturn(Completable.error(new RuntimeException("Test")));
         presenter.saveData(MODEL_TO_SAVE, new UpsertCounterListModel.Identifier(1));
         //then
         ArgumentCaptor<ListModel> argument = ArgumentCaptor.forClass(ListModel.class);
@@ -213,7 +233,7 @@ import static org.mockito.Mockito.when;
     @Test public void saveData_whenRepoThrowsException() throws Exception {
         when(repo.updateItem(any())).thenReturn(Completable.error(new RuntimeException("Test")));
         presenter.saveData(MODEL_TO_SAVE, new UpsertCounterListModel.Identifier(1));
-        verify(view,only()).onSaveDataErrorResponse();
+        verify(view, only()).onSaveDataErrorResponse();
 
 
     }
@@ -223,7 +243,10 @@ import static org.mockito.Mockito.when;
         doThrow(new Exception()).when(repo).updateItem(any(ListModel.class));
 
         presenter.saveData(getModel(), new UpsertCounterListModel.Identifier(1));
+
+        verify(view, only()).onSaveDataErrorResponse();
     }
+
     @After public void tearDown() throws Exception {
         RxJavaPlugins.reset();
     }

@@ -1,14 +1,18 @@
 package sillyv.com.counterlists.screens.counters.upsert;
 
 import android.content.Context;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import java.text.DateFormat;
 import java.util.Date;
 
-import io.reactivex.Single;
+import io.reactivex.Completable;
+import io.reactivex.Scheduler;
 import io.reactivex.functions.Function;
+import io.reactivex.observers.DisposableCompletableObserver;
 import io.reactivex.observers.DisposableSingleObserver;
+import io.reactivex.schedulers.Schedulers;
 import sillyv.com.counterlists.R;
 import sillyv.com.counterlists.baseline.BasePresenter;
 import sillyv.com.counterlists.baseline.BaseView;
@@ -31,13 +35,16 @@ public class UpsertCounterPresenter
     private final BaseView<UpsertCounterModel.CounterModel> view;
     private final RealmRepository<CounterModel, Object> repo;
     private final RealmRepository<ListModel, CounterModel> parentRepo;
+    private Scheduler mainScheduler;
 
     public UpsertCounterPresenter(BaseView<UpsertCounterModel.CounterModel> view,
                                   RealmRepository<CounterModel, Object> repo,
-                                  RealmRepository<ListModel, CounterModel> parentRepo) {
+                                  RealmRepository<ListModel, CounterModel> parentRepo,
+                                  Scheduler mainScheduler) {
         this.view = view;
         this.repo = repo;
         this.parentRepo = parentRepo;
+        this.mainScheduler = mainScheduler;
     }
 
     @Override public void loadData(Context context, DateFormat dateFormat, Long id, long parentId) {
@@ -45,19 +52,13 @@ public class UpsertCounterPresenter
             loadNewList(context, dateFormat, parentId);
             return;
         }
+        loadExistingList(context, dateFormat, id, parentId);
+
 
     }
 
-    @Override public void loadNewList(Context context, DateFormat dateFormat, Long id) {
-
-        Single<ListModel> item = parentRepo.getItem(id);
-
-        if (item == null) {
-            view.onGetDataErrorResponse();
-            return;
-        }
-
-        compositeDisposable.add(item.map(dbListItemToNewCounterItem(context, id, dateFormat)).
+    private void loadExistingList(Context context, DateFormat dateFormat, Long id, long parentId) {
+        compositeDisposable.add(parentRepo.getItem(parentId).map(dbListItemToExistingCounterItem(context, id, dateFormat)).
                 subscribeWith(new DisposableSingleObserver<UpsertCounterModel.CounterModel>() {
                     @Override public void onSuccess(UpsertCounterModel.CounterModel counterListSettings) {
                         view.onDataReceived(counterListSettings);
@@ -67,45 +68,22 @@ public class UpsertCounterPresenter
                         view.onGetDataErrorResponse();
                     }
                 }));
-
     }
-
-    @Override public void saveData(UpsertCounterModel.CounterModel model, Long id, Long parentId) {
-        if (id == 0) {
-            parentRepo.insertNewChildItem(parentId,
-                    new CounterModel(0,
-                            new Date(),
-                            new Date(),
-                            new Date(),
-                            model.getNote(),
-                            model.getClickSound(),
-                            model.getVibrate(),
-                            model.getSpeakValue(),
-                            model.getSpeakName(),
-                            model.getKeepAwake(),
-                            model.getUseVolume(),
-                            model.getName(),
-                            Integer.parseInt(model.getValue()),
-                            Integer.parseInt(model.getDefaultValue()),
-                            Integer.parseInt(model.getIncrement()),
-                            Integer.parseInt(model.getDecrement()),
-                            model.getBackgroundColor(),
-                            model.getForegroundColor(),
-                            0)
-
-
-            );
-        } else {
-
-        }
-    }
-
 
     private Function<ListModel, UpsertCounterModel.CounterModel> dbListItemToNewCounterItem(Context context, long id, DateFormat dateFormat) {
 
         return list -> {
             UpsertCounterModel.CounterModel.Builder counterListSettings = getNewCounterBuilderFromDBListItem(list);
             counterListSettings = getNewListBuilderData(context, counterListSettings);
+            return counterListSettings.build();
+        };
+
+    }
+
+    private Function<ListModel, UpsertCounterModel.CounterModel> dbListItemToExistingCounterItem(Context context, long id, DateFormat dateFormat) {
+        return list -> {
+            UpsertCounterModel.CounterModel.Builder counterListSettings = getExistingCounterBuilderFromDBListItem(list, id);
+            counterListSettings = getExistingListBuilderData(context, counterListSettings, dateFormat, getCounterModel(list, id));
             return counterListSettings.build();
         };
 
@@ -132,6 +110,122 @@ public class UpsertCounterPresenter
                 .withDateModified(context.getString(R.string.new_counter))
                 .withLastUsed(context.getString(R.string.new_counter))
                 .withToolbarTitle(context.getString(R.string.new_counter));
+    }
+
+    private UpsertCounterModel.CounterModel.Builder getExistingCounterBuilderFromDBListItem(ListModel list, long id) {
+        CounterModel selectedCounterModel = getCounterModel(list, id);
+        if (selectedCounterModel == null) { return null; }
+
+        return new UpsertCounterModel.CounterModel.Builder().withDefaultValue(String.valueOf(selectedCounterModel.getDefaultValue()))
+                .withValue(String.valueOf(selectedCounterModel.getDefaultValue()))
+                .withIncrement(String.valueOf(selectedCounterModel.getIncrement()))
+                .withDecrement(String.valueOf(selectedCounterModel.getDecrement()))
+                .withBackgroundColor(selectedCounterModel.getBackground())
+                .withForeground(selectedCounterModel.getForeground())
+                .withClickSound(selectedCounterModel.getClickSound())
+                .withVibrate(selectedCounterModel.getVibrate())
+                .withName(selectedCounterModel.getName())
+                .withNote(selectedCounterModel.getNote())
+                .withSpeakValue(selectedCounterModel.getSpeechOutputValue())
+                .withSpeakName(selectedCounterModel.getSpeechOutputName())
+                .withKeepAwake(selectedCounterModel.getKeepAwake())
+                .withUseVolume(selectedCounterModel.getVolumeKey());
+    }
+
+    private UpsertCounterModel.CounterModel.Builder getExistingListBuilderData(Context context,
+                                                                               UpsertCounterModel.CounterModel.Builder counterListSettings,
+                                                                               DateFormat dateFormat,
+                                                                               CounterModel counterModel) {
+        return counterListSettings.withDateCreated(dateFormat.format(counterModel.getCreated()))
+                .withDateModified(dateFormat.format(counterModel.getEdited()))
+                .withLastUsed(dateFormat.format(counterModel.getValueChanged()))
+                .withToolbarTitle(counterModel.getName());
+    }
+
+    @Nullable private CounterModel getCounterModel(ListModel list, long id) {
+        CounterModel selectedCounterModel = null;
+        for (CounterModel counterModel : list.getCounters()) {
+            if (counterModel.getId() == id) {
+                selectedCounterModel = counterModel;
+                break;
+            }
+        }
+
+        if (selectedCounterModel == null) {
+            return null;
+        }
+        return selectedCounterModel;
+    }
+
+    @Override public void loadNewList(Context context, DateFormat dateFormat, Long id) {
+        compositeDisposable.add(parentRepo.getItem(id).map(dbListItemToNewCounterItem(context, id, dateFormat)).
+                subscribeWith(new DisposableSingleObserver<UpsertCounterModel.CounterModel>() {
+                    @Override public void onSuccess(UpsertCounterModel.CounterModel counterListSettings) {
+                        view.onDataReceived(counterListSettings);
+                    }
+
+                    @Override public void onError(Throwable e) {
+                        view.onGetDataErrorResponse();
+                    }
+                }));
+
+    }
+
+    @Override public void saveData(UpsertCounterModel.CounterModel model, Long id, Long parentId) {
+
+        Completable completable;
+        if (id == 0) {
+            completable = parentRepo.insertNewChildItem(parentId,
+                    new CounterModel(0,
+                            new Date(),
+                            new Date(),
+                            new Date(),
+                            model.getNote(),
+                            model.getClickSound(),
+                            model.getVibrate(),
+                            model.getSpeakValue(),
+                            model.getSpeakName(),
+                            model.getKeepAwake(),
+                            model.getUseVolume(),
+                            model.getName(),
+                            Integer.parseInt(model.getValue()),
+                            Integer.parseInt(model.getDefaultValue()),
+                            Integer.parseInt(model.getIncrement()),
+                            Integer.parseInt(model.getDecrement()),
+                            model.getBackgroundColor(),
+                            model.getForegroundColor(),
+                            0));
+        } else {
+            completable = repo.updateItem(new CounterModel(id,
+                    new Date(),
+                    new Date(),
+                    new Date(),
+                    model.getNote(),
+                    model.getClickSound(),
+                    model.getVibrate(),
+                    model.getSpeakValue(),
+                    model.getSpeakName(),
+                    model.getKeepAwake(),
+                    model.getUseVolume(),
+                    model.getName(),
+                    Integer.parseInt(model.getValue()),
+                    Integer.parseInt(model.getDefaultValue()),
+                    Integer.parseInt(model.getIncrement()),
+                    Integer.parseInt(model.getDecrement()),
+                    model.getBackgroundColor(),
+                    model.getForegroundColor(),
+                    0));
+        }
+        compositeDisposable.add(completable.subscribeOn(Schedulers.io()).observeOn(mainScheduler).subscribeWith(new DisposableCompletableObserver() {
+
+            @Override public void onComplete() {
+                view.onSaveDataSuccess();
+            }
+
+            @Override public void onError(Throwable e) {
+                view.onSaveDataErrorResponse();
+            }
+        }));
     }
 
     private UpsertCounterModel.CounterModel.Builder getExistingListBuilderData(Context context,

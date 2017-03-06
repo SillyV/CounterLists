@@ -13,6 +13,7 @@ import org.greenrobot.eventbus.Subscribe;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import sillyv.com.counterlists.CLFragment;
 import sillyv.com.counterlists.R;
 import sillyv.com.counterlists.baseline.BaseListView;
@@ -56,7 +57,7 @@ public class CounterListFragment
 
         View view = inflater.inflate(R.layout.fragment_counter_list, container, false);
         ButterKnife.bind(this, view);
-        presenter = new CounterListPresenter(this, CounterController.getInstance(), ListController.getInstance());
+        presenter = new CounterListPresenter(this, CounterController.getInstance(), ListController.getInstance(), AndroidSchedulers.mainThread());
         presenter.getData(id);
 
         return view;
@@ -90,7 +91,7 @@ public class CounterListFragment
 
     }
 
-    @Override public void onDeleteBooksErrorResponse() {
+    @Override public void onDeleteItemsErrorResponse() {
 
     }
 
@@ -112,6 +113,10 @@ public class CounterListFragment
 
 
 
+
+    }
+
+    @Override public void onDeleteItemsSuccess() {
 
     }
 

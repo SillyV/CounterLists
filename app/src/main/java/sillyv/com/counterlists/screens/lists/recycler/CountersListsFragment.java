@@ -96,6 +96,10 @@ public class CountersListsFragment
 
     }
 
+    @Override public void onDeleteItemsSuccess() {
+
+    }
+
     private void createAndShowAlertDialogForDeleting() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle(getDeleteMessage());
@@ -146,7 +150,7 @@ public class CountersListsFragment
 
     }
 
-    @Override public void onDeleteBooksErrorResponse() {
+    @Override public void onDeleteItemsErrorResponse() {
 
     }
 

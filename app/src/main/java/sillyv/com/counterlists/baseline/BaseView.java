@@ -10,7 +10,7 @@ public interface BaseView<D> {
 
     void onGetDataErrorResponse();
 
-    void onDeleteBooksErrorResponse();
+    void onDeleteItemsErrorResponse();
 
     void onSaveDataErrorResponse();
 

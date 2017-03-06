@@ -20,5 +20,6 @@ public interface CounterListContract {
 
     interface CounterListView<D>extends BaseListView<D> {
 
+        void onSaveInteractionSuccess();
     }
 }

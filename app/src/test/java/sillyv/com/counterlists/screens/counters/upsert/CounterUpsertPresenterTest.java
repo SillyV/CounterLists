@@ -2,7 +2,7 @@ package sillyv.com.counterlists.screens.counters.upsert;
 
 import android.content.Context;
 
-import org.junit.Assert;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -14,7 +14,10 @@ import org.mockito.junit.MockitoRule;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
+import io.reactivex.Completable;
 import io.reactivex.Single;
+import io.reactivex.plugins.RxJavaPlugins;
+import io.reactivex.schedulers.Schedulers;
 import sillyv.com.counterlists.R;
 import sillyv.com.counterlists.baseline.BaseView;
 import sillyv.com.counterlists.database.controllers.RealmRepository;
@@ -32,9 +35,8 @@ import static org.mockito.Mockito.when;
 
 /**
  * Created by Vasili.Fedotov on 2/24/2017.
- *
  */
-public class UpsertCounterPresenterTest
+public class CounterUpsertPresenterTest
         extends ParentTest {
     private static final UpsertCounterModel.CounterModel MODEL = getNewCounterModel();
     private static final long PARENT_ID = 1L;
@@ -73,8 +75,10 @@ public class UpsertCounterPresenterTest
     }
 
     @Before public void setUp() throws Exception {
-        presenter = new UpsertCounterPresenter(view, repo, parentRepo);
+        presenter = new UpsertCounterPresenter(view, repo, parentRepo, Schedulers.trampoline());
         when(context.getString(R.string.new_counter)).thenReturn(NEW_COUNTER_STRING);
+        RxJavaPlugins.setIoSchedulerHandler(scheduler -> Schedulers.trampoline());
+
 
     }
 
@@ -123,16 +127,10 @@ public class UpsertCounterPresenterTest
         verify(view, only()).onGetDataErrorResponse();
     }
 
-    @Test public void loadNewList_whenRepoReturnsNull() throws Exception {
-        when(parentRepo.getItem(1)).thenReturn(null);
-
-        presenter.loadNewList(context, DATE_FORMAT, 1L);
-
-        verify(view, only()).onGetDataErrorResponse();
-    }
 
     @Test public void loadData_existingList() throws Exception {
         when(repo.getItem(1)).thenReturn(Single.just(EXISTING_COUNTER));
+        when(parentRepo.getItem(2)).thenReturn(Single.just(PARENT_LIST));
 
         presenter.loadData(context, DATE_FORMAT, 1L, 2L);
 
@@ -140,8 +138,8 @@ public class UpsertCounterPresenterTest
     }
 
     @Test public void loadData_whenRepoThrowsException() throws Exception {
-        //given
-        when(repo.getItem(2)).thenReturn(Single.error(new RuntimeException("test")));
+        when(repo.getItem(1)).thenReturn(Single.just(EXISTING_COUNTER));
+        when(parentRepo.getItem(2)).thenReturn(Single.error(new RuntimeException("test")));
         //when
         presenter.loadData(context, DATE_FORMAT, 2L, 2L);
         //then
@@ -149,28 +147,51 @@ public class UpsertCounterPresenterTest
 
     }
 
-    @Test public void loadData_whenRepoReturnsNull() throws Exception {
-        //given
-        when(repo.getItem(2)).thenReturn(Single.error(new RuntimeException("test")));
-        //when
-        presenter.loadData(context, DATE_FORMAT, 2L, 2L);
-        //then
-        verify(view, only()).onGetDataErrorResponse();
-
-    }
 
     @Test public void loadData_existingList_testForFields() throws Exception {
-        Assert.assertEquals(1, 2);
+        //        when(repo.getItem(1)).thenReturn(Single.just(EXISTING_COUNTER));
+        when(parentRepo.getItem(2)).thenReturn(Single.just(PARENT_LIST));
 
+        presenter.loadData(context, DATE_FORMAT, 4L, 2L);
+
+        ArgumentCaptor<UpsertCounterModel.CounterModel> argument = ArgumentCaptor.forClass(UpsertCounterModel.CounterModel.class);
+        verify(view).onDataReceived(argument.capture());
+
+        CounterModel counterModel = PARENT_LIST.getCounters().get(3);
+        UpsertCounterModel.CounterModel value = argument.getValue();
+        assertEquals(value.getDateCreated(), DATE_FORMAT.format(counterModel.getCreated()));
+        assertEquals(value.getDateModified(), DATE_FORMAT.format(counterModel.getEdited()));
+        assertEquals(value.getLastUsed(), DATE_FORMAT.format(counterModel.getValueChanged()));
+        assertEquals(value.getNote(), counterModel.getNote());
+        assertEquals(value.getName(), counterModel.getName());
+        assertEquals(value.getVibrate(), counterModel.getVibrate());
+        assertEquals(value.getSpeakName(), counterModel.getSpeechOutputName());
+        assertEquals(value.getSpeakValue(), counterModel.getSpeechOutputValue());
+        assertEquals(value.getClickSound(), counterModel.getClickSound());
+        assertEquals(value.getKeepAwake(), counterModel.getKeepAwake());
+        assertEquals(value.getUseVolume(), counterModel.getVolumeKey());
+        assertEquals(value.getValue(), String.valueOf(counterModel.getValue()));
+        assertEquals(value.getDefaultValue(), String.valueOf(counterModel.getDefaultValue()));
+        assertEquals(value.getIncrement(), String.valueOf(counterModel.getIncrement()));
+        assertEquals(value.getDecrement(), String.valueOf(counterModel.getDecrement()));
+
+        assertEquals(value.getBackgroundColor(), counterModel.getForeground());
+/*
+    private long id;
+    private int customOrder;*/
     }
 
     @Test public void saveData_newItem() throws Exception {
+        when(parentRepo.insertNewChildItem(anyLong(), any())).thenReturn(Completable.complete());
+
         presenter.saveData(MODEL, 0L, PARENT_ID);
         //then
         verify(parentRepo).insertNewChildItem(anyLong(), any(CounterModel.class));
     }
 
     @Test public void saveData_newItem_testForFields() throws Exception {
+        when(parentRepo.insertNewChildItem(anyLong(), any())).thenReturn(Completable.complete());
+
         presenter.saveData(MODEL, 0L, PARENT_ID);
         //then
         ArgumentCaptor<Long> longArgument = ArgumentCaptor.forClass(Long.class);
@@ -195,13 +216,19 @@ public class UpsertCounterPresenterTest
     }
 
     @Test public void saveData_existingItem() throws Exception {
+        when(repo.updateItem(any())).thenReturn(Completable.complete());
+
         presenter.saveData(MODEL, EXISTING_ID, PARENT_ID);
         //then
         verify(repo).updateItem(any(CounterModel.class));
+        verify(view, only()).onSaveDataSuccess();
 
     }
 
     @Test public void saveData_existingItem_testForFields() throws Exception {
+        when(repo.updateItem(any())).thenReturn(Completable.complete());
+
+
         presenter.saveData(MODEL, EXISTING_ID, PARENT_ID);
         //then
         ArgumentCaptor<CounterModel> argument = ArgumentCaptor.forClass(CounterModel.class);
@@ -224,8 +251,16 @@ public class UpsertCounterPresenterTest
 
     }
 
-    @Test public void saveData_existingItem_whenItemDoesNotExist() throws Exception {
-        Assert.assertEquals(1, 2);
+    @Test public void saveData_existingItem_whenRepoThrowsException() throws Exception {
+        when(repo.updateItem(any())).thenReturn(Completable.error(new RuntimeException("Test")));
+
+        presenter.saveData(MODEL, EXISTING_ID, PARENT_ID);
+
+        verify(view, only()).onSaveDataErrorResponse();
+    }
+
+    @After public void tearDown() throws Exception {
+        RxJavaPlugins.reset();
 
     }
 

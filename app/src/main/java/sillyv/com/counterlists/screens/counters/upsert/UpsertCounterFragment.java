@@ -15,6 +15,7 @@ import butterknife.BindView;
 import butterknife.BindViews;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import sillyv.com.counterlists.R;
 import sillyv.com.counterlists.database.controllers.CounterController;
 import sillyv.com.counterlists.database.controllers.ListController;
@@ -96,7 +97,7 @@ public class UpsertCounterFragment
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_upsert_counter, container, false);
         ButterKnife.bind(this, view);
-        presenter = new UpsertCounterPresenter(this, CounterController.getInstance(), ListController.getInstance());
+        presenter = new UpsertCounterPresenter(this, CounterController.getInstance(), ListController.getInstance(), AndroidSchedulers.mainThread());
         presenter.loadData(getContext(), getDateFormat(), id, parentId);
         initComponents();
         return view;
@@ -138,7 +139,7 @@ public class UpsertCounterFragment
 
     }
 
-    @Override public void onDeleteBooksErrorResponse() {
+    @Override public void onDeleteItemsErrorResponse() {
 
     }
 

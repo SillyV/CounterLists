@@ -15,7 +15,6 @@ import sillyv.com.counterlists.database.models.CounterModel;
 
 /**
  * Created by Vasili on 1/28/2017.
- *
  */
 
 public class CounterController
@@ -59,7 +58,7 @@ public class CounterController
     }
 
     @Override public Single<CounterModel> getItem(long id) throws RuntimeException {
-        return null;
+        return Single.fromCallable(() -> new CounterModel(Realm.getDefaultInstance().where(Counter.class).equalTo("id", id).findFirst()));
     }
 
     public Completable insert(final CounterModel model) {
@@ -81,9 +80,9 @@ public class CounterController
             Realm realm = Realm.getDefaultInstance();
             realm.executeTransaction(realm1 -> {
                 Log.d(TAG, "execute:");
-                final Counter list = getCounter(model.getId());
-                list.update(model);
-                realm1.copyToRealmOrUpdate(list);
+                final Counter counter = getCounter(model.getId());
+                counter.update(model);
+                realm1.copyToRealmOrUpdate(counter);
             });
             realm.close();
         });
@@ -91,7 +90,7 @@ public class CounterController
 
     //query a single item with the given id
     private Counter getCounter(long id) {
-        return realm.where(Counter.class).equalTo("id", id).findFirst();
+        return Realm.getDefaultInstance().where(Counter.class).equalTo("id", id).findFirst();
     }
 
     @Override public Completable deleteItem(Long aLong) {
@@ -125,7 +124,13 @@ public class CounterController
     }
 
     @Override public Completable deleteItems(List<Long> idList) {
-        return null;
+        return Completable.fromAction(() -> Realm.getDefaultInstance().executeTransaction(realm1 -> {
+            for (Long aLong : idList) {
+                RealmResults<Counter> result = realm1.where(Counter.class).equalTo("id", aLong).findAll();
+                result.deleteAllFromRealm(); //// TODO: 3/3/2017 Test deletion and list behaviors
+            }
+        }));
+
     }
 
     public void addNewList(final CounterModel model, final long nextID) {
