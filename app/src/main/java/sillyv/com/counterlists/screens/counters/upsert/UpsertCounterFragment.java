@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -17,11 +18,11 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import sillyv.com.counterlists.R;
+import sillyv.com.counterlists.baseline.BasePresenter;
 import sillyv.com.counterlists.database.controllers.CounterController;
 import sillyv.com.counterlists.database.controllers.ListController;
 import sillyv.com.counterlists.screens.Contracts;
 import sillyv.com.counterlists.screens.UpsertFragment;
-import sillyv.com.counterlists.screens.lists.upsert.UpsertCounterListContract;
 
 import static sillyv.com.counterlists.database.controllers.CounterController.DEFAULT_COUNTER;
 
@@ -71,6 +72,7 @@ public class UpsertCounterFragment
             id = getArguments().getLong(COUNTER_IDENTIFIER);
             parentId = getArguments().getLong(LIST_IDENTIFIER);
         }
+        invalidateOptionsMenu();
     }
 
     @Override public List<TextInputLayout> getRequiredFieldsTextLayouts() {
@@ -89,10 +91,6 @@ public class UpsertCounterFragment
                 (Integer) colorButtonMap.get(buttonForeground)));
     }
 
-    @Override public UpsertCounterListContract.UpsertCounterListPresenter getPresenter() {
-        return null; //// TODO: 2/24/2017 IMPLEMENT
-    }
-
     @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_upsert_counter, container, false);
@@ -101,6 +99,10 @@ public class UpsertCounterFragment
         presenter.loadData(getContext(), getDateFormat(), id, parentId);
         initComponents();
         return view;
+    }
+
+    @Override protected List<BasePresenter> getPresenters() {
+        return Collections.singletonList((BasePresenter) presenter);
     }
 
     @Override public void setTitle() {
@@ -139,15 +141,12 @@ public class UpsertCounterFragment
 
     }
 
-    @Override public void onDeleteItemsErrorResponse() {
 
+    @Override public void onSaveDataSuccess() {
+        popBackStack();
     }
 
     @Override public void onSaveDataErrorResponse() {
-
-    }
-
-    @Override public void onSaveDataSuccess() {
 
     }
 

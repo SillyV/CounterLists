@@ -27,9 +27,8 @@ import butterknife.BindViews;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import it.beppi.tristatetogglebutton_library.TriStateToggleButton;
-import sillyv.com.counterlists.CLFragment;
 import sillyv.com.counterlists.R;
-import sillyv.com.counterlists.screens.lists.upsert.UpsertCounterListContract;
+import sillyv.com.counterlists.baseline.CLFragment;
 import sillyv.com.counterlists.screens.lists.upsert.UpsertCounterListModel;
 import sillyv.com.counterlists.tools.ValidationTools;
 
@@ -144,7 +143,6 @@ public abstract class UpsertFragment<D extends UpsertModel>
                 ButterKnife.apply(getRequiredFieldsTextLayouts(), CHECK_FOR_ERRORS);
                 if (!foundErrors) {
                     saveData();
-                    popBackStack();
                 }
                 break;
             case R.id.show_advanced:
@@ -157,6 +155,8 @@ public abstract class UpsertFragment<D extends UpsertModel>
     }
 
     public abstract List<TextInputLayout> getRequiredFieldsTextLayouts();
+
+    public abstract void onSaveDataSuccess();
 
     protected abstract void saveData();
 
@@ -180,8 +180,6 @@ public abstract class UpsertFragment<D extends UpsertModel>
         ButterKnife.apply(toggles, SET_STATE_AGAIN);
 
     }
-
-    public abstract UpsertCounterListContract.UpsertCounterListPresenter getPresenter();
 
     protected void showPickColorDialog(View view) {
         ColorPickerDialogBuilder.with(getContext())
@@ -302,4 +300,6 @@ public abstract class UpsertFragment<D extends UpsertModel>
         }
         return TriStateToggleButton.ToggleStatus.on;
     }
+
+
 }

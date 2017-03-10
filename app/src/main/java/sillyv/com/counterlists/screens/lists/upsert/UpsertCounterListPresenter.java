@@ -15,7 +15,6 @@ import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
 import sillyv.com.counterlists.R;
 import sillyv.com.counterlists.baseline.BasePresenter;
-import sillyv.com.counterlists.baseline.BaseView;
 import sillyv.com.counterlists.database.controllers.ListController;
 import sillyv.com.counterlists.database.controllers.RealmRepository;
 import sillyv.com.counterlists.database.models.CounterModel;
@@ -33,11 +32,11 @@ class UpsertCounterListPresenter
 
     private static final String TAG = UpsertCounterListPresenter.class.getSimpleName();
 
-    private final BaseView<UpsertCounterListModel.CounterListSettings> view;
+    private final UpsertCounterListContract.UpsertCounterListView<UpsertCounterListModel.CounterListSettings> view;
     private final RealmRepository<ListModel, CounterModel> repo;
     private Scheduler mainScheduler;
 
-    UpsertCounterListPresenter(BaseView<UpsertCounterListModel.CounterListSettings> view,
+    UpsertCounterListPresenter(UpsertCounterListContract.UpsertCounterListView<UpsertCounterListModel.CounterListSettings> view,
                                RealmRepository<ListModel, CounterModel> repo,
                                Scheduler mainScheduler) {
         this.mainScheduler = mainScheduler;

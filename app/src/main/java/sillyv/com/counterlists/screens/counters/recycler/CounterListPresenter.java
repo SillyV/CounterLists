@@ -2,14 +2,15 @@ package sillyv.com.counterlists.screens.counters.recycler;
 
 import android.util.Log;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.Completable;
 import io.reactivex.Scheduler;
 import io.reactivex.functions.Function;
 import io.reactivex.observers.DisposableCompletableObserver;
 import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
-import sillyv.com.counterlists.baseline.BaseListView;
 import sillyv.com.counterlists.baseline.BasePresenter;
 import sillyv.com.counterlists.database.controllers.RealmRepository;
 import sillyv.com.counterlists.database.models.CounterModel;
@@ -25,11 +26,11 @@ public class CounterListPresenter
 
     private RealmRepository<ListModel, CounterModel> parentRepo;
     private RealmRepository<CounterModel, Object> childRepo;
-    private BaseListView<CounterListModel> view;
+    private CounterListContract.CounterListView<CounterListModel> view;
     private Scheduler mainScheduler;
 
 
-    public CounterListPresenter(BaseListView<CounterListModel> view,
+    public CounterListPresenter(CounterListContract.CounterListView<CounterListModel> view,
                                 RealmRepository<CounterModel, Object> childRepo,
                                 RealmRepository<ListModel, CounterModel> parentRepo,
                                 Scheduler mainScheduler) {
@@ -40,8 +41,26 @@ public class CounterListPresenter
         this.view = view;
     }
 
+    public void deleteCounters(List<Long> idList, long parentID) {
+        compositeDisposable.add(childRepo.deleteItems(idList)
+                .subscribeOn(Schedulers.io())
+                .observeOn(mainScheduler)
+                .subscribeWith(new DisposableCompletableObserver() {
+                    @Override public void onComplete() {
+                        view.onDeleteItemsSuccess();
+                        getData(parentID);
+                    }
+
+                    @Override public void onError(Throwable e) {
+                        view.onDeleteItemsErrorResponse();
+                        getData(parentID);
+                    }
+                }));
+
+    }
+
     public void getData(long id) {
-        compositeDisposable.add(parentRepo.getItem(id).map(dbItemToViewItem()).
+        compositeDisposable.add(parentRepo.getItem(id).subscribeOn(Schedulers.io()).observeOn(mainScheduler).map(dbItemToViewItem()).
                 subscribeWith(new DisposableSingleObserver<CounterListModel>() {
                     @Override public void onSuccess(CounterListModel listModels) {
                         view.onDataReceived(listModels);
@@ -54,31 +73,34 @@ public class CounterListPresenter
     }
 
     private Function<ListModel, CounterListModel> dbItemToViewItem() {
-        return listModel -> new CounterListModel(listModel.getName(),
+        return listModel -> { return new CounterListModel(listModel.getName(),
                 listModel.getItemStrings(),
                 listModel.getBackground(),
                 listModel.getDefaultCardBackgroundColor(),
                 listModel.getDefaultCardForegroundColor(),
                 listModel.getId(),
-                listModel);
+                listModel);};
     }
 
-
-    public void deleteCounter(List<Long> idList, long parentID) {
-        compositeDisposable.add(childRepo.deleteItems(idList)
+    public void resetItems(List<Long> id_list, Long parentID) {
+        List<Completable> items = new ArrayList<>();
+        for (Long aLong : id_list) {
+            items.add(childRepo.resetItems(aLong));
+        }
+        compositeDisposable.add(Completable.merge(items)
                 .subscribeOn(Schedulers.io())
                 .observeOn(mainScheduler)
                 .subscribeWith(new DisposableCompletableObserver() {
                     @Override public void onComplete() {
                         getData(parentID);
+                        view.onResetItemsSuccess();
                     }
 
                     @Override public void onError(Throwable e) {
-                        view.onDeleteItemsErrorResponse();
+                        view.onResetItemError();
                         getData(parentID);
                     }
                 }));
-
     }
 
     public void saveInteraction(Long id, Long parentId, int value) {
@@ -88,10 +110,11 @@ public class CounterListPresenter
                 .observeOn(mainScheduler)
                 .subscribeWith(new DisposableCompletableObserver() {
                     @Override public void onComplete() {
-                        Log.d(TAG, "onComplete: ");
+                        view.onSaveInteractionSuccess();
                     }
 
                     @Override public void onError(Throwable e) {
+                        view.onSaveInteractionFailure();
                         Log.d(TAG, "onError: ");
                     }
                 }));

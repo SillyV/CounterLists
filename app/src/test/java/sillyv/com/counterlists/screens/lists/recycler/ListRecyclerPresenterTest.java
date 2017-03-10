@@ -26,6 +26,7 @@ import sillyv.com.counterlists.database.models.ListModel;
 import sillyv.com.counterlists.screens.ParentTest;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Matchers.anyLong;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.only;
 import static org.mockito.Mockito.times;
@@ -56,7 +57,7 @@ import static org.mockito.Mockito.when;
 
         verify(repo, times(1)).deleteItems(any());
 
-        verify(view, only()).onDeleteItemsSuccess();
+        verify(view).onDeleteItemsSuccess();
     }
 
     @Test public void deleteItems_whenRepoThrowsException() throws Exception {
@@ -65,7 +66,7 @@ import static org.mockito.Mockito.when;
 
         presenter.deleteItems(ID_LIST);
 
-        verify(view, only()).onDeleteItemsErrorResponse();
+        verify(view).onDeleteItemsErrorResponse();
     }
 
     @Test public void deleteItems_checkGetDataIsCalled() throws Exception {
@@ -77,7 +78,7 @@ import static org.mockito.Mockito.when;
 
         ArgumentCaptor<CounterListsModel> argument = ArgumentCaptor.forClass(CounterListsModel.class);
 
-        verify(view, only()).onDataReceived(any(CounterListsModel.class));
+        verify(view).onDataReceived(any(CounterListsModel.class));
         verify(view).onDataReceived(argument.capture());
         assertEquals(argument.getValue().getItems().size(), MANY_ITEMS.size());
     }
@@ -162,6 +163,43 @@ import static org.mockito.Mockito.when;
         assertEquals(argument.getValue().getItems().get(0).getId(), 20);
 
 
+    }
+
+
+    @Test public void resetCounters() throws Exception {
+        when(repo.resetItems(anyLong())).thenReturn(Completable.complete());
+
+        presenter.resetItems(ID_LIST);
+
+        verify(repo, times(ID_LIST.size())).resetItems(anyLong());
+
+        verify(view).onResetItemsSuccess();
+    }
+
+
+    @Test public void resetCounters_whenRepoThrowsException() throws Exception {
+
+        when(repo.resetItems(anyLong())).thenReturn(Completable.error(new RuntimeException("Test")));
+
+        presenter.resetItems(ID_LIST);
+
+        verify(view).onResetItemError();
+
+
+    }
+
+    @Test public void resetCounters_check_list_accuracy() throws Exception {
+        when(repo.resetItems(anyLong())).thenReturn(Completable.complete());
+
+        presenter.resetItems(ID_LIST);
+
+        ArgumentCaptor<Long> argument = ArgumentCaptor.forClass(Long.class);
+
+        verify(repo, times(ID_LIST.size())).resetItems(argument.capture());
+
+        for (int i = 0; i < argument.getAllValues().size(); i++) {
+            assertEquals(argument.getAllValues().get(i).longValue(), ID_LIST.get(i).longValue());
+        }
     }
 
 

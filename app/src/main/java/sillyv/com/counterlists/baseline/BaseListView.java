@@ -10,4 +10,9 @@ public interface BaseListView<D> extends BaseView<D> {
 
     void onDeleteItemsSuccess();
 
+    void onResetItemsSuccess();
+
+    void onResetItemError();
+
+    void onDeleteItemsErrorResponse();
 }

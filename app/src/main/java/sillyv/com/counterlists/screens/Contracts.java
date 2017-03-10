@@ -73,7 +73,9 @@ public interface Contracts {
                 extends BaseView<D> {
 
 
+            void onSaveDataSuccess();
 
+            void onSaveDataErrorResponse();
         }
     }
 }

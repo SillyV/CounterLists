@@ -114,10 +114,10 @@ public class CounterController
             Realm realm = Realm.getDefaultInstance();
             realm.executeTransaction(realm1 -> {
                 Log.d(TAG, "execute:");
-                Counter list = getCounter(id);
-                list.setValue(value);
-                list.setValueChanged(new Date());
-                realm1.copyToRealmOrUpdate(list);
+                Counter counter = getCounter(id);
+                counter.setValue(value);
+                counter.setValueChanged(new Date());
+                realm1.copyToRealmOrUpdate(counter);
             });
             realm.close();
         });
@@ -129,8 +129,30 @@ public class CounterController
                 RealmResults<Counter> result = realm1.where(Counter.class).equalTo("id", aLong).findAll();
                 result.deleteAllFromRealm(); //// TODO: 3/3/2017 Test deletion and list behaviors
             }
+            realm1.close();
         }));
 
+    }
+
+    @Override public Completable resetItems(Long id) {
+        return Completable.fromAction(() -> {
+            Realm realm = Realm.getDefaultInstance();
+            realm.executeTransaction(realm1 -> {
+                Counter counter =  getCounter(id);
+                counter.setValue(counter.getDefaultValue());
+                counter.setValueChanged(new Date());
+                realm1.copyToRealmOrUpdate(counter);
+            });
+            realm.close();
+        });
+    }
+
+    @Override public Completable updateItemVibration(long id, boolean value) {
+        return null;
+    }
+
+    @Override public Completable updateItemVolume(long id, boolean value) {
+        return null;
     }
 
     public void addNewList(final CounterModel model, final long nextID) {

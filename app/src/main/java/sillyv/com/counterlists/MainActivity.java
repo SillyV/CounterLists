@@ -18,6 +18,7 @@ import org.greenrobot.eventbus.Subscribe;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.realm.Realm;
+import sillyv.com.counterlists.baseline.CLFragment;
 import sillyv.com.counterlists.database.controllers.ListController;
 import sillyv.com.counterlists.database.models.ListModel;
 import sillyv.com.counterlists.events.AddFragmentEvent;
@@ -164,6 +165,6 @@ public class MainActivity extends AppCompatActivity implements CLFragment.Listen
             }
         }
         super.onBackPressed();
-        onMenuChanged(null);
+        invalidateOptionsMenu();
     }
 }

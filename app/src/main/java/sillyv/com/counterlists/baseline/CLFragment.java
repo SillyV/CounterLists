@@ -1,10 +1,10 @@
-package sillyv.com.counterlists;
+package sillyv.com.counterlists.baseline;
 
 
 import android.content.Context;
 import android.support.v4.app.Fragment;
 
-import org.greenrobot.eventbus.EventBus;
+import java.util.List;
 
 /**
  * Created by Vasili on 2/18/2017.
@@ -24,6 +24,14 @@ public abstract class CLFragment
         }
     }
 
+    @Override public void onStop() {
+        for (BasePresenter basePresenter : getPresenters()) {
+            basePresenter.unsubscribe();
+        }
+        super.onStop();
+    }
+
+    protected abstract List<BasePresenter> getPresenters();
 
 
     @Override public void onDetach() {

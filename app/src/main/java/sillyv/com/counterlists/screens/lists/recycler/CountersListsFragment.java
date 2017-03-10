@@ -14,13 +14,15 @@ import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import sillyv.com.counterlists.CLFragment;
+import sillyv.com.counterlists.baseline.BasePresenter;
+import sillyv.com.counterlists.baseline.CLFragment;
 import sillyv.com.counterlists.R;
 import sillyv.com.counterlists.database.controllers.ListController;
 import sillyv.com.counterlists.events.AddFragmentEvent;
@@ -60,10 +62,6 @@ public class CountersListsFragment
         return view;
     }
 
-    @Override public void onStop() {
-        presenter.unsubscribe();
-        super.onStop();
-    }
 
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
@@ -71,7 +69,7 @@ public class CountersListsFragment
         MenuItem delete = menu.findItem(R.id.delete);
         MenuItem edit = menu.findItem(R.id.edit);
         if (adapter != null) {
-            delete.setVisible(adapter.isDeleteMode());
+            delete.setVisible(adapter.isSelectionMode());
             edit.setVisible(adapter.selectedCount() == 1);
         }
     }
@@ -88,15 +86,14 @@ public class CountersListsFragment
             case R.id.edit:
                 openSelectedFragmentForEditing();
                 return true;
+            case R.id.restart:
+                resetItems();
+                return true;
         }
 
         return false;
         //        return super.onOptionsItemSelected(item);
 
-
-    }
-
-    @Override public void onDeleteItemsSuccess() {
 
     }
 
@@ -122,6 +119,41 @@ public class CountersListsFragment
         }
     }
 
+    private void resetItems() {
+
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle(getResetMessage());
+        builder.setMessage(R.string.consider);
+        builder.setPositiveButton(android.R.string.yes, (dialog, id) -> {
+            if (adapter.isSelectionMode()) {
+                presenter.resetItems(adapter.getSelectedItems());
+            } else {
+                presenter.resetItems(adapter.getAllIDs());
+            }
+            setTitle();
+            invalidateOptionsMenu();
+            dialog.dismiss();
+        });
+        builder.setNegativeButton(android.R.string.cancel, (dialog, id) -> dialog.dismiss());
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
+
+
+    }
+
+    private String getResetMessage() {
+        String startOfString = getString(R.string.are_you_sure_you_want_to_reset) + " ";
+        if (adapter.selectedCount() == 1) {
+            return startOfString + getString(R.string.the_list) + adapter.getFirstSelectedList() + "'";
+        } else if (!adapter.isSelectionMode()) {
+            return startOfString + getString(R.string.all_lists);
+        } else {
+            return startOfString + adapter.selectedCount() + " " + getString(R.string.lists);
+        }
+    }
+
     private String getDeleteMessage() {
         String startOfString = getString(R.string.are_you_sure_you_want_to_delete) + " ";
         if (adapter.selectedCount() == 1) {
@@ -131,12 +163,16 @@ public class CountersListsFragment
         }
     }
 
-    @Override public void setTitle() {
-        if (adapter.isDeleteMode()) {
-            setTitle(adapter.selectedCount() + " List selected");
-        } else {
-            setTitle("Counter Lists");
-        }
+    @Override public void onDeleteItemsSuccess() {
+
+    }
+
+    @Override public void onResetItemsSuccess() {
+
+    }
+
+    @Override public void onResetItemError() {
+
     }
 
     @Override public void onDataReceived(CounterListsModel model) {
@@ -154,11 +190,15 @@ public class CountersListsFragment
 
     }
 
-    @Override public void onSaveDataErrorResponse() {
-
+    @Override protected List<BasePresenter> getPresenters() {
+        return Collections.singletonList(presenter);
     }
 
-    @Override public void onSaveDataSuccess() {
-
+    @Override public void setTitle() {
+        if (adapter.isSelectionMode()) {
+            setTitle(adapter.selectedCount() + " List selected");
+        } else {
+            setTitle("Counter Lists");
+        }
     }
 }

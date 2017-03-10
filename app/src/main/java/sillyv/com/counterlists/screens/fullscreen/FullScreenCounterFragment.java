@@ -1,21 +1,24 @@
 package sillyv.com.counterlists.screens.fullscreen;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.Collections;
+import java.util.List;
+
 import sillyv.com.counterlists.R;
-public class FullScreenCounterFragment extends Fragment {
+import sillyv.com.counterlists.baseline.BasePresenter;
+import sillyv.com.counterlists.baseline.CLFragment;
+
+public class FullScreenCounterFragment extends CLFragment {
 
     public FullScreenCounterFragment() {
         // Required empty public constructor
     }
 
-    public static FullScreenCounterFragment newInstance(String param1, String param2) {
+    public static FullScreenCounterFragment newInstance(long id) {
         FullScreenCounterFragment fragment = new FullScreenCounterFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
@@ -36,4 +39,11 @@ public class FullScreenCounterFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_full_screen_counter, container, false);
     }
 
+    @Override protected List<BasePresenter> getPresenters() {
+        return Collections.emptyList();
+    }
+
+    @Override public void setTitle() {
+
+    }
 }

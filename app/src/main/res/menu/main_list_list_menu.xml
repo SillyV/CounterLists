@@ -16,6 +16,13 @@
         android:title="@string/delete"
         app:showAsAction="always"/>
 
+
+    <item
+        android:id="@+id/restart"
+        android:icon="@drawable/ic_restart_white_48dp"
+        android:title="@string/restart"
+        app:showAsAction="always"/>
+
     <item
         android:id="@+id/settings"
         android:icon="@drawable/ic_settings"

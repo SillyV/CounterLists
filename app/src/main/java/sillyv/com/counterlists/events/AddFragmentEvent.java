@@ -1,6 +1,6 @@
 package sillyv.com.counterlists.events;
 
-import sillyv.com.counterlists.CLFragment;
+import sillyv.com.counterlists.baseline.CLFragment;
 
 /**
  * Created by Vasili on 1/28/2017.

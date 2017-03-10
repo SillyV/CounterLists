@@ -50,7 +50,6 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile 'com.android.support.constraint:constraint-layout:1.0.1'
     compile 'com.github.BeppiMenozzi:TriStateToggleButton:1.1.4'
     compile 'com.android.support:recyclerview-v7:25.2.0'
     compile 'com.android.support:gridlayout-v7:25.2.0'
@@ -79,4 +78,5 @@ dependencies {
     testCompile 'junit:junit:4.12'
 
     apt 'com.jakewharton:butterknife-compiler:8.4.0'
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
 }

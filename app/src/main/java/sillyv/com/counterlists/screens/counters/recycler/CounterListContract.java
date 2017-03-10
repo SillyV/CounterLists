@@ -21,5 +21,15 @@ public interface CounterListContract {
     interface CounterListView<D>extends BaseListView<D> {
 
         void onSaveInteractionSuccess();
+
+        void onSaveInteractionError();
+
+        void onSaveInteractionFailure();
+
+        void onDeleteItemsErrorResponse();
+
+        void onSaveDataErrorResponse();
+
+        void onSaveDataSuccess();
     }
 }

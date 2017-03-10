@@ -4,6 +4,7 @@ package sillyv.com.counterlists.screens.lists.recycler;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.Completable;
 import io.reactivex.Scheduler;
 import io.reactivex.functions.Function;
 import io.reactivex.observers.DisposableCompletableObserver;
@@ -34,6 +35,25 @@ class CounterListsPresenter
         this.repo = repo;
     }
 
+    public void resetItems(List<Long> idList) {
+        List<Completable> items = new ArrayList<>();
+        for (Long aLong : idList) {
+            items.add(repo.resetItems(aLong));
+        }
+        compositeDisposable.add(Completable.merge(items)
+                .subscribeOn(Schedulers.io())
+                .observeOn(mainScheduler)
+                .subscribeWith(new DisposableCompletableObserver() {
+                    @Override public void onComplete() {
+                        view.onResetItemsSuccess();
+                    }
+
+                    @Override public void onError(Throwable e) {
+                        view.onResetItemError();
+                    }
+                }));
+    }
+
     public void getData() {
         compositeDisposable.add(repo.getItems().subscribeOn(Schedulers.io()).map(dbItemToViewItem()).observeOn(mainScheduler).
                 subscribeWith(new DisposableSingleObserver<CounterListsModel>() {
@@ -56,6 +76,7 @@ class CounterListsPresenter
                 .observeOn(mainScheduler)
                 .subscribeWith(new DisposableCompletableObserver() {
                     @Override public void onComplete() {
+                        view.onDeleteItemsSuccess();
                         getData();
                     }
 
@@ -65,6 +86,7 @@ class CounterListsPresenter
                     }
                 }));
     }
+
 
     private Function<List<ListModel>, CounterListsModel> dbItemToViewItem() {
         return listModels -> {

@@ -105,6 +105,7 @@ public class ListController
         return Completable.fromAction(() -> Realm.getDefaultInstance().executeTransaction(realm1 -> {
             RealmResults<CounterList> result = realm1.where(CounterList.class).equalTo("id", aLong).findAll();
             result.deleteAllFromRealm();
+            realm1.close();
         }));
     }
 
@@ -116,6 +117,7 @@ public class ListController
             for (CounterList counterList : list) {
                 result.add(new ListModel(counterList));
             }
+            realm.close();
             return result;
         });
     }
@@ -167,10 +169,32 @@ public class ListController
                 RealmResults<CounterList> result = realm1.where(CounterList.class).equalTo("id", aLong).findAll();
                 result.deleteAllFromRealm();
             }
+            realm1.close();
         }));
-
     }
 
+
+    @Override public Completable resetItems(Long id) {
+        return Completable.fromAction(() -> {
+            Realm realm = Realm.getDefaultInstance();
+            realm.executeTransaction(realm1 -> {
+                CounterList list = realm1.where(CounterList.class).equalTo("id", id).findFirst();
+                for (Counter counter : list.getCounters()) {
+                    counter.setValue(counter.getDefaultValue());
+                }
+                realm1.copyToRealmOrUpdate(list);
+            });
+            realm.close();
+        });
+    }
+
+    @Override public Completable updateItemVibration(long id, boolean value) {
+        return null;
+    }
+
+    @Override public Completable updateItemVolume(long id, boolean value) {
+        return null;
+    }
 
     //find all objects in the Book.class
     private RealmResults<CounterList> getCounterLists() {

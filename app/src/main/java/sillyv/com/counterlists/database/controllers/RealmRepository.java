@@ -31,4 +31,9 @@ public interface RealmRepository<P, C> {
     Completable updateItemValue(Long id, Integer value);
 
     Completable deleteItems(List<Long> idList);
+
+    Completable resetItems(Long idList);
+
+    Completable updateItemVibration(long id, boolean value);
+    Completable updateItemVolume(long id, boolean value);
 }

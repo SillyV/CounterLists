@@ -1,5 +1,7 @@
 package sillyv.com.counterlists.screens.counters.recycler;
 
+import android.graphics.Color;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,6 +67,7 @@ public class CounterListModel
 
         private int backgroundColor;
         private int foregroundColor;
+        private boolean selected;
 
 
         public CounterModel() {
@@ -216,6 +219,22 @@ public class CounterListModel
 
         public void setForegroundColor(int foregroundColor) {
             this.foregroundColor = foregroundColor;
+        }
+
+        public void setSelected(boolean selected) {
+            this.selected = selected;
+            if (selected) {
+                backgroundColor = Color.BLACK;
+                foregroundColor = Color.WHITE;
+            } else {
+                backgroundColor = Color.WHITE;
+                foregroundColor = Color.BLACK;
+            }
+        }
+
+        public boolean isSelected() {
+            return selected;
+
         }
 
         public static final class Builder {

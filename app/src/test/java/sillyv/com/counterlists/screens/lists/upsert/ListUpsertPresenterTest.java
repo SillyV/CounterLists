@@ -18,7 +18,6 @@ import io.reactivex.Single;
 import io.reactivex.plugins.RxJavaPlugins;
 import io.reactivex.schedulers.Schedulers;
 import sillyv.com.counterlists.R;
-import sillyv.com.counterlists.baseline.BaseView;
 import sillyv.com.counterlists.database.controllers.ListController;
 import sillyv.com.counterlists.database.controllers.RealmRepository;
 import sillyv.com.counterlists.database.models.CounterModel;
@@ -35,6 +34,7 @@ import static org.mockito.Mockito.when;
 
 /**
  * Created by Vasili.Fedotov on 2/19/2017.
+ *
  */
 @RunWith(MockitoJUnitRunner.class) public class ListUpsertPresenterTest
         extends ParentTest {
@@ -44,7 +44,7 @@ import static org.mockito.Mockito.when;
     @Rule public MockitoRule rule = MockitoJUnit.rule();
     @Mock Context mMockContext;
     @Mock RealmRepository<ListModel, CounterModel> repo;
-    @Mock BaseView<UpsertCounterListModel.CounterListSettings> view;
+    @Mock UpsertCounterListContract.UpsertCounterListView<UpsertCounterListModel.CounterListSettings> view;
     private UpsertCounterListContract.UpsertCounterListPresenter presenter;
     private UpsertCounterListModel.CounterListSettings MODEL_TO_SAVE = getModel();
 

@@ -10,9 +10,5 @@ public interface BaseView<D> {
 
     void onGetDataErrorResponse();
 
-    void onDeleteItemsErrorResponse();
 
-    void onSaveDataErrorResponse();
-
-    void onSaveDataSuccess();
 }

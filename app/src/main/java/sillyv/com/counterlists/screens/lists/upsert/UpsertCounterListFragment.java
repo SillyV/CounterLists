@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -17,6 +18,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import sillyv.com.counterlists.R;
+import sillyv.com.counterlists.baseline.BasePresenter;
 import sillyv.com.counterlists.database.controllers.ListController;
 import sillyv.com.counterlists.screens.Contracts;
 import sillyv.com.counterlists.screens.UpsertFragment;
@@ -74,9 +76,7 @@ public class UpsertCounterListFragment
 
     }
 
-    @Override public UpsertCounterListContract.UpsertCounterListPresenter getPresenter() {
-        return presenter;
-    }
+
 
 
     //usage
@@ -138,16 +138,16 @@ public class UpsertCounterListFragment
 
     }
 
-    @Override public void onDeleteItemsErrorResponse() {
-
-    }
-
     @Override public void onSaveDataErrorResponse() {
 
     }
 
     @Override public void onSaveDataSuccess() {
+        popBackStack();
+    }
 
+    @Override protected List<BasePresenter> getPresenters() {
+        return Collections.singletonList((BasePresenter) presenter);
     }
 
     @Override public void setTitle() {

@@ -29,7 +29,6 @@ import sillyv.com.counterlists.screens.counters.recycler.CounterListFragment;
 
 /**
  * Created by Vasili.Fedotov on 1/28/2017.
- *
  */
 class CounterListsAdapter
         extends RecyclerView.Adapter<CounterListsAdapter.ListHolder> {
@@ -38,7 +37,7 @@ class CounterListsAdapter
     private final List<CounterListsModel.ListItem> selectionItems;
     private List<CounterListsModel.ListItem> currentList;
 
-    private boolean deleteMode = false;
+    private boolean selectionMode = false;
     private DisplayMetrics metrics;
 
     CounterListsAdapter(Context context, List<CounterListsModel.ListItem> counterLists) {
@@ -70,8 +69,28 @@ class CounterListsAdapter
         return currentList.size();
     }
 
-    boolean isDeleteMode() {
-        return deleteMode;
+    public List<Long> getAllIDs() {
+        List<Long> model = new ArrayList<>();
+        for (CounterListsModel.ListItem selectionItem : currentList) {
+
+            model.add(selectionItem.getId());
+
+        }
+        return model;
+    }
+
+    public int selectedCount() {
+        int i = 0;
+        for (CounterListsModel.ListItem selectionItem : selectionItems) {
+            if (selectionItem.isSelected()) {
+                i++;
+            }
+        }
+        return i;
+    }
+
+    boolean isSelectionMode() {
+        return selectionMode;
     }
 
     String getFirstSelectedList() {
@@ -91,16 +110,6 @@ class CounterListsAdapter
             }
         }
         return model;
-    }
-
-    int selectedCount() {
-        int i = 0;
-        for (CounterListsModel.ListItem selectionItem : selectionItems) {
-            if (selectionItem.isSelected()) {
-                i++;
-            }
-        }
-        return i;
     }
 
     class ListHolder
@@ -163,7 +172,7 @@ class CounterListsAdapter
 
 
         @OnClick(R.id.card_view) void onClick() {
-            if (deleteMode) {
+            if (selectionMode) {
                 setItemSelectedOrNot();
                 return;
             }
@@ -175,7 +184,7 @@ class CounterListsAdapter
             CounterListsModel.ListItem me = selectionItems.get(getAdapterPosition());
             me.setSelected(!me.isSelected());
             if (!me.isSelected() && selectedCount() == 0) {
-                deleteMode = false;
+                selectionMode = false;
                 currentList = regularItems;
             }
             EventBus.getDefault().post(new MenuChangedEvent());
@@ -185,7 +194,7 @@ class CounterListsAdapter
 
         @SuppressWarnings("SameReturnValue") @OnLongClick(R.id.card_view) boolean onLongClick() {
             currentList = selectionItems;
-            deleteMode = true;
+            selectionMode = true;
             setItemSelectedOrNot();
             return true;
         }

@@ -19,7 +19,6 @@ import io.reactivex.Single;
 import io.reactivex.plugins.RxJavaPlugins;
 import io.reactivex.schedulers.Schedulers;
 import sillyv.com.counterlists.R;
-import sillyv.com.counterlists.baseline.BaseView;
 import sillyv.com.counterlists.database.controllers.RealmRepository;
 import sillyv.com.counterlists.database.models.CounterModel;
 import sillyv.com.counterlists.database.models.ListModel;
@@ -48,7 +47,7 @@ public class CounterUpsertPresenterTest
     @Rule public MockitoRule rule = MockitoJUnit.rule();
     @Mock RealmRepository<CounterModel, Object> repo;
     @Mock RealmRepository<ListModel, CounterModel> parentRepo;
-    @Mock BaseView<UpsertCounterModel.CounterModel> view;
+    @Mock UpsertCounterContract.UpsertCounterView<UpsertCounterModel.CounterModel> view;
     @Mock Context context;
     private UpsertCounterPresenter presenter;
 

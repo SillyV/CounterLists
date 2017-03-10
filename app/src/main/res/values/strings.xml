@@ -28,7 +28,9 @@
     <string name="keep_awake_on_this_counter">Keep Awake on this counter</string>
     <string name="use_volume_key_to_count">Use volume key to count</string>
     <string name="are_you_sure_you_want_to_delete">Are you sure you want to delete</string>
+    <string name="are_you_sure_you_want_to_reset">Are you sure you want to reset</string>
     <string name="the_list">the list \'</string>
+    <string name="the_counter">the counter \'</string>
     <string name="lists"> lists?</string>
     <string name="consider">consider backing up your data in the settings menu before choosing this irrevocable action.</string>
     <string name="edit_list">Edit list</string>
@@ -53,4 +55,8 @@
     <string name="delete">Delete</string>
     <string name="settings">Settings</string>
     <string name="about">About</string>
+    <string name="counters">counters?</string>
+    <string name="restart">Restart</string>
+    <string name="all_lists">all lists?</string>
+    <string name="all_counters">all counters?</string>
 </resources>
