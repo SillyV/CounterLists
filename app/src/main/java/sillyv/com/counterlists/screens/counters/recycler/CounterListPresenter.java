@@ -18,6 +18,7 @@ import sillyv.com.counterlists.database.models.ListModel;
 
 /**
  * Created by Vasili.Fedotov on 2/19/2017.
+ *
  */
 
 public class CounterListPresenter
@@ -73,13 +74,13 @@ public class CounterListPresenter
     }
 
     private Function<ListModel, CounterListModel> dbItemToViewItem() {
-        return listModel -> { return new CounterListModel(listModel.getName(),
+        return listModel -> new CounterListModel(listModel.getName(),
                 listModel.getItemStrings(),
                 listModel.getBackground(),
                 listModel.getDefaultCardBackgroundColor(),
                 listModel.getDefaultCardForegroundColor(),
                 listModel.getId(),
-                listModel);};
+                listModel);
     }
 
     public void resetItems(List<Long> id_list, Long parentID) {

@@ -4,6 +4,7 @@ import sillyv.com.counterlists.baseline.BaseView;
 
 /**
  * Created by Vasili.Fedotov on 2/24/2017.
+ *
  */
 
 public interface Contracts {

@@ -1,7 +1,5 @@
 package sillyv.com.counterlists.tools;
 
-import com.facebook.stetho.common.StringUtil;
-
 import java.text.NumberFormat;
 import java.text.ParseException;
 

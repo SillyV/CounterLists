@@ -4,29 +4,24 @@ import sillyv.com.counterlists.screens.Contracts;
 import sillyv.com.counterlists.screens.UpsertModel;
 
 /**
- * Created by Vasili on 2/18/2017.
+ * Created by Vasili.Fedotov on 2/18/2017.
+ *
  */
 
 public abstract class UpsertCounterListModel {
 
-    public static class CounterListSettings
+    @SuppressWarnings("SameParameterValue") public static class CounterListSettings
             extends UpsertModel
             implements Contracts.UpsertContract.UpsertModel {
         private String defaultIncrement;
         private String defaultDecrement;
         private int defaultColorCounterBackground;
         private int defaultColorCounterText;
-        public CounterListSettings(String defaultIncrement,
-                                   String defaultDecrement,
-                                   int defaultColorCounterBackground,
-                                   int defaultColorCounterText) {
+        CounterListSettings(String defaultIncrement, String defaultDecrement, int defaultColorCounterBackground, int defaultColorCounterText) {
             this.defaultIncrement = defaultIncrement;
             this.defaultDecrement = defaultDecrement;
             this.defaultColorCounterBackground = defaultColorCounterBackground;
             this.defaultColorCounterText = defaultColorCounterText;
-        }
-
-        public CounterListSettings() {
         }
 
         public CounterListSettings(String name,
@@ -88,35 +83,35 @@ public abstract class UpsertCounterListModel {
             setDefaultColorCounterText(builder.defaultColorCounterText);
         }
 
-        public String getDefaultIncrement() {
+        String getDefaultIncrement() {
             return defaultIncrement;
         }
 
-        public void setDefaultIncrement(String defaultIncrement) {
+        void setDefaultIncrement(String defaultIncrement) {
             this.defaultIncrement = defaultIncrement;
         }
 
-        public String getDefaultDecrement() {
+        String getDefaultDecrement() {
             return defaultDecrement;
         }
 
-        public void setDefaultDecrement(String defaultDecrement) {
+        void setDefaultDecrement(String defaultDecrement) {
             this.defaultDecrement = defaultDecrement;
         }
 
-        public int getDefaultColorCounterBackground() {
+        int getDefaultColorCounterBackground() {
             return defaultColorCounterBackground;
         }
 
-        public void setDefaultColorCounterBackground(int defaultColorCounterBackground) {
+        void setDefaultColorCounterBackground(int defaultColorCounterBackground) {
             this.defaultColorCounterBackground = defaultColorCounterBackground;
         }
 
-        public int getDefaultColorCounterText() {
+        int getDefaultColorCounterText() {
             return defaultColorCounterText;
         }
 
-        public void setDefaultColorCounterText(int defaultColorCounterText) {
+        void setDefaultColorCounterText(int defaultColorCounterText) {
             this.defaultColorCounterText = defaultColorCounterText;
         }
 
@@ -144,92 +139,95 @@ public abstract class UpsertCounterListModel {
 
             public Builder() {}
 
-            public Builder withName(String name) {
+            Builder withName(String name) {
                 this.name = name;
                 return this;
             }
 
-            public Builder withNote(String note) {
+            Builder withNote(String note) {
                 this.note = note;
                 return this;
             }
 
-            public Builder withDefaultValue(String defaultValue) {
+            Builder withDefaultValue(String defaultValue) {
                 this.defaultValue = defaultValue;
                 return this;
             }
 
-            public Builder withBackgroundColor(int backgroundColor) {
+            Builder withBackgroundColor(int backgroundColor) {
                 this.backgroundColor = backgroundColor;
                 return this;
             }
 
-            public Builder withClickSound(int clickSound) {
+
+            Builder withClickSound(int clickSound) {
                 this.clickSound = clickSound;
                 return this;
             }
 
-            public Builder withVibrate(int vibrate) {
+            Builder withVibrate(int vibrate) {
                 this.vibrate = vibrate;
                 return this;
             }
 
-            public Builder withSpeakValue(int speakValue) {
+            Builder withSpeakValue(int speakValue) {
                 this.speakValue = speakValue;
                 return this;
             }
 
-            public Builder withSpeakName(int speakName) {
+
+            Builder withSpeakName(int speakName) {
                 this.speakName = speakName;
                 return this;
             }
 
-            public Builder withKeepAwake(int keepAwake) {
+
+            Builder withKeepAwake(int keepAwake) {
                 this.keepAwake = keepAwake;
                 return this;
             }
 
-            public Builder withUseVolume(int useVolume) {
+            Builder withUseVolume(int useVolume) {
                 this.useVolume = useVolume;
                 return this;
             }
 
-            public Builder withDateCreated(String dateCreated) {
+            Builder withDateCreated(String dateCreated) {
                 this.dateCreated = dateCreated;
                 return this;
             }
 
-            public Builder withDateModified(String dateModified) {
+            Builder withDateModified(String dateModified) {
                 this.dateModified = dateModified;
                 return this;
             }
 
-            public Builder withLastUsed(String lastUsed) {
+            Builder withLastUsed(String lastUsed) {
                 this.lastUsed = lastUsed;
                 return this;
             }
 
-            public Builder withToolbarTitle(String toolbarTitle) {
+            Builder withToolbarTitle(String toolbarTitle) {
                 this.toolbarTitle = toolbarTitle;
                 return this;
             }
 
-            public Builder withDefaultIncrement(String val) {
+            Builder withDefaultIncrement(String val) {
                 defaultIncrement = val;
                 return this;
             }
 
-            public Builder withDefaultDecrement(String val) {
+            Builder withDefaultDecrement(String val) {
                 defaultDecrement = val;
                 return this;
             }
 
-            public Builder withDefaultColorCounterBackground(int val) {
+            Builder withDefaultColorCounterBackground(int val) {
                 defaultColorCounterBackground = val;
                 return this;
             }
 
-            public Builder withDefaultColorCounterText(int val) {
+            Builder withDefaultColorCounterText(int val) {
                 defaultColorCounterText = val;
                 return this;
             }

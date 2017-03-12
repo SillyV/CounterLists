@@ -3,6 +3,8 @@ package sillyv.com.counterlists.screens.counters.upsert;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
+import android.support.v4.content.ContextCompat;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +19,7 @@ import butterknife.BindViews;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import it.beppi.tristatetogglebutton_library.TriStateToggleButton;
 import sillyv.com.counterlists.R;
 import sillyv.com.counterlists.baseline.BasePresenter;
 import sillyv.com.counterlists.database.controllers.CounterController;
@@ -101,6 +104,10 @@ public class UpsertCounterFragment
         return view;
     }
 
+    @Override public boolean volumePressed(int keyCode, KeyEvent event) {
+return false;
+    }
+
     @Override protected List<BasePresenter> getPresenters() {
         return Collections.singletonList((BasePresenter) presenter);
     }
@@ -135,6 +142,13 @@ public class UpsertCounterFragment
         toolbarTitle = model.getToolbarTitle();
         setTitle(toolbarTitle);
         this.colorButtonMap = colorButtonMap;
+        fixButtons();
+    }
+
+    private void fixButtons() {
+        if (switchClickSound.getToggleStatus() == TriStateToggleButton.ToggleStatus.mid) {
+            switchClickSound.setBackgroundColor(ContextCompat.getColor(getContext(),R.color.colorPrimaryDark));
+        }
     }
 
     @Override public void onGetDataErrorResponse() {

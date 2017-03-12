@@ -35,6 +35,7 @@ import static org.mockito.Mockito.when;
 
 /**
  * Created by Vasili.Fedotov on 2/19/2017.
+ *
  */
 @RunWith(MockitoJUnitRunner.class) public class ListRecyclerPresenterTest
         extends ParentTest {
@@ -139,12 +140,12 @@ import static org.mockito.Mockito.when;
 
         ArgumentCaptor<CounterListsModel> argument = ArgumentCaptor.forClass(CounterListsModel.class);
         verify(view).onDataReceived(argument.capture());
-        List<String> abcdList = new ArrayList<>();
-        abcdList.add("AAA");
-        abcdList.add("BBB");
-        abcdList.add("CCC");
-        abcdList.add("DDD");
-        assertEquals(argument.getValue().getItems().get(0).getSubtitle(), abcdList);
+        List<String> alphabetList = new ArrayList<>();
+        alphabetList.add("AAA");
+        alphabetList.add("BBB");
+        alphabetList.add("CCC");
+        alphabetList.add("DDD");
+        assertEquals(argument.getValue().getItems().get(0).getSubtitle(), alphabetList);
 
     }
 

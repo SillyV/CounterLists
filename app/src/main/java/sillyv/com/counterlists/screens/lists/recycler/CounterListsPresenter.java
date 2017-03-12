@@ -18,6 +18,7 @@ import sillyv.com.counterlists.database.models.ListModel;
 
 /**
  * Created by Vasili.Fedotov on 2/18/2017.
+ *
  */
 
 class CounterListsPresenter

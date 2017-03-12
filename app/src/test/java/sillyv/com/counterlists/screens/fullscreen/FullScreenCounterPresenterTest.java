@@ -24,6 +24,7 @@ import static org.mockito.Mockito.when;
 
 /**
  * Created by Vasili.Fedotov on 3/10/2017.
+ *
  */
 public class FullScreenCounterPresenterTest
         extends ParentTest {
@@ -82,7 +83,7 @@ public class FullScreenCounterPresenterTest
     }
 
     @Test public void toggleVibration() throws Exception {
-        when(repo.updateItemVibration(COUNTER_ID, true)).thenReturn(Completable.complete());
+        when(repo.updateItemVibration()).thenReturn(Completable.complete());
 
         presenter.setVibration(COUNTER_ID, true);
 
@@ -90,7 +91,7 @@ public class FullScreenCounterPresenterTest
     }
 
     @Test public void toggleVibration_errorFromRepo() throws Exception {
-        when(repo.updateItemVibration(COUNTER_ID, true)).thenReturn(Completable.error(new RuntimeException("test")));
+        when(repo.updateItemVibration()).thenReturn(Completable.error(new RuntimeException("test")));
 
         presenter.setVibration(COUNTER_ID, true);
 

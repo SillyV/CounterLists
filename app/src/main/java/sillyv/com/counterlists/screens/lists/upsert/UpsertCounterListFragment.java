@@ -3,6 +3,7 @@ package sillyv.com.counterlists.screens.lists.upsert;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -144,6 +145,10 @@ public class UpsertCounterListFragment
 
     @Override public void onSaveDataSuccess() {
         popBackStack();
+    }
+
+    @Override public boolean volumePressed(int keyCode, KeyEvent event) {
+        return false;
     }
 
     @Override protected List<BasePresenter> getPresenters() {

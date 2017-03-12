@@ -1,21 +1,18 @@
 package sillyv.com.counterlists;
 
 import android.app.Application;
-import android.graphics.Color;
 
 import com.facebook.stetho.Stetho;
 import com.uphyca.stetho_realm.RealmInspectorModulesProvider;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
-import sillyv.com.counterlists.database.controllers.ListController;
-import sillyv.com.counterlists.database.models.ListModel;
 
 /**
  * Created by Vasili on 1/28/2017.
  *
  */
-public class CLApplication extends Application {
+class CLApplication extends Application {
 
     @Override
     public void onCreate() {

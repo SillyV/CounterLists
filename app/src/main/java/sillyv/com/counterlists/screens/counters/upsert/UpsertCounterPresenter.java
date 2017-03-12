@@ -24,6 +24,7 @@ import static android.content.ContentValues.TAG;
 
 /**
  * Created by Vasili.Fedotov on 2/19/2017.
+ *
  */
 
 public class UpsertCounterPresenter
@@ -116,7 +117,7 @@ public class UpsertCounterPresenter
         if (selectedCounterModel == null) { return null; }
 
         return new UpsertCounterModel.CounterModel.Builder().withDefaultValue(String.valueOf(selectedCounterModel.getDefaultValue()))
-                .withValue(String.valueOf(selectedCounterModel.getDefaultValue()))
+                .withValue(String.valueOf(selectedCounterModel.getValue()))
                 .withIncrement(String.valueOf(selectedCounterModel.getIncrement()))
                 .withDecrement(String.valueOf(selectedCounterModel.getDecrement()))
                 .withBackgroundColor(selectedCounterModel.getBackground())

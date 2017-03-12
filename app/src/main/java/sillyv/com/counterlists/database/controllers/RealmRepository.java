@@ -23,8 +23,6 @@ public interface RealmRepository<P, C> {
 
     Single<List<P>> getItems() throws RuntimeException;
 
-    Single<List<P>> getItems(long id) throws RuntimeException;
-
 
     Completable insertNewChildItem(Long parentId, C model);
 
@@ -34,6 +32,6 @@ public interface RealmRepository<P, C> {
 
     Completable resetItems(Long idList);
 
-    Completable updateItemVibration(long id, boolean value);
+    Completable updateItemVibration();
     Completable updateItemVolume(long id, boolean value);
 }

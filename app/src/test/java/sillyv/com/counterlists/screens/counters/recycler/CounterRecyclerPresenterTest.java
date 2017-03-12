@@ -32,6 +32,7 @@ import static org.mockito.Mockito.when;
 
 /**
  * Created by Vasili.Fedotov on 2/21/2017.
+ *
  */
 public class CounterRecyclerPresenterTest
         extends ParentTest {

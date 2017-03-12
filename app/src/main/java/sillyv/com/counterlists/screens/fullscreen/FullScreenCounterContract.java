@@ -18,14 +18,6 @@ public interface FullScreenCounterContract {
 
         void onSaveInteractionError();
 
-        void onVibrateChangedSuccess();
-
-        void onVibrateChangeError();
-
-        void onVolumeChangedSuccess();
-
-        void onVolumeChangeError();
-
         void onResetSuccess();
 
         void onResetError();

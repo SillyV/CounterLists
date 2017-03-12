@@ -9,7 +9,7 @@ import sillyv.com.counterlists.screens.UpsertModel;
 
 public abstract class UpsertCounterModel {
 
-     static class CounterModel extends UpsertModel
+     @SuppressWarnings("SameParameterValue") static class CounterModel extends UpsertModel
     {
         private String value;
         private String increment;

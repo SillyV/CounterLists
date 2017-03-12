@@ -5,7 +5,8 @@ import java.util.Date;
 import sillyv.com.counterlists.database.dbitems.Counter;
 
 /**
- * Created by Vasili on 2/18/2017.
+ * Created by Vasili.Fedotov on 2/18/2017.
+ *
  */
 
 public class CounterModel {

@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -188,6 +189,10 @@ public class CountersListsFragment
 
     @Override public void onDeleteItemsErrorResponse() {
 
+    }
+
+    @Override public boolean volumePressed(int keyCode, KeyEvent event) {
+        return false;
     }
 
     @Override protected List<BasePresenter> getPresenters() {

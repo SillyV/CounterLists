@@ -14,7 +14,8 @@ import sillyv.com.counterlists.database.dbitems.Counter;
 import sillyv.com.counterlists.database.models.CounterModel;
 
 /**
- * Created by Vasili on 1/28/2017.
+ * Created by Vasili.Fedotov on 1/28/2017.
+ *
  */
 
 public class CounterController
@@ -101,10 +102,6 @@ public class CounterController
         return null;
     }
 
-    @Override public Single<List<CounterModel>> getItems(long id) throws RuntimeException {
-        return null;
-    }
-
     @Override public Completable insertNewChildItem(Long parentId, Object model) {
         return Completable.fromAction(() -> {});
     }
@@ -147,7 +144,7 @@ public class CounterController
         });
     }
 
-    @Override public Completable updateItemVibration(long id, boolean value) {
+    @Override public Completable updateItemVibration() {
         return null;
     }
 

@@ -34,6 +34,7 @@ import static org.mockito.Mockito.when;
 
 /**
  * Created by Vasili.Fedotov on 2/24/2017.
+ *
  */
 public class CounterUpsertPresenterTest
         extends ParentTest {

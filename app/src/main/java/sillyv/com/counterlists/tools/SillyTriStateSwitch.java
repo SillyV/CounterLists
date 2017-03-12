@@ -7,6 +7,7 @@ import it.beppi.tristatetogglebutton_library.TriStateToggleButton;
 
 /**
  * Created by Vasili.Fedotov on 2/22/2017.
+ *
  */
 
 public class SillyTriStateSwitch extends TriStateToggleButton {

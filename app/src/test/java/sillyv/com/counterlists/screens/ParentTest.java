@@ -15,39 +15,40 @@ import sillyv.com.counterlists.screens.lists.upsert.UpsertCounterListModel;
 
 /**
  * Created by Vasili.Fedotov on 2/24/2017.
+ *
  */
 
 public abstract class ParentTest {
 
 
-    public static final int LIST_ID = 2;
-    public static final int LIST_DEFAULT_VALUE = 3;
-    public static final int LIST_DEFAULT_INCREMENT = 5;
-    public static final int LIST_DEFAULT_DECREMENT = 7;
-    public static final int LIST_BACKGROUND = 11;
-    public static final int LIST_DEFAULT_CARD_BACKGROUND_COLOR = 13;
-    public static final int LIST_DEFAULT_CARD_FOREGROUND_COLOR = 17;
-    public static final int LIST_CLICK_SOUND = 0;
-    public static final int LIST_VIBRATE = 1;
-    public static final int LIST_SPEECH_OUTPUT_VALUE = 2;
-    public static final int LIST_SPEECH_OUTPUT_NAME = 0;
-    public static final int LIST_KEEP_AWAKE = 1;
-    public static final int LIST_VOLUME_KEY = 2;
-    public static final String NEW_COUNTER_STRING = "New counter";
-    public static final String TEST_NAME = "test name";
-    public static final String TEST_NOTE = "test note";
-    public static final String VALUE = "5";
-    public static final int BACKGROUND_COLOR = 1;
-    public static final int CLICK_SOUND = 2;
-    public static final int VIBRATE = 3;
-    public static final int SPEAK_VALUE = 4;
-    public static final int SPEAK_NAME = 5;
-    public static final int KEEP_AWAKE = 6;
-    public static final int USE_VOLUME = 7;
-    public static final String INCREMENT = "27";
-    public static final String DECREMENT = "19";
-    public static final int FOREGROUND_COLOR = 666;
-    public static final String DEFAULT_VALUE = "905";
+   private static final int LIST_ID = 2;
+   private static final int LIST_DEFAULT_VALUE = 3;
+   private static final int LIST_DEFAULT_INCREMENT = 5;
+   private static final int LIST_DEFAULT_DECREMENT = 7;
+   private static final int LIST_BACKGROUND = 11;
+   private static final int LIST_DEFAULT_CARD_BACKGROUND_COLOR = 13;
+   private static final int LIST_DEFAULT_CARD_FOREGROUND_COLOR = 17;
+   private static final int LIST_CLICK_SOUND = 0;
+   private static final int LIST_VIBRATE = 1;
+   private static final int LIST_SPEECH_OUTPUT_VALUE = 2;
+   private static final int LIST_SPEECH_OUTPUT_NAME = 0;
+   private static final int LIST_KEEP_AWAKE = 1;
+   private static final int LIST_VOLUME_KEY = 2;
+   private static final String NEW_COUNTER_STRING = "New counter";
+   private static final String TEST_NAME = "test name";
+   private static final String TEST_NOTE = "test note";
+   private static final String VALUE = "5";
+   private static final int BACKGROUND_COLOR = 1;
+   private static final int CLICK_SOUND = 2;
+   private static final int VIBRATE = 3;
+   private static final int SPEAK_VALUE = 4;
+   private static final int SPEAK_NAME = 5;
+   private static final int KEEP_AWAKE = 6;
+   private static final int USE_VOLUME = 7;
+   private static final String INCREMENT = "27";
+   private static final String DECREMENT = "19";
+   private static final int FOREGROUND_COLOR = 666;
+   private static final String DEFAULT_VALUE = "905";
     protected static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.UK);
     private static final String LIST_NAME = "Happy Name";
     private static final String LIST_NOTE = "Happy Note";

@@ -59,4 +59,9 @@
     <string name="restart">Restart</string>
     <string name="all_lists">all lists?</string>
     <string name="all_counters">all counters?</string>
+    <string name="selected">Selected</string>
+    <string name="created">Created</string>
+    <string name="last_modified">Last Modified</string>
+    <string name="value_last_changed">Value Last Changed</string>
+    <string name="current_session">Current Session</string>
 </resources>

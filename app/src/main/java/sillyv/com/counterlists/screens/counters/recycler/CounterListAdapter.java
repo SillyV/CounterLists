@@ -26,6 +26,7 @@ import sillyv.com.counterlists.screens.fullscreen.FullScreenCounterFragment;
 
 /**
  * Created by Vasili.Fedotov on 2/19/2017.
+ *
  */
 
 class CounterListAdapter
@@ -154,6 +155,8 @@ class CounterListAdapter
             id = counterModel.getId();
             parentId = counterModel.getParentId();
 
+            plusButton.setSoundEffectsEnabled(counterModel.isClickSound());
+            minusButton.setSoundEffectsEnabled(counterModel.isClickSound());
             plusButton.setOnClickListener(view -> {
                 value += increment;
                 updateValue(getAdapterPosition());
@@ -207,7 +210,7 @@ class CounterListAdapter
                 setItemSelectedOrNot();
                 return;
             }
-            EventBus.getDefault().post(new AddFragmentEvent(FullScreenCounterFragment.newInstance(currentList.get(getAdapterPosition()).getId())));
+            EventBus.getDefault().post(new AddFragmentEvent(FullScreenCounterFragment.newInstance(id,parentId)));
         }
 
 

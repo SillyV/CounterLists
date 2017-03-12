@@ -10,13 +10,13 @@ import sillyv.com.counterlists.screens.lists.recycler.CounterListsModel;
 
 /**
  * Created by Vasili.Fedotov on 2/19/2017.
+ *
  */
 
-public class CounterListModel
+class CounterListModel
         extends CounterListsModel.ListItem {
 
-    private final ListModel listModel;
-    List<CounterModel> counterModels;
+    private List<CounterModel> counterModels;
 
     CounterListModel(String title,
                      List<String> subtitle,
@@ -26,7 +26,6 @@ public class CounterListModel
                      long id,
                      ListModel listModel) {
         super(title, subtitle, backgroundColor, cardBackgroundColor, cardForegroundColor, id);
-        this.listModel = listModel;
 
         counterModels = new ArrayList<>();
         for (sillyv.com.counterlists.database.models.CounterModel counterModel : listModel.getCounters()) {
@@ -46,7 +45,7 @@ public class CounterListModel
         }
     }
 
-    public List<CounterModel> getCounterModels() {
+    List<CounterModel> getCounterModels() {
         return counterModels;
     }
 
@@ -73,21 +72,6 @@ public class CounterListModel
         public CounterModel() {
         }
 
-        private CounterModel(Builder builder) {
-            setId(builder.id);
-            setParentId(builder.parentId);
-            setName(builder.name);
-            setAmount(builder.amount);
-            setIncrement(builder.increment);
-            setDecrement(builder.decrement);
-            setCustomOrder(builder.customOrder);
-            setClickSound(builder.clickSound);
-            setVibrate(builder.vibrate);
-            setSpeakName(builder.speakName);
-            setSpeakValue(builder.speakValue);
-            setBackgroundColor(builder.backgroundColor);
-            setForegroundColor(builder.foregroundColor);
-        }
 
         public CounterModel(long id,
                             long parentId,
@@ -141,11 +125,11 @@ public class CounterListModel
             this.name = name;
         }
 
-        public int getAmount() {
+        int getAmount() {
             return amount;
         }
 
-        public void setAmount(int amount) {
+        void setAmount(int amount) {
             this.amount = amount;
         }
 
@@ -165,11 +149,11 @@ public class CounterListModel
             this.decrement = decrement;
         }
 
-        public int getCustomOrder() {
+        int getCustomOrder() {
             return customOrder;
         }
 
-        public void setCustomOrder(int customOrder) {
+        void setCustomOrder(int customOrder) {
             this.customOrder = customOrder;
         }
 
@@ -189,19 +173,19 @@ public class CounterListModel
             this.vibrate = vibrate;
         }
 
-        public boolean isSpeakName() {
+        boolean isSpeakName() {
             return speakName;
         }
 
-        public void setSpeakName(boolean speakName) {
+        void setSpeakName(boolean speakName) {
             this.speakName = speakName;
         }
 
-        public boolean isSpeakValue() {
+        boolean isSpeakValue() {
             return speakValue;
         }
 
-        public void setSpeakValue(boolean speakValue) {
+        void setSpeakValue(boolean speakValue) {
             this.speakValue = speakValue;
         }
 
@@ -209,19 +193,19 @@ public class CounterListModel
             return backgroundColor;
         }
 
-        public void setBackgroundColor(int backgroundColor) {
+        void setBackgroundColor(int backgroundColor) {
             this.backgroundColor = backgroundColor;
         }
 
-        public int getForegroundColor() {
+        int getForegroundColor() {
             return foregroundColor;
         }
 
-        public void setForegroundColor(int foregroundColor) {
+        void setForegroundColor(int foregroundColor) {
             this.foregroundColor = foregroundColor;
         }
 
-        public void setSelected(boolean selected) {
+        void setSelected(boolean selected) {
             this.selected = selected;
             if (selected) {
                 backgroundColor = Color.BLACK;
@@ -232,94 +216,9 @@ public class CounterListModel
             }
         }
 
-        public boolean isSelected() {
+        boolean isSelected() {
             return selected;
 
-        }
-
-        public static final class Builder {
-            private long id;
-            private long parentId;
-            private String name;
-            private int amount;
-            private int increment;
-            private int decrement;
-            private int customOrder;
-            private boolean clickSound;
-            private boolean vibrate;
-            private boolean speakName;
-            private boolean speakValue;
-            private int backgroundColor;
-            private int foregroundColor;
-
-            public Builder() {}
-
-            public Builder withId(long val) {
-                id = val;
-                return this;
-            }
-
-            public Builder withParentId(long val) {
-                parentId = val;
-                return this;
-            }
-
-            public Builder withName(String val) {
-                name = val;
-                return this;
-            }
-
-            public Builder withAmount(int val) {
-                amount = val;
-                return this;
-            }
-
-            public Builder withIncrement(int val) {
-                increment = val;
-                return this;
-            }
-
-            public Builder withDecrement(int val) {
-                decrement = val;
-                return this;
-            }
-
-            public Builder withCustomOrder(int val) {
-                customOrder = val;
-                return this;
-            }
-
-            public Builder withClickSound(boolean val) {
-                clickSound = val;
-                return this;
-            }
-
-            public Builder withVibrate(boolean val) {
-                vibrate = val;
-                return this;
-            }
-
-            public Builder withSpeakName(boolean val) {
-                speakName = val;
-                return this;
-            }
-
-            public Builder withSpeakValue(boolean val) {
-                speakValue = val;
-                return this;
-            }
-
-            public Builder withBackgroundColor(int val) {
-                backgroundColor = val;
-                return this;
-            }
-
-            public Builder withForegroundColor(int val) {
-                foregroundColor = val;
-                return this;
-            }
-
-            public CounterModel build() {return new CounterModel(this);}
         }
     }
 }

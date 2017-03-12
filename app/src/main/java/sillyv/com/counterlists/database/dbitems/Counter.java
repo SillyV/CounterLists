@@ -8,7 +8,8 @@ import io.realm.annotations.PrimaryKey;
 import sillyv.com.counterlists.database.models.CounterModel;
 
 /**
- * Created by Vasili on 1/28/2017.
+ * Created by Vasili.Fedotov on 1/28/2017.
+ *
  */
 
 public class Counter
@@ -141,7 +142,7 @@ public class Counter
         return speechOutputValue;
     }
 
-    public void setSpeechOutputValue(int speechOutputValue) {
+    private void setSpeechOutputValue(int speechOutputValue) {
         this.speechOutputValue = speechOutputValue;
     }
 

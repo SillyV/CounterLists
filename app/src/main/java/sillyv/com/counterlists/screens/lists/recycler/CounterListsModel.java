@@ -8,6 +8,7 @@ import java.util.List;
 
 /**
  * Created by Vasili.Fedotov on 2/18/2017.
+ *
  */
 
 public class CounterListsModel {

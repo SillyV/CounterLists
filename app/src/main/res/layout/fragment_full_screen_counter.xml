@@ -1,42 +1,59 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
                                              xmlns:app="http://schemas.android.com/apk/res-auto"
+                                             xmlns:autofit="http://schemas.android.com/apk/res-auto"
                                              xmlns:tools="http://schemas.android.com/tools"
                                              android:layout_width="match_parent"
+                                             android:id="@+id/parent_constraint_layout"
                                              android:layout_height="match_parent"
                                              tools:context="sillyv.com.counterlists.screens.fullscreen.FullScreenCounterFragment">
 
-
-    <TextView
-        android:id="@+id/counter"
+    <me.grantland.widget.AutofitLayout
+        android:maxLines="2"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:gravity="center"
-        android:textSize="500sp"
+        android:textSize="300sp"
+        autofit:minTextSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0"
-        tools:text="9"
-        tools:visibility="gone"/>
+        tools:layout_editor_absoluteY="0dp"
+        tools:layout_editor_absoluteX="8dp">
+
+        <TextView
+            android:soundEffectsEnabled="false"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/counter"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            tools:text="0"
+            android:gravity="center"
+            android:maxLines="1"
+            android:textSize="300sp"
+            />
+    </me.grantland.widget.AutofitLayout>
 
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
+        android:soundEffectsEnabled="false"
+        android:src="@drawable/ic_remove"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:layout_marginLeft="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        />
+        android:layout_marginStart="8dp"/>
+
+
 
     <TextView
         android:id="@+id/title"
@@ -49,7 +66,9 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="Counter 1"/>
+        tools:text="Counter 1"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"/>
 
     <TextView
         android:id="@+id/date_created_label"
@@ -58,19 +77,20 @@
         android:layout_marginBottom="7dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
-        android:text="Created"
+        android:text="@string/created"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.18"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"/>
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"/>
 
     <TextView
         android:id="@+id/date_modified_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:layout_marginLeft="0dp"
-        android:text="Last Modified"
+        android:text="@string/last_modified"
         app:layout_constraintBottom_toTopOf="@+id/date_created_label"
         app:layout_constraintLeft_toLeftOf="@+id/date_created_label"/>
 
@@ -79,8 +99,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="7dp"
-        android:layout_marginLeft="0dp"
-        android:text="Value Last Changed"
+        android:text="@string/value_last_changed"
         app:layout_constraintBottom_toTopOf="@+id/date_modified_label"
         app:layout_constraintLeft_toLeftOf="@+id/date_modified_label"/>
 
@@ -89,8 +108,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:layout_marginLeft="0dp"
-        android:text="Current Session"
+        android:text="@string/current_session"
         app:layout_constraintBottom_toTopOf="@+id/value_changed_label"
         app:layout_constraintLeft_toLeftOf="@+id/value_changed_label"
         />
@@ -105,40 +123,36 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/title"
-        tools:text="Some note if visible"/>
+        tools:text="Some note if visible"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"/>
 
     <TextView
         android:id="@+id/value_changed"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="0dp"
-        android:layout_marginTop="0dp"
+        android:layout_marginLeft="8dp"
         app:layout_constraintBottom_toBottomOf="@+id/value_changed_label"
+        app:layout_constraintLeft_toRightOf="@+id/value_changed_label"
         app:layout_constraintTop_toTopOf="@+id/value_changed_label"
         app:layout_constraintVertical_bias="0.0"
         tools:text="1m 32s ago"
-        app:layout_constraintLeft_toRightOf="@+id/value_changed_label"
-        android:layout_marginLeft="8dp"/>
+        android:layout_marginStart="8dp"/>
 
     <TextView
         android:id="@+id/current_session"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="0dp"
-        android:layout_marginTop="0dp"
         app:layout_constraintBottom_toBottomOf="@+id/current_session_label"
+        app:layout_constraintLeft_toLeftOf="@+id/value_changed"
         app:layout_constraintTop_toTopOf="@+id/current_session_label"
         app:layout_constraintVertical_bias="0.0"
-        tools:text="5m 22s"
-        app:layout_constraintLeft_toLeftOf="@+id/value_changed"/>
+        tools:text="5m 22s"/>
 
     <TextView
         android:id="@+id/date_modified"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="0dp"
-        android:layout_marginLeft="0dp"
-        android:layout_marginTop="0dp"
         app:layout_constraintBottom_toBottomOf="@+id/date_modified_label"
         app:layout_constraintLeft_toLeftOf="@+id/current_session"
         app:layout_constraintTop_toTopOf="@+id/date_modified_label"
@@ -149,9 +163,6 @@
         android:id="@+id/date_created"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="0dp"
-        android:layout_marginLeft="0dp"
-        android:layout_marginTop="0dp"
         app:layout_constraintBottom_toBottomOf="@+id/date_created_label"
         app:layout_constraintLeft_toLeftOf="@+id/current_session"
         app:layout_constraintTop_toTopOf="@+id/date_created_label"

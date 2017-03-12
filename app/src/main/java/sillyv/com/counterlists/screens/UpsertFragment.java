@@ -1,7 +1,6 @@
 package sillyv.com.counterlists.screens;
 
 import android.graphics.PorterDuff;
-import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.util.Pair;
@@ -10,6 +9,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.animation.AlphaAnimation;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -44,6 +44,27 @@ public abstract class UpsertFragment<D extends UpsertModel>
             view.setBackgroundColor(view.getMidColor());
         }
     };
+    public static final ButterKnife.Action<TriStateToggleButton>
+            TEMPORARY_BROKEN_TOGGLE_FIX =
+            (view, index) -> view.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                int oldVis = View.GONE;
+
+                @Override public void onGlobalLayout() {
+                    int newVis = view.getVisibility();
+                    if (oldVis != newVis) {
+                        oldVis = (view.getVisibility());
+                        if (view.getToggleStatus() == TriStateToggleButton.ToggleStatus.mid) {
+                            view.setToggleOn(false);
+                            view.setToggleMid(false);
+                        }
+                        if (oldVis == View.VISIBLE) {
+                            view.callOnClick();
+                            view.callOnClick();
+                            view.callOnClick();
+                        }
+                    }
+                }
+            });
     protected static final String LIST_IDENTIFIER = "ListIdentifier";
     public HashMap<View, Integer> colorButtonMap;
     @BindView(R.id.edit_text_name) protected TextView editTextName;
@@ -119,12 +140,6 @@ public abstract class UpsertFragment<D extends UpsertModel>
         // Required empty public constructor
     }
 
-    @Override public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-
-        }
-    }
 
     @Override public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
@@ -156,8 +171,6 @@ public abstract class UpsertFragment<D extends UpsertModel>
 
     public abstract List<TextInputLayout> getRequiredFieldsTextLayouts();
 
-    public abstract void onSaveDataSuccess();
-
     protected abstract void saveData();
 
     @OnClick(R.id.button_advanced) protected void onAdvancedClick() {
@@ -180,6 +193,8 @@ public abstract class UpsertFragment<D extends UpsertModel>
         ButterKnife.apply(toggles, SET_STATE_AGAIN);
 
     }
+
+    public abstract void onSaveDataSuccess();
 
     protected void showPickColorDialog(View view) {
         ColorPickerDialogBuilder.with(getContext())
@@ -210,6 +225,7 @@ public abstract class UpsertFragment<D extends UpsertModel>
         bindSwitchesToHints();
         setAdvancedVisibility();
         invalidateOptionsMenu();
+        ButterKnife.apply(toggles, TEMPORARY_BROKEN_TOGGLE_FIX);
 
     }
 

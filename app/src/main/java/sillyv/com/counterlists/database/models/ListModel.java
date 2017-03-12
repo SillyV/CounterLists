@@ -8,7 +8,8 @@ import sillyv.com.counterlists.database.dbitems.Counter;
 import sillyv.com.counterlists.database.dbitems.CounterList;
 
 /**
- * Created by Vasili on 1/28/2017.
+ * Created by Vasili.Fedotov on 1/28/2017.
+ *
  */
 
 public class ListModel {

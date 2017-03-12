@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -30,6 +31,7 @@ import sillyv.com.counterlists.events.AddFragmentEvent;
 import sillyv.com.counterlists.events.NotifyValueChangedEvent;
 import sillyv.com.counterlists.screens.counters.upsert.UpsertCounterFragment;
 import sillyv.com.counterlists.screens.lists.upsert.UpsertCounterListFragment;
+import sillyv.com.counterlists.tools.CLStringUtils;
 
 public class CounterListFragment
         extends CLFragment
@@ -60,7 +62,6 @@ public class CounterListFragment
         if (getArguments() != null) {
             id = getArguments().getLong(COUNTER_LIST_ID);
         }
-        invalidateOptionsMenu();
     }
 
     @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -69,7 +70,7 @@ public class CounterListFragment
         ButterKnife.bind(this, view);
         presenter = new CounterListPresenter(this, CounterController.getInstance(), ListController.getInstance(), AndroidSchedulers.mainThread());
         presenter.getData(id);
-
+        invalidateOptionsMenu();
         return view;
     }
 
@@ -116,7 +117,7 @@ public class CounterListFragment
 
     private void createAndShowAlertDialogForDeleting() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle(getDeleteMessage());
+        builder.setTitle(CLStringUtils.getDeleteMessage(getContext(), adapter.getFirstSelectedList(), adapter.selectedCount()));
         builder.setMessage(R.string.consider);
         builder.setPositiveButton(android.R.string.yes, (dialog, id) -> {
             interaction = true;
@@ -133,7 +134,11 @@ public class CounterListFragment
     private void resetItems() {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle(getResetMessage());
+        builder.setTitle(CLStringUtils.getResetMessage(getContext(),
+                adapter.getFirstSelectedList(),
+                adapter.selectedCount(),
+                adapter.isSelectionMode()));
+
         builder.setMessage(R.string.consider);
         builder.setPositiveButton(android.R.string.yes, (dialog, id) -> {
             interaction = true;
@@ -162,31 +167,16 @@ public class CounterListFragment
         EventBus.getDefault().post(new AddFragmentEvent(UpsertCounterListFragment.newInstance(id)));
     }
 
-    private String getDeleteMessage() {
-        String startOfString = getString(R.string.are_you_sure_you_want_to_delete) + " ";
-        if (adapter.selectedCount() == 1) {
-            return startOfString + getString(R.string.the_counter) + adapter.getFirstSelectedList() + "'";
-        } else {
-            return startOfString + adapter.selectedCount() + " " + getString(R.string.counters);
-        }
-    }
-
-    private String getResetMessage() {
-        String startOfString = getString(R.string.are_you_sure_you_want_to_reset) + " ";
-        if (adapter.selectedCount() == 1) {
-            return startOfString + getString(R.string.the_counter) + adapter.getFirstSelectedList() + "'";
-        } else if (!adapter.isSelectionMode()) {
-            return startOfString + getString(R.string.all_counters);
-        } else {
-            return startOfString + adapter.selectedCount() + " " + getString(R.string.counters);
-        }
-    }
 
     @Override public void onStop() {
         if (EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().unregister(this);
         }
         super.onStop();
+    }
+
+    @Override public boolean volumePressed(int keyCode, KeyEvent event) {
+        return false;
     }
 
     @Override protected List<BasePresenter> getPresenters() {
@@ -209,6 +199,18 @@ public class CounterListFragment
         interaction = false;
     }
 
+    @Override public void onDeleteItemsErrorResponse() {
+        interaction = false;
+    }
+
+    @Override public void onSaveDataErrorResponse() {
+        interaction = false;
+    }
+
+    @Override public void onSaveDataSuccess() {
+        interaction = false;
+    }
+
     @Override public void onDataReceived(CounterListModel counterListModel) {
         LinearLayoutManager layout = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layout);
@@ -219,18 +221,6 @@ public class CounterListFragment
     }
 
     @Override public void onGetDataErrorResponse() {
-        interaction = false;
-    }
-
-    @Override public void onDeleteItemsErrorResponse() {
-        interaction = false;
-    }
-
-    @Override public void onSaveDataErrorResponse() {
-        interaction = false;
-    }
-
-    @Override public void onSaveDataSuccess() {
         interaction = false;
     }
 

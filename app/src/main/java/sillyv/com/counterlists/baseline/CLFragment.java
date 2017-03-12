@@ -3,11 +3,13 @@ package sillyv.com.counterlists.baseline;
 
 import android.content.Context;
 import android.support.v4.app.Fragment;
+import android.view.KeyEvent;
 
 import java.util.List;
 
 /**
- * Created by Vasili on 2/18/2017.
+ * Created by Vasili.Fedotov on 2/18/2017.
+ *
  */
 
 public abstract class CLFragment
@@ -30,6 +32,9 @@ public abstract class CLFragment
         }
         super.onStop();
     }
+
+    public abstract boolean volumePressed(int keyCode, KeyEvent event);
+
 
     protected abstract List<BasePresenter> getPresenters();
 
